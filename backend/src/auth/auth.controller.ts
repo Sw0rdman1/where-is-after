@@ -1,7 +1,6 @@
 import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Role } from 'src/users/schema/role.enum';
-import { LoginDto } from 'src/users/dto/login.dto';
 import { RegisterDto } from 'src/users/dto/register.dto';
 import { LocalAuthGuard } from './guards/local.guard';
 
@@ -18,6 +17,16 @@ export class AuthController {
     @Post('login')
     async login(@Request() req) {
         return this.authService.login(req.user);
+    }
+
+    @Post('logout')
+    async logout(@Request() req) {
+        return this.authService.logout(req.user);
+    }
+
+    @Post('refresh')
+    async refresh(@Request() req) {
+        return this.authService.refresh(req.user);
     }
 }
 

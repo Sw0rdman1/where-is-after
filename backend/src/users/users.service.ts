@@ -19,7 +19,7 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
-  async updateRefreshToken(userId: string, refreshToken: string) {
+  async updateRefreshToken(userId: string, refreshToken: string | null) {
     return this.userModel.findByIdAndUpdate(userId, { refreshToken }).exec();
   }
 }

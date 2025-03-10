@@ -38,9 +38,26 @@ export class AuthService {
             expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
         });
 
-        // Store refresh token in DB
         await this.usersService.updateRefreshToken(userID, refreshToken);
 
         return { accessToken, refreshToken };
+    }
+
+    async logout(user: User) {
+        const userID = user._id as string;
+
+        return this.usersService.updateRefreshToken(userID, null);
+    }
+
+    async refresh(user: User) {
+        const userID = user._id as string;
+        const payload = { email: user.email, sub: userID, role: user.role };
+
+        const accessToken = this.jwtService.sign(payload, {
+            secret: process.env.JWT_ACCESS_SECRET,
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
+        });
+
+        return { accessToken };
     }
 }
