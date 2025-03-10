@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthDto } from 'src/users/dto/auth.dto';
 import { ObjectId, Types } from 'mongoose';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
         const userExists = await this.usersService.findByEmail(
             createUserDto.email,
         );
+
         if (userExists) {
             throw new BadRequestException('User already exists');
         }
@@ -29,8 +31,10 @@ export class AuthService {
             ...createUserDto,
             password: hash,
         });
-        const tokens = await this.getTokens(newUser._id.toString(), newUser.email);
-        await this.updateRefreshToken(newUser._id.toString(), tokens.refreshToken);
+        const newUserID = newUser._id as ObjectId;
+
+        const tokens = await this.getTokens(newUserID.toString(), newUser.email);
+        await this.updateRefreshToken(newUserID.toString(), tokens.refreshToken);
         return tokens;
     }
 
@@ -41,8 +45,11 @@ export class AuthService {
         const passwordMatches = await argon2.verify(user.password, data.password);
         if (!passwordMatches)
             throw new BadRequestException('Password is incorrect');
-        const tokens = await this.getTokens(user._id.toString(), user.email);
-        await this.updateRefreshToken(user._id.toString(), tokens.refreshToken);
+
+        const userID = user._id as ObjectId;
+
+        const tokens = await this.getTokens(userID.toString(), user.email);
+        await this.updateRefreshToken(userID.toString(), tokens.refreshToken);
         return tokens;
     }
 
@@ -61,12 +68,12 @@ export class AuthService {
         });
     }
 
-    async getTokens(userId: string, username: string) {
+    async getTokens(userId: string, email: string) {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(
                 {
                     sub: userId,
-                    username,
+                    email,
                 },
                 {
                     secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
@@ -76,7 +83,7 @@ export class AuthService {
             this.jwtService.signAsync(
                 {
                     sub: userId,
-                    username,
+                    email,
                 },
                 {
                     secret: this.configService.get<string>('JWT_REFRESH_SECRET'),

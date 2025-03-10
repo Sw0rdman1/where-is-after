@@ -20,17 +20,21 @@ export interface RequestWithUser extends Request {
 export class AuthController {
     constructor(private authService: AuthService) { }
 
-    @Post('signup')
+    @Post('register')
+    @HttpCode(HttpStatus.CREATED)
     signup(@Body() createUserDto: CreateUserDto) {
         return this.authService.signUp(createUserDto);
     }
 
-    @Post('signin')
+    @Post('login')
+    @HttpCode(HttpStatus.OK)
     signin(@Body() data: AuthDto) {
         return this.authService.signIn(data);
     }
 
+
     @Get('logout')
+    @HttpCode(HttpStatus.OK)
     logout(@Req() req: RequestWithUser) {
         this.authService.logout(req.user['sub']);
     }

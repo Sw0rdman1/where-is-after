@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ObjectId } from 'mongoose';
 
 @Controller('users')
 export class UsersController {
