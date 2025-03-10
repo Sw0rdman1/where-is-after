@@ -1,44 +1,93 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcrypt';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UsersService } from 'src/users/users.service';
+import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { AuthDto } from 'src/users/dto/auth.dto';
+import { ObjectId, Types } from 'mongoose';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly usersService: UsersService,
-        private readonly jwtService: JwtService,
+        private usersService: UsersService,
+        private jwtService: JwtService,
+        private configService: ConfigService,
     ) { }
-
-    async register(email: string, password: string) {
-        const existingUser = await this.usersService.findByEmail(email);
-        if (existingUser) {
+    async signUp(createUserDto: CreateUserDto): Promise<any> {
+        // Check if user exists
+        const userExists = await this.usersService.findByEmail(
+            createUserDto.email,
+        );
+        if (userExists) {
             throw new BadRequestException('User already exists');
         }
 
-        const user = await this.usersService.createUser(email, password);
-        return { message: 'Registration successful. Please verify your email.', userId: user._id };
+        // Hash password
+        const hash = await this.hashData(createUserDto.password);
+        const newUser = await this.usersService.create({
+            ...createUserDto,
+            password: hash,
+        });
+        const tokens = await this.getTokens(newUser._id.toString(), newUser.email);
+        await this.updateRefreshToken(newUser._id.toString(), tokens.refreshToken);
+        return tokens;
     }
 
-    async validateUser(email: string, password: string) {
-        const user = await this.usersService.findByEmail(email);
-        if (!user) {
-            throw new UnauthorizedException('Invalid email or password');
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            throw new UnauthorizedException('Invalid email or password');
-        }
-
-        return user;
+    async signIn(data: AuthDto) {
+        // Check if user exists
+        const user = await this.usersService.findByEmail(data.email);
+        if (!user) throw new BadRequestException('User does not exist');
+        const passwordMatches = await argon2.verify(user.password, data.password);
+        if (!passwordMatches)
+            throw new BadRequestException('Password is incorrect');
+        const tokens = await this.getTokens(user._id.toString(), user.email);
+        await this.updateRefreshToken(user._id.toString(), tokens.refreshToken);
+        return tokens;
     }
 
-    async login(user: any) {
-        const payload = { email: user.email, sub: user._id };
+    async logout(userId: string) {
+        return this.usersService.update(userId, { refreshToken: null });
+    }
+
+    hashData(data: string) {
+        return argon2.hash(data);
+    }
+
+    async updateRefreshToken(userId: string, refreshToken: string) {
+        const hashedRefreshToken = await this.hashData(refreshToken);
+        await this.usersService.update(userId, {
+            refreshToken: hashedRefreshToken,
+        });
+    }
+
+    async getTokens(userId: string, username: string) {
+        const [accessToken, refreshToken] = await Promise.all([
+            this.jwtService.signAsync(
+                {
+                    sub: userId,
+                    username,
+                },
+                {
+                    secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+                    expiresIn: '15m',
+                },
+            ),
+            this.jwtService.signAsync(
+                {
+                    sub: userId,
+                    username,
+                },
+                {
+                    secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+                    expiresIn: '7d',
+                },
+            ),
+        ]);
+
         return {
-            accessToken: this.jwtService.sign(payload, { expiresIn: '15m' }),
-            refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }),
+            accessToken,
+            refreshToken,
         };
     }
 }
