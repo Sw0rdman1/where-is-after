@@ -6,11 +6,13 @@ import {
     HttpStatus,
     Post,
     Req,
+    UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from 'src/users/dto/auth.dto';
+import { JwtAuthGuard } from './guards/jwt-auth,guard';
 
 export interface RequestWithUser extends Request {
     user: { sub: string };
@@ -19,6 +21,7 @@ export interface RequestWithUser extends Request {
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
+
 
     @Post('register')
     @HttpCode(HttpStatus.CREATED)
@@ -34,6 +37,7 @@ export class AuthController {
 
 
     @Get('logout')
+    @UseGuards(JwtAuthGuard)
     @HttpCode(HttpStatus.OK)
     logout(@Req() req: RequestWithUser) {
         this.authService.logout(req.user['sub']);
