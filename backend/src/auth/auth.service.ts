@@ -11,8 +11,13 @@ export class AuthService {
     constructor(private usersService: UsersService, private jwtService: JwtService) { }
 
     async register(email: string, password: string, role: Role = Role.USER) {
-        const hashedPassword = await argon2.hash(password);
-        return this.usersService.create(email, hashedPassword, role);
+        const user = await this.usersService.findByEmail(email);
+
+        if (user) {
+            throw new UnauthorizedException('Email already exists');
+        }
+
+        return this.usersService.create(email, password, role);
     }
 
     async validateUser(email: string, password: string) {
