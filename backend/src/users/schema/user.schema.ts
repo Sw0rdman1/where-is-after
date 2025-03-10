@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Role } from './role.enum';
 
 @Schema({ timestamps: true })
 export class User extends Document {
@@ -8,6 +9,9 @@ export class User extends Document {
 
     @Prop({ required: true, trim: true, minlength: 6 })
     password: string;
+
+    @Prop({ type: String, enum: Role, default: Role.USER })
+    role: Role;
 
     @Prop({ default: false, required: true })
     isVerified: boolean;
