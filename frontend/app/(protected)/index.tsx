@@ -1,14 +1,23 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useAuth } from '@/context/AuthProvider';
 
 export default function TabOneScreen() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
         {user?.email}
       </Text>
+      <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Log out</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -27,5 +36,14 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  button: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'red',
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
   },
 });

@@ -18,6 +18,13 @@ export class User extends Document {
 
     @Prop({ type: String, default: null })
     refreshToken?: string;
+
+    toJSON() {
+        const obj = this.toObject();
+        delete obj.password;
+        return obj;
+    }
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -45,10 +45,18 @@ export class AuthService {
 
         await this.usersService.updateRefreshToken(userID, refreshToken);
 
-        return { user, accessToken, refreshToken };
+        const { password, ...userWithoutPassword } = user;
+
+        return { user: userWithoutPassword, accessToken, refreshToken };
     }
 
-    async logout(user: User) {
+    async logout(email: string) {
+        const user = await this.usersService.findByEmail(email);
+
+        if (!user) {
+            throw new UnauthorizedException('Invalid email');
+        }
+
         const userID = user._id as string;
 
         return this.usersService.updateRefreshToken(userID, null);
