@@ -2,20 +2,18 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useAuth } from '@/context/AuthProvider';
 
-export default function TabOneScreen() {
+export default function MainScreen() {
   const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
   }
 
-  console.log('user', user);
-
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {user?.id}
+        {user?._id}
       </Text>
       <Text style={styles.title}>
         {user?.email}

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
-    id: string;
+    _id: string;
     email: string;
     isVerified: boolean;
     role: string;
@@ -36,9 +36,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loadAuthData();
     }, []);
 
-    const afterLogInHandler = async (userFromResponse: any, accessToken: string, refreshToken: string) => {
+    const afterLogInHandler = async (userFromResponse: User, accessToken: string, refreshToken: string) => {
         const user: User = {
-            id: userFromResponse._id,
+            _id: userFromResponse._id,
             email: userFromResponse.email,
             isVerified: userFromResponse.isVerified,
             role: userFromResponse.role
