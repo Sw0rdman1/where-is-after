@@ -1,10 +1,14 @@
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
+import { useAuth } from '@/context/AuthProvider';
 
 export default function TabOneScreen() {
+  const { user } = useAuth();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>
+        {user?.email}
+      </Text>
     </View>
   );
 }

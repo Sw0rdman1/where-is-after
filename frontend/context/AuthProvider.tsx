@@ -9,17 +9,18 @@ interface User {
 
 interface AuthContextType {
     user: User | null;
-    token: string | null;
-    afterLogInHandler: (user: User, token: string) => Promise<void>;
+    accessToken: string | null;
+    isLoading: boolean;
+    afterLogInHandler: (user: User, accessToken: string, refreshToken: string) => Promise<void>;
     logout: () => Promise<void>;
-    refreshToken: (newToken: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [token, setToken] = useState<string | null>(null);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const loadAuthData = async () => {
@@ -27,33 +28,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const storedToken = await AsyncStorage.getItem('token');
             if (storedUser && storedToken) {
                 setUser(JSON.parse(storedUser));
-                setToken(storedToken);
+                setAccessToken(storedToken);
             }
+            setIsLoading(false);
         };
         loadAuthData();
     }, []);
 
-    const afterLogInHandler = async (user: User, token: string) => {
+    const afterLogInHandler = async (user: User, accessToken: string, refreshToken: string) => {
         setUser(user);
-        setToken(token);
+        setAccessToken(accessToken);
         await AsyncStorage.setItem('user', JSON.stringify(user));
-        await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('token', accessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
     };
 
     const logout = async () => {
         setUser(null);
-        setToken(null);
+        setAccessToken(null);
         await AsyncStorage.removeItem('user');
         await AsyncStorage.removeItem('token');
     };
 
-    const refreshToken = async (newToken: string) => {
-        setToken(newToken);
-        await AsyncStorage.setItem('token', newToken);
-    };
-
     return (
-        <AuthContext.Provider value={{ user, token, afterLogInHandler, logout, refreshToken }}>
+        <AuthContext.Provider value={{ user, accessToken, isLoading, afterLogInHandler, logout }}>
             {children}
         </AuthContext.Provider>
     );

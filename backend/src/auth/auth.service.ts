@@ -45,7 +45,7 @@ export class AuthService {
 
         await this.usersService.updateRefreshToken(userID, refreshToken);
 
-        return { accessToken, refreshToken };
+        return { user, accessToken, refreshToken };
     }
 
     async logout(user: User) {
