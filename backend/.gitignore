@@ -27,4 +27,4 @@ build/
 .DS_Store
 Thumbs.db
 
-../frontend/
+/frontend/

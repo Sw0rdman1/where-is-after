@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# Expo
+.expo/
+.expo-shared/
+
+# Metro bundler
+metro.config.js
+babel.config.js
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+expo-error.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+android/
+ios/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# Other
+/backend/
