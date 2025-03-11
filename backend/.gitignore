@@ -26,3 +26,5 @@ build/
 # Miscellaneous
 .DS_Store
 Thumbs.db
+
+../frontend/
