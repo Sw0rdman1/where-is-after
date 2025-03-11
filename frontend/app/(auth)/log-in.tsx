@@ -5,18 +5,15 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 const LoginScreen = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("test@gmail.com");
+    const [password, setPassword] = useState("Pass123!");
     const { afterLogInHandler } = useAuth();
 
     const handleLogin = async () => {
         try {
-            console.log(email, password);
-
             const data = await login(email, password);
 
             if (data.user && data.accessToken && data.refreshToken) {
-                console.log(data);
                 await afterLogInHandler(data.user, data.accessToken, data.refreshToken);
                 router.replace('/');
             }

@@ -9,10 +9,22 @@ export default function TabOneScreen() {
     logout();
   }
 
+  console.log('user', user);
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
+        {user?.id}
+      </Text>
+      <Text style={styles.title}>
         {user?.email}
+      </Text>
+      <Text style={styles.title}>
+        {user?.role}
+      </Text>
+      <Text style={styles.title}>
+        {user?.isVerified ? 'Verified' : 'Not verified'}
       </Text>
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log out</Text>
@@ -27,6 +39,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 20,
   },
   title: {
     fontSize: 20,

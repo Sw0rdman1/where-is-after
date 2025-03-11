@@ -15,11 +15,27 @@ export class UsersService {
     return user.save();
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string, withoutPassword = false): Promise<User | null> {
+    if (withoutPassword) {
+      return this.userModel.findOne
+        ({
+          email
+        })
+        .select('-password')
+        .exec();
+    }
     return this.userModel.findOne({ email }).exec();
   }
 
   async updateRefreshToken(userId: string, refreshToken: string | null) {
     return this.userModel.findByIdAndUpdate(userId, { refreshToken }).exec();
   }
+
+  async verify(email: string) {
+    return this.userModel
+      .findOneAndUpdate({ email }, { isVerified: true })
+      .exec();
+  }
+
+
 }

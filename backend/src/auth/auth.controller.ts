@@ -1,10 +1,11 @@
-import { Controller, Post, Body, UseGuards, Request, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, HttpCode, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Role } from 'src/users/schema/role.enum';
 import { RegisterDto } from 'src/users/dto/register.dto';
 import { LocalAuthGuard } from './guards/local.guard';
 import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
 import { log } from 'console';
+import { VerifyUserDto } from 'src/users/dto/verify-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -19,7 +20,6 @@ export class AuthController {
     @Post('login')
     @HttpCode(200)
     async login(@Request() req) {
-        log('req.user', req.user);
         return this.authService.login(req.user);
     }
 
@@ -31,6 +31,11 @@ export class AuthController {
     @Post('refresh')
     async refresh(@Body() body: RefreshTokenDto) {
         return this.authService.refresh(body.refreshToken, body.email);
+    }
+
+    @Patch('verify')
+    async verify(@Body() body: VerifyUserDto) {
+        return this.authService.verify(body.email, body.verificationCode);
     }
 
 }

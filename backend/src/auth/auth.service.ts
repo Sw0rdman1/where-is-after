@@ -5,6 +5,7 @@ import { UsersService } from '../users/users.service';
 import * as argon2 from 'argon2';
 import { Role } from 'src/users/schema/role.enum';
 import { User } from 'src/users/schema/user.schema';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -45,9 +46,9 @@ export class AuthService {
 
         await this.usersService.updateRefreshToken(userID, refreshToken);
 
-        const { password, ...userWithoutPassword } = user;
+        const fetchedUser = await this.usersService.findByEmail(user.email, true);
 
-        return { user: userWithoutPassword, accessToken, refreshToken };
+        return { user: fetchedUser, accessToken, refreshToken };
     }
 
     async logout(email: string) {
@@ -82,5 +83,19 @@ export class AuthService {
         });
 
         return { accessToken };
+    }
+
+    async verify(email: string, verificationCode: string) {
+        const user = await this.usersService.findByEmail(email);
+
+        if (!user) {
+            throw new UnauthorizedException('Invalid email');
+        }
+
+        if (verificationCode !== '123456') {
+            throw new UnauthorizedException('Invalid verification code');
+        }
+
+        return this.usersService.verify(email);
     }
 }

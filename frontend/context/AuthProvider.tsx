@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 interface User {
     id: string;
     email: string;
-    name: string;
+    isVerified: boolean;
+    role: string;
 }
 
 interface AuthContextType {
@@ -35,7 +36,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loadAuthData();
     }, []);
 
-    const afterLogInHandler = async (user: User, accessToken: string, refreshToken: string) => {
+    const afterLogInHandler = async (userFromResponse: any, accessToken: string, refreshToken: string) => {
+        const user: User = {
+            id: userFromResponse._id,
+            email: userFromResponse.email,
+            isVerified: userFromResponse.isVerified,
+            role: userFromResponse.role
+        };
         setUser(user);
         setAccessToken(accessToken);
         await AsyncStorage.setItem('user', JSON.stringify(user));
