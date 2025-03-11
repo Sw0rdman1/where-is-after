@@ -54,7 +54,17 @@ export class AuthService {
         return this.usersService.updateRefreshToken(userID, null);
     }
 
-    async refresh(user: User) {
+    async refresh(refreshToken: string, email: string) {
+        const user = await this.usersService.findByEmail(email);
+
+        if (!user) {
+            throw new UnauthorizedException('Invalid email');
+        }
+
+        if (user.refreshToken !== refreshToken) {
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+
         const userID = user._id as string;
         const payload = { email: user.email, sub: userID, role: user.role };
 

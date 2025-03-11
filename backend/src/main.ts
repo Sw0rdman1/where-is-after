@@ -11,6 +11,12 @@ async function bootstrap() {
     transform: true, // Automatically transform payloads to DTOs (e.g., strings to numbers)
   }));
 
+  app.enableCors({
+    origin: '*', // Allow requests from any origin (use a specific URL in production)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Allow cookies if needed
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 
