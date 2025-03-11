@@ -6,7 +6,7 @@ const WelcomeScreen = () => {
         <View style={styles.container}>
             <Image
                 style={styles.backgroundImage}
-                source={require('../../assets/images/background.jpg')}
+                source={require('../../assets/images/background3.jpg')}
             />
             <View style={styles.buttonContainer}>
                 <Text style={styles.title}>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     backgroundImage: {
         flex: 1,
-        resizeMode: 'center',
+        resizeMode: 'contain',
         justifyContent: 'center',
     },
     title: {
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         position: 'absolute',
-        bottom: 80,
+        bottom: 60,
         width: '100%',
         paddingHorizontal: 30,
     },
     button: {
-        marginTop: 20,
+        marginTop: 30,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
