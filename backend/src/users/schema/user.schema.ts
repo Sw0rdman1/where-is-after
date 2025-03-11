@@ -13,11 +13,17 @@ export class User extends Document {
     @Prop({ type: String, enum: Role, default: Role.USER })
     role: Role;
 
+    @Prop({ type: String, default: null })
+    refreshToken?: string;
+
     @Prop({ default: false, required: true })
     isVerified: boolean;
 
     @Prop({ type: String, default: null })
-    refreshToken?: string;
+    verificationCode: string
+
+    @Prop({ type: Date, nullable: true })
+    verificationCodeExpires: Date | null;
 
 }
 

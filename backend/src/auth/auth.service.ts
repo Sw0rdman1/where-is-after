@@ -5,20 +5,41 @@ import { UsersService } from '../users/users.service';
 import * as argon2 from 'argon2';
 import { Role } from 'src/users/schema/role.enum';
 import { User } from 'src/users/schema/user.schema';
-import { log } from 'console';
+import { generateVerificationCode } from 'src/utils/random';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private usersService: UsersService, private jwtService: JwtService) { }
+    constructor(
+        private usersService: UsersService,
+        private jwtService: JwtService,
+        private emailService: EmailService,
+    ) { }
 
     async register(email: string, password: string, role: Role = Role.USER) {
-        const user = await this.usersService.findByEmail(email);
+        const userExists = await this.usersService.findByEmail(email);
 
-        if (user) {
+        if (userExists) {
             throw new UnauthorizedException('Email already exists');
         }
 
-        return this.usersService.create(email, password, role);
+        const verificationCode = generateVerificationCode();
+        const expires = new Date();
+        expires.setMinutes(expires.getMinutes() + 15); // Expiry time (15 minutes)
+
+        // Create the user
+        const user = await this.usersService.create(
+            email,
+            password,
+            verificationCode,
+            expires
+        );
+
+        // Send the verification email
+        await this.emailService.sendVerificationCode(email, verificationCode);
+
+        return { message: 'Registration successful. Please check your email for the verification code.' };
+
     }
 
     async validateUser(email: string, password: string) {
@@ -85,17 +106,26 @@ export class AuthService {
         return { accessToken };
     }
 
-    async verify(_id: string, verificationCode: string) {
-        const user = await this.usersService.findById(_id);
-
+    async verifyEmail(userId: string, code: string) {
+        const user = await this.usersService.findById(userId);
         if (!user) {
-            throw new UnauthorizedException('Invalid email');
+            throw new Error('User not found');
         }
 
-        if (verificationCode !== '123456') {
-            throw new UnauthorizedException('Invalid verification code');
+        if (user.verificationCodeExpires && user.verificationCodeExpires < new Date()) {
+            throw new Error('Verification code expired');
         }
 
-        return this.usersService.verify(_id);
+        if (user.verificationCode !== code) {
+            throw new Error('Invalid verification code');
+        }
+
+        // Set user as verified
+        user.isVerified = true;
+        user.verificationCode = '';
+        user.verificationCodeExpires = null;
+        await this.usersService.verify(userId);
+
+        return { message: 'Email verified successfully' };
     }
 }

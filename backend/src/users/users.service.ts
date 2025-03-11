@@ -9,7 +9,7 @@ import { User } from './schema/user.schema';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) { }
 
-  async create(email: string, password: string, role: Role = Role.USER): Promise<User> {
+  async create(email: string, password: string, verificationCode: string, expires: Date, role: Role = Role.USER): Promise<User> {
     const hashedPassword = await argon2.hash(password);
     const user = new this.userModel({ email, password: hashedPassword, role });
     return user.save();
