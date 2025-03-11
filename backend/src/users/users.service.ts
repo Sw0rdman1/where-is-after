@@ -11,7 +11,13 @@ export class UsersService {
 
   async create(email: string, password: string, verificationCode: string, expires: Date, role: Role = Role.USER): Promise<User> {
     const hashedPassword = await argon2.hash(password);
-    const user = new this.userModel({ email, password: hashedPassword, role });
+    const user = new this.userModel({
+      email,
+      password: hashedPassword,
+      verificationCode,
+      verificationCodeExpires: expires,
+      role
+    });
     return user.save();
   }
 

@@ -21,7 +21,7 @@ export class EmailService {
         const request = this.mailjet.post('send', { version: 'v3.1' }).request({
             Messages: [
                 {
-                    From: { Email: sender, Name: 'Your App Name' },
+                    From: { Email: sender, Name: 'Gde je after?' },
                     To: [{ Email: email }],
                     Subject: 'Email Verification Code',
                     TextPart: `Your verification code is: ${code}`,

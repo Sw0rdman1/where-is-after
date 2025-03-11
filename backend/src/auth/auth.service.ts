@@ -35,7 +35,6 @@ export class AuthService {
             expires
         );
 
-        // Send the verification email
         await this.emailService.sendVerificationCode(email, verificationCode);
 
         return { message: 'Registration successful. Please check your email for the verification code.' };
