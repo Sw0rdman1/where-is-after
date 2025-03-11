@@ -13,7 +13,6 @@ const LoginScreen = () => {
         try {
             console.log(email, password);
 
-
             const data = await login(email, password);
 
             if (data.user && data.accessToken && data.refreshToken) {
