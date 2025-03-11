@@ -42,7 +42,7 @@ const LoginScreen = () => {
                 onChangeText={setPassword}
             />
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Log In</Text>
             </TouchableOpacity>
         </View>
     );
@@ -51,10 +51,10 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#f5f5f5",
         padding: 20,
+        marginTop: 200,
     },
     title: {
         fontSize: 24,

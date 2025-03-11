@@ -8,25 +8,24 @@ export default function AppLayout() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
-      if (user.role === 'admin') {
-        router.replace('/(protected)/(admin)');
-      } else if (user.role === 'user') {
-        router.replace('/(protected)/(user)');
-      }
+    if (user?.role === 'user') {
+      router.navigate('/(protected)/(user)');
     }
-  }, [user, router]);
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+    if (user?.role === 'admin') {
+      router.navigate('/(protected)/(admin)');
+    }
+  }, [user]);
+
 
   if (!user) {
     return <Redirect href="/log-in" />;
   }
 
+
   return (
-    <Stack>
+    <Stack initialRouteName='index'>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(user)" options={{ headerShown: false }} />
       <Stack.Screen name="(admin)" options={{ headerShown: false }} />
     </Stack>

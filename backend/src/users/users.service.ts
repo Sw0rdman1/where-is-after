@@ -27,13 +27,17 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findById(id: string): Promise<User | null> {
+    return this.userModel.findById(id).exec();
+  }
+
   async updateRefreshToken(userId: string, refreshToken: string | null) {
     return this.userModel.findByIdAndUpdate(userId, { refreshToken }).exec();
   }
 
-  async verify(email: string) {
+  async verify(_id: string) {
     return this.userModel
-      .findOneAndUpdate({ email }, { isVerified: true })
+      .findOneAndUpdate({ _id }, { isVerified: true })
       .exec();
   }
 

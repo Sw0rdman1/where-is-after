@@ -1,9 +1,8 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class VerifyUserDto {
-    @IsEmail({}, { message: 'invalid-email' })
-    @IsNotEmpty({ message: 'required-email' })
-    email: string;
+    @IsNotEmpty({ message: 'required-id' })
+    userId: string;
 
     @IsNotEmpty({ message: 'required-verification-code' })
     verificationCode: string;

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './axios';
+import { User } from '@/context/AuthProvider';
 
 export const register = async (email: string, password: string) => {
     try {
@@ -42,6 +43,20 @@ export const getToken = async () => {
         return null;
     }
 };
+
+export const verifyUser = async (user: User, verificationCode: string) => {
+    try {
+        const response = await api.post('/verify', { userId: user._id, verificationCode });
+        return response.data;
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            console.log('Error verifying user:', error.response?.data?.message);
+            throw error.response?.data?.message || 'Verification failed. Please try again.';
+        }
+        throw 'Network error. Please check your connection.';
+    }
+}
 
 export const logout = async () => {
     await AsyncStorage.multiRemove(['token', 'refreshToken']); // Ensure refreshToken is removed

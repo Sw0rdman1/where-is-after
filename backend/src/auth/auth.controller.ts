@@ -33,9 +33,9 @@ export class AuthController {
         return this.authService.refresh(body.refreshToken, body.email);
     }
 
-    @Patch('verify')
+    @Post('verify')
     async verify(@Body() body: VerifyUserDto) {
-        return this.authService.verify(body.email, body.verificationCode);
+        return this.authService.verify(body.userId, body.verificationCode);
     }
 
 }

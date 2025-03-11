@@ -85,8 +85,8 @@ export class AuthService {
         return { accessToken };
     }
 
-    async verify(email: string, verificationCode: string) {
-        const user = await this.usersService.findByEmail(email);
+    async verify(_id: string, verificationCode: string) {
+        const user = await this.usersService.findById(_id);
 
         if (!user) {
             throw new UnauthorizedException('Invalid email');
@@ -96,6 +96,6 @@ export class AuthService {
             throw new UnauthorizedException('Invalid verification code');
         }
 
-        return this.usersService.verify(email);
+        return this.usersService.verify(_id);
     }
 }

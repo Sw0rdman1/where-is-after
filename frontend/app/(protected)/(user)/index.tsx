@@ -8,14 +8,9 @@ export default function MainScreen() {
     const handleLogout = () => {
         logout();
     }
-    console.log('User Panel');
-
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>
-                User Panel
-            </Text>
             <Text style={styles.title}>
                 {user?.email}
             </Text>
