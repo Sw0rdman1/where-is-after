@@ -32,5 +32,6 @@ export class AuthController {
     async refresh(@Body() body: RefreshTokenDto) {
         return this.authService.refresh(body.refreshToken, body.email);
     }
+
 }
 
