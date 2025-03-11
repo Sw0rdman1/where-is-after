@@ -43,7 +43,7 @@ export class UsersService {
 
   async verify(_id: string) {
     return this.userModel
-      .findOneAndUpdate({ _id }, { isVerified: true })
+      .findOneAndUpdate({ _id }, { isVerified: true, verificationCode: '', verificationCodeExpires: null })
       .exec();
   }
 

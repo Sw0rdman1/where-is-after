@@ -107,6 +107,7 @@ export class AuthService {
 
     async verifyEmail(userId: string, code: string) {
         const user = await this.usersService.findById(userId);
+
         if (!user) {
             throw new Error('User not found');
         }
@@ -120,9 +121,7 @@ export class AuthService {
         }
 
         // Set user as verified
-        user.isVerified = true;
-        user.verificationCode = '';
-        user.verificationCodeExpires = null;
+
         await this.usersService.verify(userId);
 
         return { message: 'Email verified successfully' };
