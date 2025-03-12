@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
 import { Formik } from "formik";
-import Button from "../ui/Button";
 import { useAuth } from "@/context/AuthProvider";
 import { Text, View } from "../Themed";
 import { loginValidation } from "@/utils/validation";
 import { EmailInput, PasswordInput } from "../InputFields/AuthInputs";
 import { calculateStatus } from "@/utils/helpers";
+import Button from "../Button/Button";
 
 const initialValues = {
     email: "",
@@ -56,7 +56,7 @@ const LogInForm = () => {
                                 Object.keys(touched).length === 0
                             }
                             onPress={handleSubmit}
-                            text="Log In"
+                            title="Log In"
                         />
                     </View>
                 </View>

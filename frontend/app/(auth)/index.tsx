@@ -1,12 +1,22 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import Button from '@/components/Button/Button'
+import { router } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+
+const BACKGROUND_IMAGE = require('../../assets/images/auth/background3.jpg')
 
 const WelcomeScreen = () => {
+    const handlePress = () => {
+        router.push('/(auth)/log-in')
+    }
+
     return (
         <View style={styles.container}>
+            <StatusBar style='light' />
             <Image
                 style={styles.backgroundImage}
-                source={require('../../assets/images/background3.jpg')}
+                source={BACKGROUND_IMAGE}
             />
             <View style={styles.buttonContainer}>
                 <Text style={styles.title}>
@@ -15,11 +25,11 @@ const WelcomeScreen = () => {
                 <Text style={styles.subtitle}>
                     With Gde je After, find the hottest parties near you and keep the night alive!
                 </Text>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>
-                        Discover parties
-                    </Text>
-                </TouchableOpacity>
+                <Button
+                    title='Discover parties'
+                    onPress={handlePress}
+                    color='secondary'
+                />
             </View>
         </View>
     )
@@ -47,10 +57,12 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 18,
         color: 'white',
+        marginBottom: 20,
+
     },
     buttonContainer: {
         position: 'absolute',
-        bottom: 60,
+        bottom: 40,
         width: '100%',
         paddingHorizontal: 30,
     },
