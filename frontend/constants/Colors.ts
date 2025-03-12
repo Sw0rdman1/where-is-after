@@ -1,5 +1,5 @@
-const tint = '#2f95dc';
-const tintLowOpacity = `${tint}80`;
+const tint = '#FF4500';
+const tintLowOpacity = `${tint}70`;
 
 export default {
   light: {
@@ -9,8 +9,10 @@ export default {
     tintLowOpacity
   },
   dark: {
-    text: '#fff',
-    background: '#000',
+    text: "#ffffff",
+    placeholderText: "#cccccc",
+    background: "#1A1A1A",
+    backgroundDarker: "#000000",
     tint,
     tintLowOpacity
   },

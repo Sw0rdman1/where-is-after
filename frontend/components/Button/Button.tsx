@@ -11,10 +11,10 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = forwardRef(({ title, onPress, disabled, color = 'primary' }, ref) => {
-    const { tint, tintLowOpacity, background, text } = useColors()
+    const { tint, tintLowOpacity } = useColors()
 
-    const backgroundColor = color === 'primary' ? tint : background
-    const textColor = color === 'primary' ? 'white' : text
+    const backgroundColor = color === 'primary' ? tint : 'white'
+    const textColor = color === 'primary' ? 'white' : tint
 
 
     return (
