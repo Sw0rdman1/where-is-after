@@ -1,17 +1,16 @@
 import { AuthProvider } from '@/context/AuthProvider';
+import { cacheImages } from '@/utils/cache';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 
 
-export {
-  ErrorBoundary,
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(auth)',
@@ -20,22 +19,34 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
-  });
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    async function loadResourcesAndDataAsync() {
+      try {
+        SplashScreen.preventAutoHideAsync();
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+        const imageAssets = cacheImages([
+          require('../assets/images/auth/background.jpg'),
+          require('../assets/images/auth/banner.jpg'),
+        ]);
+
+
+        await Promise.all([...imageAssets]);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+        SplashScreen.hideAsync();
+      }
     }
-  }, [loaded]);
 
-  if (!loaded) {
+    loadResourcesAndDataAsync();
+  }, []);
+
+
+
+  if (!appIsReady) {
     return null;
   }
 

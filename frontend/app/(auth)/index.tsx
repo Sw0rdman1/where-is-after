@@ -4,7 +4,7 @@ import Button from '@/components/Button/Button'
 import { router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 
-const BACKGROUND_IMAGE = require('../../assets/images/auth/background3.jpg')
+const BACKGROUND_IMAGE = require('../../assets/images/auth/background.jpg')
 
 const WelcomeScreen = () => {
     const handlePress = () => {

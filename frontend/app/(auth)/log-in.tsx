@@ -3,7 +3,7 @@ import { View } from '@/components/Themed';
 import Banner from '@/components/Image/Banner';
 import LogInForm from '@/components/Form/LogInForm';
 
-const LOGIN_BANNER = require('../../assets/images/auth/background.jpg')
+const LOGIN_BANNER = require('../../assets/images/auth/banner.jpg')
 
 const LogInScreen = () => {
     return (
