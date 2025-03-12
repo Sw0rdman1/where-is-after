@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         borderBottomStartRadius: 250,
         borderBottomEndRadius: 250,
         overflow: 'hidden',
+
     },
     imageChildContainer: {
         flex: 1,
