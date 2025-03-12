@@ -14,12 +14,12 @@ interface InputProps extends TextInputProps {
 }
 
 const DisplayNameInput: React.FC<InputProps> = ({ status, error, ...props }) => {
-    const { tint } = useColors()
+    const { tint, placeholderText } = useColors()
 
     const color = () => {
         switch (status) {
             case 'empty':
-                return 'gray'
+                return placeholderText
             case 'error':
                 return 'red'
             case 'success':
@@ -36,6 +36,7 @@ const DisplayNameInput: React.FC<InputProps> = ({ status, error, ...props }) => 
                     style={[styles.input, { color: color() }]}
                     autoCapitalize="words"
                     placeholder="Display Name"
+                    placeholderTextColor={placeholderText}
                     {...props}
                 />
                 {status === 'success' ?
@@ -49,12 +50,12 @@ const DisplayNameInput: React.FC<InputProps> = ({ status, error, ...props }) => 
 }
 
 const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
-    const { tint } = useColors()
+    const { tint, placeholderText } = useColors()
 
     const color = () => {
         switch (status) {
             case 'empty':
-                return 'gray'
+                return placeholderText
             case 'error':
                 return 'red'
             case 'success':
@@ -64,13 +65,14 @@ const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
 
     return (
         <View style={styles.container}>
-            <View style={[styles.inputContainer, { borderColor: color() }]}>
+            <View style={styles.inputContainer}>
                 <Entypo style={styles.icon} name="mail" size={28} color={color()} />
                 <TextInput
                     style={[styles.input, { color: color() }]}
                     autoCapitalize="none"
                     placeholder="Email"
                     keyboardType="email-address"
+                    placeholderTextColor={placeholderText}
                     {...props}
                 />
                 {status === 'success' ?
@@ -81,7 +83,7 @@ const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
 
             </View>
 
-        </View>
+        </View >
 
     )
 }
@@ -89,23 +91,25 @@ const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
 
 const PasswordInput: React.FC<InputProps> = ({ status, error, ...props }) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true)
+    const { placeholderText } = useColors()
 
     return (
         <View style={styles.container}>
 
             <View style={styles.inputContainer}>
-                <Entypo style={styles.icon} name="lock" size={28} color='gray' />
+                <Entypo style={styles.icon} name="lock" size={28} color={placeholderText} />
                 <TextInput
                     style={styles.input}
                     autoCapitalize="none"
                     placeholder="Password"
                     secureTextEntry={secureTextEntry}
+                    placeholderTextColor={placeholderText}
                     keyboardType={secureTextEntry ? 'default' : 'visible-password'}
                     {...props}
                 />
                 {secureTextEntry ?
-                    <Ionicons style={styles.icon} name="eye-off" size={28} color='gray' onPress={() => setSecureTextEntry(false)} /> :
-                    <Ionicons style={styles.icon} name="eye" size={28} color='gray' onPress={() => setSecureTextEntry(true)} />
+                    <Ionicons style={styles.icon} name="eye-off" size={28} color={placeholderText} onPress={() => setSecureTextEntry(false)} /> :
+                    <Ionicons style={styles.icon} name="eye" size={28} color={placeholderText} onPress={() => setSecureTextEntry(true)} />
                 }
                 {(status === 'error' && error) && <Text style={styles.errorText}>{error}</Text>}
             </View>

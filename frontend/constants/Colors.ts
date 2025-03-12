@@ -4,7 +4,9 @@ const tintLowOpacity = `${tint}70`;
 export default {
   light: {
     text: '#000',
+    placeholderText: "#000",
     background: '#fff',
+    backgroundDarker: "#fff",
     tint,
     tintLowOpacity
   },
