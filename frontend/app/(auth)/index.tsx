@@ -17,7 +17,7 @@ const WelcomeScreen = () => {
                 </Text>
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText}>
-                        Explore parties
+                        Discover parties
                     </Text>
                 </TouchableOpacity>
             </View>

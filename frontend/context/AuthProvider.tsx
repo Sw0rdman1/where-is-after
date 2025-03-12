@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { login } from '@/api/auth';
+import { router } from 'expo-router';
 
 export interface User {
     _id: string;
@@ -12,7 +14,7 @@ interface AuthContextType {
     user: User | null;
     accessToken: string | null;
     isLoading: boolean;
-    afterLogInHandler: (user: User, accessToken: string, refreshToken: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -36,18 +38,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loadAuthData();
     }, []);
 
-    const afterLogInHandler = async (userFromResponse: User, accessToken: string, refreshToken: string) => {
-        const user: User = {
-            _id: userFromResponse._id,
-            email: userFromResponse.email,
-            isVerified: userFromResponse.isVerified,
-            role: userFromResponse.role
-        };
-        setUser(user);
-        setAccessToken(accessToken);
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        await AsyncStorage.setItem('token', accessToken);
-        await AsyncStorage.setItem('refreshToken', refreshToken);
+    const loginHandler = async (email: string, password: string) => {
+        const data = await login(email, password);
+
+        if (data.user && data.accessToken && data.refreshToken) {
+            const { user, accessToken, refreshToken } = data;
+            setUser(user);
+            setAccessToken(accessToken);
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            await AsyncStorage.setItem('token', accessToken);
+            await AsyncStorage.setItem('refreshToken', refreshToken);
+            router.replace('/');
+        }
     };
 
     const logout = async () => {
@@ -58,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ user, accessToken, isLoading, afterLogInHandler, logout }}>
+        <AuthContext.Provider value={{ user, accessToken, isLoading, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
