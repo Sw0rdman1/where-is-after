@@ -13,7 +13,7 @@ export default {
   dark: {
     text: "#fff",
     placeholderText: "#f8f8f2",
-    background: "#0C222F",
+    background: "#282a36",
     backgroundDarker: "#000000",
     tint,
     tintLowOpacity

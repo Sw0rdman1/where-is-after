@@ -8,36 +8,21 @@ interface BannerProps {
 
 const Banner: React.FC<BannerProps> = ({ source, height }) => {
     return (
-        <View style={[styles.imageContainer, { height }]}>
-            <View style={styles.imageChildContainer}>
-                <Image
-                    source={source}
-                    style={styles.image}
-                />
-            </View>
-        </View>
+        <Image
+            source={source}
+            style={[styles.image, { height }]}
+        />
     )
 }
 
 export default Banner
 
 const styles = StyleSheet.create({
-    imageContainer: {
-        width: '100%',
-        transform: [{ scaleX: 2 }],
-        borderBottomStartRadius: 250,
-        borderBottomEndRadius: 250,
-        overflow: 'hidden',
-
-    },
-    imageChildContainer: {
-        flex: 1,
-        transform: [{ scaleX: 0.5 }],
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     image: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
         width: '100%',
-        aspectRatio: 1,
     },
 })
