@@ -3,19 +3,19 @@ const tintLowOpacity = `${tint}70`;
 
 export default {
   light: {
-    text: '#000',
-    placeholderText: "#000",
-    background: '#fff',
-    backgroundDarker: "#fff",
+    text: '#333',
+    placeholderText: "#A0A0A0",
+    background: '#f7f7f7',
+    backgroundDarker: "#e5e5e5",
     tint,
     tintLowOpacity,
     error: "#ff5555",
     success: "#50fa7b",
     warning: "#f1fa8c",
     info: "#8be9fd",
-    border: "#44475a",
-    outline: "#44475a",
-    link: "#8be9fd",
+    border: "#d1d1d1",
+    outline: "#b0b0b0",
+    link: "#4e8eff",
   },
   dark: {
     text: "#f8f8f2",
