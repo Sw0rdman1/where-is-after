@@ -4,7 +4,7 @@ import Banner from '@/components/Image/Banner';
 import LogInForm from '@/components/Form/LogInForm';
 
 const LOGIN_BANNER = require('../../assets/images/auth/banner.jpg')
-const BANNER_HEIGHT = 240
+const BANNER_HEIGHT = 220
 
 const LogInScreen = () => {
     return (
@@ -23,8 +23,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        width: '100%',
     },
     formContainer: {
+        flex: 1,
+        width: '100%',
         borderTopRightRadius: 40,
         shadowColor: 'white',
         shadowOffset: {

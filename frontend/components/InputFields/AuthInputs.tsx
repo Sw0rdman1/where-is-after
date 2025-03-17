@@ -9,19 +9,22 @@ import { useState } from 'react';
 const { width } = Dimensions.get('window')
 
 interface InputProps extends TextInputProps {
+    registration?: boolean,
     status: 'empty' | 'error' | 'success',
     error?: string
 }
 
-const DisplayNameInput: React.FC<InputProps> = ({ status, error, ...props }) => {
-    const { tint, placeholderText } = useColors()
+const DisplayNameInput: React.FC<InputProps> = ({ registration, status, error, ...props }) => {
+    const { tint, placeholderText, error: errorColor } = useColors()
 
     const color = () => {
+        if (!registration) return placeholderText
+
         switch (status) {
             case 'empty':
                 return placeholderText
             case 'error':
-                return 'red'
+                return errorColor
             case 'success':
                 return tint
         }
@@ -43,21 +46,24 @@ const DisplayNameInput: React.FC<InputProps> = ({ status, error, ...props }) => 
                     <AntDesign style={styles.successIcon} name="checkcircle" size={24} color={tint} /> :
                     <View style={{ width: 25 }} />
                 }
-                {(status === 'error' && error) && <Text style={styles.errorText}>{error}</Text>}
+                {(status === 'error' && error) &&
+                    <Text style={[styles.errorText, { color: errorColor }]}>{error}</Text>
+                }
             </View>
         </View>
     )
 }
 
-const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
-    const { tint, placeholderText } = useColors()
+const EmailInput: React.FC<InputProps> = ({ registration, status, error, ...props }) => {
+    const { tint, placeholderText, error: errorColor } = useColors()
 
     const color = () => {
+
         switch (status) {
             case 'empty':
                 return placeholderText
             case 'error':
-                return 'red'
+                return errorColor
             case 'success':
                 return tint
         }
@@ -70,8 +76,13 @@ const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
                 <TextInput
                     style={[styles.input, { color: color() }]}
                     autoCapitalize="none"
+                    autoCorrect={false}
+                    autoComplete="email"
+                    textContentType="emailAddress"
+                    importantForAutofill="yes"
                     placeholder="Email"
                     keyboardType="email-address"
+                    returnKeyType="done"
                     placeholderTextColor={placeholderText}
                     {...props}
                 />
@@ -79,8 +90,9 @@ const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
                     <AntDesign style={styles.successIcon} name="checkcircle" size={24} color={tint} /> :
                     <View style={{ width: 25 }} />
                 }
-                {(status === 'error' && error) && <Text style={styles.errorText}>{error}</Text>}
-
+                {(status === 'error' && error) &&
+                    <Text style={[styles.errorText, { color: errorColor }]}>{error}</Text>
+                }
             </View>
 
         </View >
@@ -91,27 +103,33 @@ const EmailInput: React.FC<InputProps> = ({ status, error, ...props }) => {
 
 const PasswordInput: React.FC<InputProps> = ({ status, error, ...props }) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true)
-    const { placeholderText } = useColors()
+    const { placeholderText, error: errorColor } = useColors()
 
     return (
         <View style={styles.container}>
-
             <View style={styles.inputContainer}>
                 <Entypo style={styles.icon} name="lock" size={28} color={placeholderText} />
                 <TextInput
                     style={styles.input}
                     autoCapitalize="none"
+                    autoCorrect={false}
+                    autoComplete="password"
+                    textContentType="password"
+                    importantForAutofill="yes"
                     placeholder="Password"
                     secureTextEntry={secureTextEntry}
                     placeholderTextColor={placeholderText}
                     keyboardType={secureTextEntry ? 'default' : 'visible-password'}
+                    returnKeyType="done"
                     {...props}
                 />
                 {secureTextEntry ?
                     <Ionicons style={styles.icon} name="eye-off" size={28} color={placeholderText} onPress={() => setSecureTextEntry(false)} /> :
                     <Ionicons style={styles.icon} name="eye" size={28} color={placeholderText} onPress={() => setSecureTextEntry(true)} />
                 }
-                {(status === 'error' && error) && <Text style={styles.errorText}>{error}</Text>}
+                {(status === 'error' && error) &&
+                    <Text style={[styles.errorText, { color: errorColor }]}>{error}</Text>
+                }
             </View>
             <View style={{ width: 25 }} />
         </View>
@@ -129,8 +147,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     inputContainer: {
-        width: width - 75,
-        marginLeft: 15,
+        width: width - 40,
+        marginLeft: 5,
         flexDirection: 'row',
         borderColor: 'gray',
         borderBottomWidth: 1,
@@ -159,7 +177,7 @@ const styles = StyleSheet.create({
         left: 5,
         bottom: -25,
         height: 20,
-        color: 'red',
+
         fontSize: 13,
         fontWeight: '500',
     },
