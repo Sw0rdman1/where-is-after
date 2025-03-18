@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import WelcomeScreen from "./WelcomeScreen";
 import EmailForm from "../Form/EmailForm";
 import Entypo from "@expo/vector-icons/Entypo";
+import LogInForm from "../Form/LogInForm";
 
 enum AUTH_SCREENS {
   WELCOME = "welcome",
@@ -70,7 +71,7 @@ const AuthContent = () => {
         );
 
       case AUTH_SCREENS.LOG_IN:
-        return <Text>Log In Screen</Text>;
+        return <LogInForm email={email} />;
 
       case AUTH_SCREENS.REGISTER:
         return <Text>Register Screen</Text>;
