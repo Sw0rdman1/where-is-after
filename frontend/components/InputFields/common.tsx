@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     },
     iconContainer: {
         height: '100%',
-        aspectRatio: 1,
+        width: 50,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
         fontWeight: '500',
         marginRight: 10,
         flexGrow: 1,
+        color: 'white'
     },
     successIcon: {
         height: 25,

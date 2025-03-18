@@ -13,7 +13,7 @@ enum AUTH_SCREENS {
 }
 
 const AuthContent = () => {
-    const [currentAuthScreen, setCurrentAuthScreen] = useState(AUTH_SCREENS.EMAIL_ENTER)
+    const [currentAuthScreen, setCurrentAuthScreen] = useState(AUTH_SCREENS.WELCOME)
 
     const backState = useMemo(() => {
         switch (currentAuthScreen) {

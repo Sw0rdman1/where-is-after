@@ -1,5 +1,9 @@
 import * as Yup from 'yup';
 
+export const emailValidation = Yup.object().shape({
+    email: Yup.string().email('Invalid email adress!').required('Email is required'),
+});
+
 export const loginValidation = Yup.object().shape({
     email: Yup.string().email('Invalid email adress!').required('Email is required'),
     password: Yup.string().required('Password is required'),

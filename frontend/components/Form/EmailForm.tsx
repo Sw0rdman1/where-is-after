@@ -2,14 +2,13 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Formik } from "formik";
 import { useAuth } from "@/context/AuthProvider";
 import { Text } from "../Themed";
-import { loginValidation } from "@/utils/validation";
+import { emailValidation } from "@/utils/validation";
 import { calculateStatus } from "@/utils/helpers";
 import Button from "../Button/Button";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { router } from "expo-router";
 import { BlurView } from "expo-blur";
 import EmailInput from "../InputFields/EmailInput";
-import PasswordInput from "../InputFields/PasswordInput";
 
 const initialValues = {
     email: "",
@@ -31,16 +30,15 @@ const EmailForm = () => {
         router.replace("/(auth)/register");
     }
     return (
-
         <Formik
             initialValues={initialValues}
-            validationSchema={loginValidation}
+            validationSchema={emailValidation}
             onSubmit={(values) => {
                 onSubmitHandler(values);
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                <BlurView style={styles.container} intensity={40} tint="dark">
+                <BlurView style={styles.container} intensity={50} tint="dark">
                     <Animated.View entering={FadeInDown.delay(200).duration(400)}>
                         <Text style={styles.title}>
                             Hi there!
@@ -64,10 +62,7 @@ const EmailForm = () => {
                     <Animated.View entering={FadeInDown.delay(800).duration(400)}>
                         <View style={styles.buttonContainer}>
                             <Button
-                                disabled={
-                                    Object.keys(errors).length > 0 ||
-                                    Object.keys(touched).length === 0
-                                }
+                                disabled={Object.keys(errors).length > 0 || Object.keys(touched).length === 0}
                                 onPress={handleSubmit}
                                 title="Continue"
                             />

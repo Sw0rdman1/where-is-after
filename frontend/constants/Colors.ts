@@ -19,7 +19,7 @@ export default {
   },
   dark: {
     text: "#f8f8f2",
-    placeholderText: "#f8f8f2",
+    placeholderText: "#A0A0A0",
     background: "#0C222F",
     backgroundDarker: "#000000",
     tint,

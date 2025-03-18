@@ -1,33 +1,55 @@
-import { AntDesign, Entypo } from "@expo/vector-icons"
+import { AntDesign, Entypo, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons"
 import { Text } from "../Themed"
 import { ICON_SIZE, InputProps, styles } from "./common"
 import { useColors } from "@/hooks/useColors"
 import { BlurView } from "expo-blur"
 import { TextInput, View } from "react-native"
+import { useMemo, useState } from "react"
 
 const EmailInput: React.FC<InputProps> = ({ registration, status, error, ...props }) => {
-    const { tint, placeholderText, error: errorColor } = useColors()
+    const { tint, placeholderText, error: errorColor, success } = useColors()
+    const [isFocused, setIsFocused] = useState(false)
 
-    const color = () => {
+    const color = useMemo(() => {
+        if (isFocused) {
+            return 'white'
+        }
 
         switch (status) {
             case 'empty':
-                return placeholderText
-            case 'error':
+                return placeholderText;
+
+            case "success":
+                return success
+
+            case "error":
                 return errorColor
-            case 'success':
-                return tint
         }
-    }
+    }, [status, isFocused]);
 
     return (
-        <BlurView style={styles.container} intensity={60} tint="dark">
+        <BlurView
+            style={[styles.container, { borderColor: tint, }]}
+            intensity={isFocused ? 80 : 50}
+            tint='dark'
+        >
             <View style={styles.iconContainer}>
-                <Entypo name="mail" size={ICON_SIZE} color={'white'} />
+                <Entypo
+                    name={'email'}
+                    size={ICON_SIZE}
+                    color={color}
+                />
             </View>
             <View style={styles.inputContainer}>
                 <TextInput
-                    style={[styles.input, { color: color() }]}
+                    onSubmitEditing={(e) => {
+                        setIsFocused(false)
+                    }}
+                    onFocus={(e) => {
+                        props.onFocus && props.onFocus(e)
+                        setIsFocused(true)
+                    }}
+                    style={[styles.input, { color }]}
                     autoCapitalize="none"
                     autoCorrect={false}
                     autoComplete="email"
@@ -40,11 +62,8 @@ const EmailInput: React.FC<InputProps> = ({ registration, status, error, ...prop
                     {...props}
                 />
                 {status === 'success' ?
-                    <AntDesign style={styles.successIcon} name="checkcircle" size={ICON_SIZE} color={tint} /> :
+                    <AntDesign style={styles.successIcon} name="checkcircle" size={ICON_SIZE} /> :
                     <View style={{ width: 25 }} />
-                }
-                {(status === 'error' && error) &&
-                    <Text style={[styles.errorText, { color: errorColor }]}>{error}</Text>
                 }
             </View>
 
