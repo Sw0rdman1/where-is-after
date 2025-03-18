@@ -13,16 +13,15 @@ import PasswordInput from "../InputFields/PasswordInput";
 
 const initialValues = {
     email: "",
-    password: "",
 };
 
 
-const LogInForm = () => {
+const EmailForm = () => {
     const { login } = useAuth();
 
     const onSubmitHandler = async (values: typeof initialValues) => {
         try {
-            login(values.email, values.password);
+            // login(values.email, values.password);
         } catch (error) {
             console.error('Login failed', error);
         }
@@ -41,13 +40,18 @@ const LogInForm = () => {
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                <BlurView style={styles.container} intensity={50} tint="dark">
+                <BlurView style={styles.container} intensity={40} tint="dark">
                     <Animated.View entering={FadeInDown.delay(200).duration(400)}>
                         <Text style={styles.title}>
-                            Welcome Back!
+                            Hi there!
                         </Text>
                     </Animated.View>
                     <Animated.View entering={FadeInDown.delay(400).duration(400)}>
+                        <Text style={styles.subtitle}>
+                            Please enter your email address to continue
+                        </Text>
+                    </Animated.View>
+                    <Animated.View entering={FadeInDown.delay(600).duration(400)}>
                         <EmailInput
                             onChangeText={handleChange("email")}
                             onBlur={handleBlur("email")}
@@ -56,15 +60,7 @@ const LogInForm = () => {
                             status={calculateStatus(errors.email, touched.email, values.email)}
                         />
                     </Animated.View>
-                    <Animated.View entering={FadeInDown.delay(600).duration(400)}>
-                        <PasswordInput
-                            onChangeText={handleChange("password")}
-                            onBlur={handleBlur("password")}
-                            value={values.password}
-                            error={errors.password}
-                            status={calculateStatus(errors.password, touched.password, values.password)}
-                        />
-                    </Animated.View>
+
                     <Animated.View entering={FadeInDown.delay(800).duration(400)}>
                         <View style={styles.buttonContainer}>
                             <Button
@@ -73,18 +69,8 @@ const LogInForm = () => {
                                     Object.keys(touched).length === 0
                                 }
                                 onPress={handleSubmit}
-                                title="Log In"
+                                title="Continue"
                             />
-                        </View>
-                        <View style={styles.switchFormContainer}>
-                            <Text style={styles.switchFormText}>
-                                You don't have an account?
-                            </Text>
-                            <TouchableOpacity onPress={handleFormSwitch} activeOpacity={0.7}>
-                                <Text style={[styles.switchFormText, { color: "#8be9fd" }]}>
-                                    Sign Up
-                                </Text>
-                            </TouchableOpacity>
                         </View>
                     </Animated.View>
                 </BlurView>
@@ -93,7 +79,7 @@ const LogInForm = () => {
     );
 };
 
-export default LogInForm;
+export default EmailForm;
 
 const styles = StyleSheet.create({
     container: {
@@ -101,13 +87,19 @@ const styles = StyleSheet.create({
         zIndex: 1,
         paddingHorizontal: 10,
         paddingVertical: 40,
-        gap: 25,
+        gap: 20,
         borderRadius: 20,
         overflow: "hidden",
+        marginTop: 100,
     },
     title: {
         fontSize: 34,
         fontWeight: "bold",
+        marginLeft: 10,
+    },
+    subtitle: {
+        fontSize: 20,
+        fontWeight: "500",
         marginLeft: 10,
     },
     buttonContainer: {

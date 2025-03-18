@@ -28,6 +28,7 @@ export default WelcomeScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',
         justifyContent: 'flex-end',
         padding: 30,
         marginBottom: 10
