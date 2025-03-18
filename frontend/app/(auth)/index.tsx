@@ -3,6 +3,8 @@ import React from 'react'
 import Button from '@/components/Button/Button'
 import { router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import EmailInput from '@/components/InputFields/EmailInput'
+import LogInForm from '@/components/Form/LogInForm'
 
 const BACKGROUND_IMAGE = require('../../assets/images/auth/background.jpg')
 
@@ -18,8 +20,9 @@ const WelcomeScreen = () => {
                 style={styles.backgroundImage}
                 source={BACKGROUND_IMAGE}
             />
-            <View style={styles.buttonContainer}>
-                <Text style={styles.title}>
+            <LogInForm />
+
+            {/* <Text style={styles.title}>
                     The best parties aren't planned - they're discovered!
                 </Text>
                 <Text style={styles.subtitle}>
@@ -29,8 +32,7 @@ const WelcomeScreen = () => {
                     title='Discover parties'
                     onPress={handlePress}
                     color='secondary'
-                />
-            </View>
+                /> */}
         </View>
     )
 }
@@ -44,8 +46,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     backgroundImage: {
-        flex: 1,
-        resizeMode: 'contain',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
     },
     title: {
@@ -58,13 +61,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'white',
         marginBottom: 20,
-
     },
     buttonContainer: {
-        position: 'absolute',
-        bottom: 40,
-        width: '100%',
-        paddingHorizontal: 30,
+        height: 300,
     },
     button: {
         marginTop: 30,

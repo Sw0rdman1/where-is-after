@@ -1,13 +1,15 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Formik } from "formik";
 import { useAuth } from "@/context/AuthProvider";
-import { Text, View } from "../Themed";
+import { Text } from "../Themed";
 import { loginValidation } from "@/utils/validation";
-import { EmailInput, PasswordInput } from "../InputFields/AuthInputs";
 import { calculateStatus } from "@/utils/helpers";
 import Button from "../Button/Button";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { router } from "expo-router";
+import { BlurView } from "expo-blur";
+import EmailInput from "../InputFields/EmailInput";
+import PasswordInput from "../InputFields/PasswordInput";
 
 const initialValues = {
     email: "",
@@ -39,7 +41,7 @@ const LogInForm = () => {
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                <View style={styles.container}>
+                <BlurView style={styles.container} intensity={50} tint="dark">
                     <Animated.View entering={FadeInDown.delay(200).duration(400)}>
                         <Text style={styles.title}>
                             Welcome Back!
@@ -55,7 +57,6 @@ const LogInForm = () => {
                         />
                     </Animated.View>
                     <Animated.View entering={FadeInDown.delay(600).duration(400)}>
-
                         <PasswordInput
                             onChangeText={handleChange("password")}
                             onBlur={handleBlur("password")}
@@ -86,7 +87,7 @@ const LogInForm = () => {
                             </TouchableOpacity>
                         </View>
                     </Animated.View>
-                </View>
+                </BlurView>
             )}
         </Formik>
     );
@@ -96,11 +97,13 @@ export default LogInForm;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        width: "95%",
+        zIndex: 1,
         paddingHorizontal: 10,
-        paddingTop: 30,
+        paddingVertical: 40,
         gap: 25,
-        borderTopRightRadius: 40,
+        borderRadius: 20,
+        overflow: "hidden",
     },
     title: {
         fontSize: 34,
