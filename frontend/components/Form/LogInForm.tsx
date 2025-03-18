@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
         gap: 25,
         borderRadius: 20,
         overflow: "hidden",
+        marginBottom: 120
     },
     title: {
         fontSize: 34,
