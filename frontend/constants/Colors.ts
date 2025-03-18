@@ -1,16 +1,16 @@
-const tint = '#5B78A7';
+const tint = "#02C08C";
 const tintLowOpacity = `${tint}70`;
 
 export default {
   light: {
-    text: '#333',
+    text: "#333",
     placeholderText: "#A0A0A0",
-    background: '#f7f7f7',
+    background: "#f7f7f7",
     backgroundDarker: "#e5e5e5",
     tint,
     tintLowOpacity,
     error: "#ff5555",
-    success: "#50fa7b",
+    success: "#02C08C",
     warning: "#f1fa8c",
     info: "#8be9fd",
     border: "#d1d1d1",
@@ -25,7 +25,7 @@ export default {
     tint,
     tintLowOpacity,
     error: "#ff5555",
-    success: "#50fa7b",
+    success: "#02C08C",
     warning: "#f1fa8c",
     info: "#8be9fd",
     border: "#44475a",
@@ -47,7 +47,6 @@ export default {
 // Secondary: #ff79c6 (Pink)
 // Accent: #50fa7b (Green)
 // Text: #f8f8f2 (Off-white)
-
 
 // 4. Nord (Minimal & Elegant)
 // Background: #2e3440 (Cool dark blue)
