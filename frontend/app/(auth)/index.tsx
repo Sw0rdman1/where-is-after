@@ -7,6 +7,7 @@ const BACKGROUND_IMAGE = require("../../assets/images/auth/bg7.jpg");
 
 const WelcomeScreen = () => {
 
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />

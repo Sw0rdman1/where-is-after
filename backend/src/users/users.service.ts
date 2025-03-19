@@ -52,10 +52,10 @@ export class UsersService {
       .exec();
   }
 
-  async updateVerificationCode(email: string, code: string, expires: Date) {
+  async updateVerificationCode(userId: string, code: string, expires: Date) {
     return this.userModel.findOneAndUpdate
       (
-        { email },
+        { _id: userId },
         {
           verificationCode: code,
           verificationCodeExpires: expires

@@ -18,4 +18,8 @@ export const registrationValidation = Yup.object().shape({
     ),
 });
 
+export const verifyEmailValidation = Yup.object().shape({
+    verificationCode: Yup.array().required('Code is required').min(6, 'Code must be 6 characters long').max(6, 'Code must be 6 characters long'),
+});
+
 

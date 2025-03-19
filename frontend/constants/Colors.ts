@@ -15,7 +15,7 @@ export default {
     info: "#8be9fd",
     border: "#d1d1d1",
     outline: "#b0b0b0",
-    link: "#4e8eff",
+    link: "#02C08C",
   },
   dark: {
     text: "#f8f8f2",
@@ -30,7 +30,7 @@ export default {
     info: "#8be9fd",
     border: "#44475a",
     outline: "#44475a",
-    link: "#8be9fd",
+    link: "#02C08C",
   },
 };
 

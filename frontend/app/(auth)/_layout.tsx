@@ -11,18 +11,23 @@ export default function AuthLayout() {
             return;
         }
 
+        if (user && !user.isVerified) {
+            return router.replace('/(auth)/verify');
+        }
+
         if (user?.role === 'user') {
-            router.replace('/(protected)/(user)');
+            return router.replace('/(protected)/(user)');
         }
 
         if (user?.role === 'admin') {
-            router.replace('/(protected)/(admin)');
+            return router.replace('/(protected)/(admin)');
         }
     }, [user]);
 
     return (
         <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" />
+            <Stack.Screen name="verify" />
         </Stack >
     )
 }

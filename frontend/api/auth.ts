@@ -68,9 +68,11 @@ export const sendVerificationCode = async (email: string) => {
     }
 };
 
-export const verifyUser = async (user: User, verificationCode: string) => {
+export const verifyUser = async (userId: string, verificationCode: string) => {
     try {
-        const response = await api.post('/verify', { userId: user._id, verificationCode });
+        const response = await api.post('/verify-email', { userId, verificationCode });
+        console.log(response.data);
+
         return response.data;
     } catch (error) {
 

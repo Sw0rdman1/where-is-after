@@ -13,7 +13,7 @@ export default function MainScreen() {
 
     const handleVerify = async () => {
         if (!user) return
-        const data = await verifyUser(user, verificationCode);
+        const data = await verifyUser(user._id, verificationCode);
     }
 
 
