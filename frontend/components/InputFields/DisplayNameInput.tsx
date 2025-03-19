@@ -33,38 +33,34 @@ const DisplayNameInput: React.FC<InputProps> = ({ status, error, ...props }) => 
             intensity={isFocused || status === "success" ? 80 : 50}
             tint="light"
         >
-            <View style={styles.iconContainer}>
+            <View style={styles.leftContainer}>
                 <FontAwesome name="user" size={ICON_SIZE} color={color} />
-            </View>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    onSubmitEditing={(e) => {
-                        setIsFocused(false);
-                    }}
-                    onFocus={(e) => {
-                        props.onFocus && props.onFocus(e);
-                        setIsFocused(true);
-                    }}
-                    style={[styles.input, { color }]}
-                    autoCapitalize="none"
-                    maxLength={50}
-                    autoComplete="name"
-                    importantForAutofill="yes"
-                    placeholder="Display name"
-                    returnKeyType="done"
-                    placeholderTextColor={placeholderText}
-                    {...props}
-                />
-                {status === "success" ? (
-                    <AntDesign
-                        style={styles.successIcon}
-                        name="checkcircle"
-                        size={ICON_SIZE}
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        onSubmitEditing={(e) => {
+                            setIsFocused(false);
+                        }}
+                        onFocus={(e) => {
+                            props.onFocus && props.onFocus(e);
+                            setIsFocused(true);
+                        }}
+                        style={[styles.input, { color }]}
+                        maxLength={50}
+                        autoComplete="name"
+                        placeholder="Display name"
+                        returnKeyType="done"
+                        placeholderTextColor={placeholderText}
+                        {...props}
                     />
-                ) : (
-                    <View style={{ width: 25 }} />
-                )}
+                </View>
             </View>
+            {status === "success" && (
+                <AntDesign
+                    name="checkcircle"
+                    size={ICON_SIZE}
+                    color={success}
+                />
+            )}
         </BlurView>
     );
 };

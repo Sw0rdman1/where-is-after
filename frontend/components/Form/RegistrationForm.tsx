@@ -1,13 +1,14 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Formik } from "formik";
 import { useAuth } from "@/context/AuthProvider";
-import { loginValidation } from "@/utils/validation";
+import { registrationValidation } from "@/utils/validation";
 import { calculateStatus } from "@/utils/helpers";
 import Button from "../Button/Button";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
 import PasswordInput from "../InputFields/PasswordInput";
 import DisplayNameInput from "../InputFields/DisplayNameInput";
+import PasswordValidation from "../InputFields/PasswordValidation";
 
 interface Props { email: string; }
 
@@ -15,10 +16,10 @@ const RegistrationForm: React.FC<Props> = ({ email }) => {
 
     const initialValues = {
         email,
+        displayName: "",
         password: "",
     };
 
-    const { login } = useAuth();
 
     const onSubmitHandler = async (values: typeof initialValues) => {
 
@@ -28,7 +29,7 @@ const RegistrationForm: React.FC<Props> = ({ email }) => {
     return (
         <Formik
             initialValues={initialValues}
-            validationSchema={loginValidation}
+            validationSchema={registrationValidation}
             onSubmit={onSubmitHandler}
         >
             {(formik) => (
@@ -49,21 +50,23 @@ const RegistrationForm: React.FC<Props> = ({ email }) => {
                     </Animated.View>
                     <Animated.View entering={FadeInDown.delay(600).duration(400)}>
                         <DisplayNameInput
-                            onChangeText={formik.handleChange("password")}
-                            onBlur={formik.handleBlur("password")}
-                            value={formik.values.password}
-                            error={formik.errors.password}
-                            status={calculateStatus(formik.errors.password, formik.touched.password, formik.values.password)}
+                            onChangeText={formik.handleChange("displayName")}
+                            onBlur={formik.handleBlur("displayName")}
+                            value={formik.values.displayName}
+                            error={formik.errors.displayName}
+                            status={calculateStatus(formik.errors.displayName, formik.touched.displayName, formik.values.displayName)}
                         />
                     </Animated.View>
                     <Animated.View entering={FadeInDown.delay(800).duration(400)}>
                         <PasswordInput
+                            registration
                             onChangeText={formik.handleChange("password")}
                             onBlur={formik.handleBlur("password")}
                             value={formik.values.password}
                             error={formik.errors.password}
                             status={calculateStatus(formik.errors.password, formik.touched.password, formik.values.password)}
                         />
+                        <PasswordValidation password={formik.values.password} />
                     </Animated.View>
                     <Animated.View entering={FadeInDown.delay(1000).duration(400)}>
                         <View style={styles.buttonContainer}>
@@ -87,10 +90,11 @@ export default RegistrationForm;
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 40,
         width: "95%",
         zIndex: 1,
         paddingHorizontal: 10,
-        paddingVertical: 40,
+        paddingVertical: 20,
         gap: 25,
         borderRadius: 20,
         overflow: "hidden",
@@ -103,15 +107,19 @@ const styles = StyleSheet.create({
     },
     subtitleContainer: {
         marginLeft: 10,
-
         gap: 5,
     },
     subtitle: {
         fontSize: 18,
         color: "white",
     },
-    buttonContainer: {
+    helperText: {
+        fontSize: 14,
+        color: "white",
+        marginLeft: 10,
         marginTop: 10,
+    },
+    buttonContainer: {
         marginHorizontal: 20,
     },
 

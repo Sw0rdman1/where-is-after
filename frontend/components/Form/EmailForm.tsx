@@ -55,7 +55,7 @@ const EmailForm: React.FC<Props> = ({ email, openLoginScreen, openRegisterScreen
               Please enter your email address to be able to find parties near you.
             </Text>
           </Animated.View>
-          <Animated.View entering={FadeInDown.delay(600).duration(400)}>
+          <Animated.View entering={FadeInDown.delay(600).duration(400)} style={{ width: "100%" }}>
             <EmailInput
               onChangeText={formik.handleChange("email")}
               onBlur={formik.handleBlur("email")}
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     gap: 20,
     borderRadius: 20,
     overflow: "hidden",
-    marginTop: 100,
   },
   title: {
     fontSize: 34,
@@ -111,16 +110,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
     marginHorizontal: 20,
-  },
-  switchFormContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 10,
-  },
-  switchFormText: {
-    fontSize: 16,
-    fontWeight: "700",
   },
 });

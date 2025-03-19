@@ -22,7 +22,7 @@ const PasswordInput: React.FC<InputProps> = ({ registration, status, error, ...p
         return placeholderText;
 
       case "success":
-        return "white";
+        return 'white';
 
       case "error":
         return errorColor;
@@ -31,36 +31,36 @@ const PasswordInput: React.FC<InputProps> = ({ registration, status, error, ...p
 
   return (
     <BlurView style={styles.container} intensity={isFocused || status === "success" ? 80 : 50} tint="light">
-      <View style={styles.iconContainer}>
+      <View style={styles.leftContainer}>
         <Fontisto name="locked" size={ICON_SIZE} color={color} />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          onSubmitEditing={(e) => {
-            setIsFocused(false);
-          }}
-          onFocus={(e) => {
-            props.onFocus && props.onFocus(e);
-            setIsFocused(true);
-          }}
-          style={[styles.input, { color }]}
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoComplete="password"
-          textContentType="password"
-          importantForAutofill="yes"
-          placeholder="Password"
-          secureTextEntry={secureTextEntry}
-          placeholderTextColor={placeholderText}
-          keyboardType={secureTextEntry ? "default" : "visible-password"}
-          returnKeyType="done"
-          {...props}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            onSubmitEditing={(e) => {
+              setIsFocused(false);
+            }}
+            onFocus={(e) => {
+              props.onFocus && props.onFocus(e);
+              setIsFocused(true);
+            }}
+            style={[styles.input, { color }]}
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="password"
+            textContentType="password"
+            importantForAutofill="yes"
+            placeholder="Password"
+            secureTextEntry={secureTextEntry}
+            placeholderTextColor={placeholderText}
+            keyboardType={secureTextEntry ? "default" : "visible-password"}
+            returnKeyType="done"
+            {...props}
+          />
+        </View>
       </View>
 
-      <TouchableOpacity style={styles.iconContainer} onPress={() => setSecureTextEntry((prev) => !prev)}>
+      <TouchableOpacity onPress={() => setSecureTextEntry((prev) => !prev)}>
         <Ionicons
-          name={secureTextEntry ? "eye-off" : "eye"}
+          name={secureTextEntry ? "eye" : "eye-off"}
           size={ICON_SIZE}
           color={color}
         />

@@ -11,33 +11,36 @@ export interface InputProps extends TextInputProps {
 
 export const styles = StyleSheet.create({
   container: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: 'space-between',
     marginHorizontal: 5,
+    paddingHorizontal: 15,
     borderRadius: 10,
     overflow: "hidden",
     height: 55,
+    gap: 10,
   },
-  iconContainer: {
+  leftContainer: {
     height: "100%",
-    paddingHorizontal: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    flex: 1,
+    gap: 10,
+  },
+  inputContainer: {
+    height: "100%",
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
     fontSize: 20,
     fontWeight: "500",
-    marginRight: 10,
-    flexGrow: 1,
     color: "white",
+    flex: 1,
+    height: "100%",
   },
-  successIcon: {
-    height: 25,
-    width: 25,
-  },
+
 });
