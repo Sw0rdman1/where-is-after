@@ -23,10 +23,8 @@ export class AuthService {
 
         return {
             exists: true,
-            user: {
-                name: user.displayName,
-                profileImage: user.profileImage
-            }
+            displayName: user.displayName,
+            profileImage: user.profileImage
         }
     }
 

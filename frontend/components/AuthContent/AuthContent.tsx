@@ -13,10 +13,9 @@ enum AUTH_SCREENS {
 }
 
 const AuthContent = () => {
-  const [currentAuthScreen, setCurrentAuthScreen] = useState(
-    AUTH_SCREENS.WELCOME
-  );
+  const [currentAuthScreen, setCurrentAuthScreen] = useState(AUTH_SCREENS.WELCOME);
   const [email, setEmail] = useState("");
+  const [user, setUser] = useState<{ displayName: string; profileImage: string } | null>(null);
 
   const backState = useMemo(() => {
     switch (currentAuthScreen) {
@@ -43,8 +42,11 @@ const AuthContent = () => {
     }
   };
 
-  const openLoginScreen = (email: string) => {
+  const openLoginScreen = (email: string, displayName: string, profileImage: string) => {
     setEmail(email);
+    console.log(displayName, profileImage);
+
+    setUser({ displayName, profileImage });
     setCurrentAuthScreen(AUTH_SCREENS.LOG_IN);
   };
 
@@ -71,7 +73,7 @@ const AuthContent = () => {
         );
 
       case AUTH_SCREENS.LOG_IN:
-        return <LogInForm email={email} />;
+        return <LogInForm email={email} user={user} />;
 
       case AUTH_SCREENS.REGISTER:
         return <Text>Register Screen</Text>;

@@ -13,13 +13,16 @@ import { Image } from "expo-image";
 
 interface Props {
   email: string;
+  user: { displayName: string; profileImage: string } | null;
 }
 
-const LogInForm: React.FC<Props> = ({ email }) => {
+const LogInForm: React.FC<Props> = ({ email, user }) => {
+
   const initialValues = {
     email,
     password: "",
   };
+
   const { login } = useAuth();
 
   const onSubmitHandler = async (values: typeof initialValues) => {
@@ -30,25 +33,14 @@ const LogInForm: React.FC<Props> = ({ email }) => {
     }
   };
 
-  const handleFormSwitch = () => {
-    router.replace("/(auth)/register");
-  };
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={loginValidation}
-      onSubmit={(values) => {
-        onSubmitHandler(values);
-      }}
+      onSubmit={onSubmitHandler}
     >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        errors,
-        touched,
-      }) => (
+      {(formik) => (
         <BlurView style={styles.container} intensity={50} tint="dark">
           <Animated.View entering={FadeInDown.delay(200).duration(400)}>
             <Text style={styles.title}>Welcome Back!</Text>
@@ -56,50 +48,34 @@ const LogInForm: React.FC<Props> = ({ email }) => {
           <Animated.View entering={FadeInDown.delay(400).duration(400)}>
             <View style={styles.userProfileContainer}>
               <Image
-                source={{
-                  uri: "https://cdn.nba.com/headshots/nba/latest/1040x760/201939.png",
-                }}
+                source={{ uri: user?.profileImage }}
                 style={styles.userProfileImage}
               />
               <View style={styles.userProfileTextContainer}>
-                <Text style={styles.name}>Bozidar Vujasinovic</Text>
+                <Text style={styles.name}>{user?.displayName}</Text>
                 <Text style={styles.email}>{email}</Text>
               </View>
             </View>
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(600).duration(400)}>
             <PasswordInput
-              onChangeText={handleChange("password")}
-              onBlur={handleBlur("password")}
-              value={values.password}
-              error={errors.password}
-              status={calculateStatus(
-                errors.password,
-                touched.password,
-                values.password
-              )}
+              onChangeText={formik.handleChange("password")}
+              onBlur={formik.handleBlur("password")}
+              value={formik.values.password}
+              error={formik.errors.password}
+              status={calculateStatus(formik.errors.password, formik.touched.password, formik.values.password)}
             />
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(800).duration(400)}>
             <View style={styles.buttonContainer}>
               <Button
                 disabled={
-                  Object.keys(errors).length > 0 ||
-                  Object.keys(touched).length === 0
+                  Object.keys(formik.errors).length > 0 ||
+                  Object.keys(formik.touched).length === 0
                 }
-                onPress={handleSubmit}
+                onPress={formik.handleSubmit}
                 title="Log In"
               />
-            </View>
-            <View style={styles.switchFormContainer}>
-              <Text style={styles.switchFormText}>
-                You don't have an account?
-              </Text>
-              <TouchableOpacity onPress={handleFormSwitch} activeOpacity={0.7}>
-                <Text style={[styles.switchFormText, { color: "#8be9fd" }]}>
-                  Sign Up
-                </Text>
-              </TouchableOpacity>
             </View>
           </Animated.View>
         </BlurView>

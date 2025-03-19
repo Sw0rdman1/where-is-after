@@ -8,26 +8,29 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { router } from "expo-router";
 import { BlurView } from "expo-blur";
 import EmailInput from "../InputFields/EmailInput";
+import { checkEmail } from "@/api/auth";
 
 const initialValues = {
   email: "",
 };
 
 interface Props {
-  openLoginScreen: (email: string) => void;
+  openLoginScreen: (email: string, displayName: string, profileImage: string) => void;
   openRegisterScreen: (email: string) => void;
 }
 
-const EmailForm: React.FC<Props> = ({
-  openLoginScreen,
-  openRegisterScreen,
-}) => {
-  const { login } = useAuth();
+const EmailForm: React.FC<Props> = ({ openLoginScreen, openRegisterScreen }) => {
 
   const onSubmitHandler = async (values: typeof initialValues) => {
     try {
-      openLoginScreen(values.email);
-      // login(values.email, values.password);
+      const data = await checkEmail(values.email);
+
+      if (data.exists) {
+        openLoginScreen(values.email, data.displayName, data.profileImage);
+      } else {
+        openRegisterScreen(values.email);
+      }
+
     } catch (error) {
       console.error("Login failed", error);
     }
@@ -37,18 +40,9 @@ const EmailForm: React.FC<Props> = ({
     <Formik
       initialValues={initialValues}
       validationSchema={emailValidation}
-      onSubmit={(values) => {
-        onSubmitHandler(values);
-      }}
+      onSubmit={onSubmitHandler}
     >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        errors,
-        touched,
-      }) => (
+      {(formik) => (
         <BlurView style={styles.container} intensity={50} tint="dark">
           <Animated.View entering={FadeInDown.delay(200).duration(400)}>
             <Text style={styles.title}>Hi there!</Text>
@@ -60,15 +54,11 @@ const EmailForm: React.FC<Props> = ({
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(600).duration(400)}>
             <EmailInput
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
-              error={errors.email}
-              status={calculateStatus(
-                errors.email,
-                touched.email,
-                values.email
-              )}
+              onChangeText={formik.handleChange("email")}
+              onBlur={formik.handleBlur("email")}
+              value={formik.values.email}
+              error={formik.errors.email}
+              status={calculateStatus(formik.errors.email, formik.touched.email, formik.values.email)}
             />
           </Animated.View>
 
@@ -76,10 +66,10 @@ const EmailForm: React.FC<Props> = ({
             <View style={styles.buttonContainer}>
               <Button
                 disabled={
-                  Object.keys(errors).length > 0 ||
-                  Object.keys(touched).length === 0
+                  Object.keys(formik.errors).length > 0 ||
+                  Object.keys(formik.touched).length === 0
                 }
-                onPress={handleSubmit}
+                onPress={formik.handleSubmit}
                 title="Continue"
               />
             </View>

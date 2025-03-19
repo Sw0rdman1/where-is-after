@@ -4,7 +4,6 @@ import { Role } from 'src/users/schema/role.enum';
 import { RegisterDto } from 'src/users/dto/register.dto';
 import { LocalAuthGuard } from './guards/local.guard';
 import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
-import { log } from 'console';
 import { VerifyUserDto } from 'src/users/dto/verify-user.dto';
 
 @Controller('auth')
