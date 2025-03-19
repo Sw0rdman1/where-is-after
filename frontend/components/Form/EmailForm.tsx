@@ -23,8 +23,6 @@ const EmailForm: React.FC<Props> = ({ email, openLoginScreen, openRegisterScreen
 
   const onSubmitHandler = async (values: typeof initialValues) => {
     try {
-      console.log(values);
-
       const data = await checkEmail(values.email);
 
       if (data.exists) {

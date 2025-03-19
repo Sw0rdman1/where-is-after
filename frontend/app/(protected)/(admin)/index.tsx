@@ -14,7 +14,6 @@ export default function MainScreen() {
     const handleVerify = async () => {
         if (!user) return
         const data = await verifyUser(user, verificationCode);
-        console.log(data);
     }
 
 

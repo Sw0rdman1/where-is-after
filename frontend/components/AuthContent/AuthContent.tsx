@@ -45,8 +45,6 @@ const AuthContent = () => {
 
   const openLoginScreen = (email: string, displayName: string, profileImage: string) => {
     setEmail(email);
-    console.log(displayName, profileImage);
-
     setUser({ displayName, profileImage });
     setCurrentAuthScreen(AUTH_SCREENS.LOG_IN);
   };
