@@ -4,6 +4,7 @@ import WelcomeScreen from "./WelcomeScreen";
 import EmailForm from "../Form/EmailForm";
 import Entypo from "@expo/vector-icons/Entypo";
 import LogInForm from "../Form/LogInForm";
+import RegistrationForm from "../Form/RegistrationForm";
 
 enum AUTH_SCREENS {
   WELCOME = "welcome",
@@ -77,7 +78,7 @@ const AuthContent = () => {
         return <LogInForm email={email} user={user} />;
 
       case AUTH_SCREENS.REGISTER:
-        return <Text>Register Screen</Text>;
+        return <RegistrationForm email={email} />;
 
       default:
         return <Text>Unknown Screen</Text>;
@@ -91,8 +92,8 @@ const AuthContent = () => {
           <Entypo name="chevron-left" size={32} color="white" />
         </TouchableOpacity>
       )}
-
       {renderContent}
+      <View style={{ height: 50 }} />
     </View>
   );
 };

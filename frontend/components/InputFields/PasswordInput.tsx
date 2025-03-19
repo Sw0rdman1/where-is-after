@@ -3,11 +3,11 @@ import { Text } from "../Themed";
 import { ICON_SIZE, InputProps, styles } from "./common";
 import { useColors } from "@/hooks/useColors";
 import { BlurView } from "expo-blur";
-import { TextInput, View } from "react-native";
+import { TextInput, TouchableOpacity, View } from "react-native";
 import { useMemo, useState } from "react";
 import Fontisto from "@expo/vector-icons/Fontisto";
 
-const PasswordInput: React.FC<InputProps> = ({ status, error, ...props }) => {
+const PasswordInput: React.FC<InputProps> = ({ registration, status, error, ...props }) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { tint, placeholderText, error: errorColor, success } = useColors();
   const [isFocused, setIsFocused] = useState(false);
@@ -30,7 +30,7 @@ const PasswordInput: React.FC<InputProps> = ({ status, error, ...props }) => {
   }, [status, isFocused]);
 
   return (
-    <BlurView style={styles.container} intensity={80} tint="dark">
+    <BlurView style={styles.container} intensity={isFocused || status === "success" ? 80 : 50} tint="light">
       <View style={styles.iconContainer}>
         <Fontisto name="locked" size={ICON_SIZE} color={color} />
       </View>
@@ -56,26 +56,15 @@ const PasswordInput: React.FC<InputProps> = ({ status, error, ...props }) => {
           returnKeyType="done"
           {...props}
         />
-        {secureTextEntry ? (
-          <Ionicons
-            name="eye-off"
-            size={ICON_SIZE}
-            color={placeholderText}
-            onPress={() => setSecureTextEntry(false)}
-          />
-        ) : (
-          <Ionicons
-            name="eye"
-            size={ICON_SIZE}
-            color={placeholderText}
-            onPress={() => setSecureTextEntry(true)}
-          />
-        )}
-        {status === "error" && error && (
-          <Text style={[styles.errorText, { color: errorColor }]}>{error}</Text>
-        )}
       </View>
-      <View style={{ width: 25 }} />
+
+      <TouchableOpacity style={styles.iconContainer} onPress={() => setSecureTextEntry((prev) => !prev)}>
+        <Ionicons
+          name={secureTextEntry ? "eye-off" : "eye"}
+          size={ICON_SIZE}
+          color={color}
+        />
+      </TouchableOpacity>
     </BlurView>
   );
 };

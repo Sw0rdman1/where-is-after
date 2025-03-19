@@ -30,7 +30,6 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: {
-    width: "80%",
     fontSize: 20,
     fontWeight: "500",
     marginRight: 10,
@@ -40,13 +39,5 @@ export const styles = StyleSheet.create({
   successIcon: {
     height: 25,
     width: 25,
-  },
-  errorText: {
-    position: "absolute",
-    left: 5,
-    bottom: -25,
-    height: 20,
-    fontSize: 13,
-    fontWeight: "500",
   },
 });

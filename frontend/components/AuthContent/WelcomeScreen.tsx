@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-end",
     padding: 30,
-    marginBottom: 10,
+    paddingBottom: 0,
   },
   title: {
     fontSize: 32,
