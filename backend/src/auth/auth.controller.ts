@@ -49,5 +49,9 @@ export class AuthController {
         return this.authService.resendVerificationCode(body.email);
     }
 
+    @Get('profile')
+    async getProfile(@Query('id') id: string) {
+        return this.authService.getProfile(id);
+    }
 }
 

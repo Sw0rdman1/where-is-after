@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { login } from '@/api/auth';
+import { getProfile, login } from '@/api/auth';
 
 export interface User {
     _id: string;
@@ -30,7 +30,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const storedUser = await AsyncStorage.getItem('user');
             const storedToken = await AsyncStorage.getItem('token');
             if (storedUser && storedToken) {
-                setUser(JSON.parse(storedUser));
+                const user = await getProfile(JSON.parse(storedUser)._id);
+                setUser(user);
                 setAccessToken(storedToken);
             }
             setIsLoading(false);

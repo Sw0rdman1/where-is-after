@@ -162,4 +162,14 @@ export class AuthService {
 
         return { message: 'Verification code sent successfully' };
     }
+
+    async getProfile(id: string) {
+        const user = await this.usersService.findById(id);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        return user;
+    }
 }

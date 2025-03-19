@@ -13,8 +13,6 @@ export const checkEmail = async (email: string) => {
     }
 };
 
-
-
 export const register = async (email: string, password: string) => {
     try {
         const response = await api.post('/register', { email, password });
@@ -71,8 +69,6 @@ export const sendVerificationCode = async (email: string) => {
 export const verifyUser = async (userId: string, verificationCode: string) => {
     try {
         const response = await api.post('/verify-email', { userId, verificationCode });
-        console.log(response.data);
-
         return response.data;
     } catch (error) {
 
@@ -81,6 +77,16 @@ export const verifyUser = async (userId: string, verificationCode: string) => {
             throw error.response?.data?.message || 'Verification failed. Please try again.';
         }
         throw 'Network error. Please check your connection.';
+    }
+}
+
+
+export const getProfile = async (id: string) => {
+    try {
+        const response = await api.get('/profile', { params: { id } });
+        return response.data as User;
+    } catch (error) {
+        throw handleApiError(error);
     }
 }
 
