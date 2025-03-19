@@ -9,6 +9,10 @@ import { User } from './schema/user.schema';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) { }
 
+  async checkUserByEmail(email: string) {
+    return this.userModel.findOne({ email }).select('displayName profileImage').exec()
+  }
+
   async create(email: string, password: string, verificationCode: string, expires: Date, role: Role = Role.USER): Promise<User> {
     const hashedPassword = await argon2.hash(password);
     const user = new this.userModel({
@@ -30,6 +34,7 @@ export class UsersService {
         .select('-password')
         .exec();
     }
+
     return this.userModel.findOne({ email }).exec();
   }
 
@@ -46,6 +51,7 @@ export class UsersService {
       .findOneAndUpdate({ _id }, { isVerified: true, verificationCode: '', verificationCodeExpires: null })
       .exec();
   }
+
 
 
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request, HttpCode, Patch } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, HttpCode, Patch, Query, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Role } from 'src/users/schema/role.enum';
 import { RegisterDto } from 'src/users/dto/register.dto';
@@ -10,6 +10,11 @@ import { VerifyUserDto } from 'src/users/dto/verify-user.dto';
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
+
+    @Get('check-email')
+    async checkEmail(@Query('email') email: string) {
+        return this.authService.checkUserByEmail(email);
+    }
 
     @Post('register')
     async register(@Body() body: RegisterDto) {

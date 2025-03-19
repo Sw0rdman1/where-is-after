@@ -1,5 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { router } from "expo-router";
+import { Image, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { View } from "@/components/Themed";
 import AuthContent from "@/components/AuthContent/AuthContent";
@@ -7,9 +6,6 @@ import AuthContent from "@/components/AuthContent/AuthContent";
 const BACKGROUND_IMAGE = require("../../assets/images/auth/bg7.jpg");
 
 const WelcomeScreen = () => {
-  const handlePress = () => {
-    router.push("/(auth)/log-in");
-  };
 
   return (
     <View style={styles.container}>

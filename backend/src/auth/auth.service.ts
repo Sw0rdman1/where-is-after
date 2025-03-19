@@ -16,6 +16,20 @@ export class AuthService {
         private emailService: EmailService,
     ) { }
 
+    async checkUserByEmail(email: string) {
+        const user = await this.usersService.checkUserByEmail(email);
+
+        if (!user) return { exists: false };
+
+        return {
+            exists: true,
+            user: {
+                name: user.displayName,
+                profileImage: user.profileImage
+            }
+        }
+    }
+
     async register(email: string, password: string, role: Role = Role.USER) {
         const userExists = await this.usersService.findByEmail(email);
 

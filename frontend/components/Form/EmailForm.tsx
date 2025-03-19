@@ -1,7 +1,6 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Formik } from "formik";
 import { useAuth } from "@/context/AuthProvider";
-import { Text } from "../Themed";
 import { emailValidation } from "@/utils/validation";
 import { calculateStatus } from "@/utils/helpers";
 import Button from "../Button/Button";
@@ -108,11 +107,14 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: "bold",
     marginLeft: 10,
+    color: "white",
   },
   subtitle: {
     fontSize: 20,
     fontWeight: "500",
     marginLeft: 10,
+    color: "white",
+
   },
   buttonContainer: {
     marginTop: 10,
