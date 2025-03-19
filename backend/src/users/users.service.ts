@@ -52,6 +52,18 @@ export class UsersService {
       .exec();
   }
 
+  async updateVerificationCode(email: string, code: string, expires: Date) {
+    return this.userModel.findOneAndUpdate
+      (
+        { email },
+        {
+          verificationCode: code,
+          verificationCodeExpires: expires
+        }
+      )
+      .exec();
+  }
+
 
 
 }

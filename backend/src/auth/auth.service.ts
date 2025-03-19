@@ -138,4 +138,28 @@ export class AuthService {
 
         return { message: 'Email verified successfully' };
     }
+
+    async resendVerificationCode(email: string) {
+        const user = await this.usersService.findByEmail(email);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        if (user.isVerified) {
+            throw new Error('User already verified');
+        }
+
+        const verificationCode = generateVerificationCode();
+        const expires = new Date();
+        expires.setMinutes(expires.getMinutes() + 15); // Expiry time (15 minutes)
+
+        const userID = user._id as string;
+
+        await this.usersService.updateVerificationCode(userID, verificationCode, expires);
+
+        await this.emailService.sendVerificationCode(user.email, verificationCode);
+
+        return { message: 'Verification code sent successfully' };
+    }
 }

@@ -5,6 +5,7 @@ import { RegisterDto } from 'src/users/dto/register.dto';
 import { LocalAuthGuard } from './guards/local.guard';
 import { RefreshTokenDto } from 'src/users/dto/refresh-token.dto';
 import { VerifyUserDto } from 'src/users/dto/verify-user.dto';
+import { log } from 'console';
 
 @Controller('auth')
 export class AuthController {
@@ -40,6 +41,12 @@ export class AuthController {
     @Post('verify-email')
     async verify(@Body() body: VerifyUserDto) {
         return this.authService.verifyEmail(body.userId, body.verificationCode);
+    }
+
+    @Post('resend-verification-code')
+    async resendVerificationCode(@Body() body: { email: string }) {
+        log('resendVerificationCode');
+        return this.authService.resendVerificationCode(body.email);
     }
 
 }

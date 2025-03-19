@@ -56,6 +56,18 @@ export const getToken = async () => {
     }
 };
 
+export const sendVerificationCode = async (email: string) => {
+    try {
+        const response = await api.post('/resend-verification-code', { email });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data?.message || 'Failed to send verification code. Please try again.';
+        }
+        throw 'Network error. Please check your connection.';
+    }
+};
+
 export const verifyUser = async (user: User, verificationCode: string) => {
     try {
         const response = await api.post('/verify', { userId: user._id, verificationCode });
