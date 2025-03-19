@@ -67,6 +67,7 @@ const AuthContent = () => {
       case AUTH_SCREENS.EMAIL_ENTER:
         return (
           <EmailForm
+            email={email}
             openLoginScreen={openLoginScreen}
             openRegisterScreen={openRegisterScreen}
           />

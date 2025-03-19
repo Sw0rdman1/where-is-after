@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { TextInputProps } from "../Themed";
 
-export const ICON_SIZE = 24;
+export const ICON_SIZE = 22;
 
 export interface InputProps extends TextInputProps {
   registration?: boolean;
@@ -20,13 +20,14 @@ export const styles = StyleSheet.create({
   },
   iconContainer: {
     height: "100%",
-    width: 50,
+    paddingHorizontal: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
   input: {
     width: "80%",

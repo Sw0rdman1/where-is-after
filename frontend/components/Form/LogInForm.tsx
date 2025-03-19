@@ -27,6 +27,8 @@ const LogInForm: React.FC<Props> = ({ email, user }) => {
 
   const onSubmitHandler = async (values: typeof initialValues) => {
     try {
+      console.log(values);
+
       login(values.email, values.password);
     } catch (error) {
       console.error("Login failed", error);

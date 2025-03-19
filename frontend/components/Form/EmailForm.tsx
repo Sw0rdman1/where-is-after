@@ -10,19 +10,21 @@ import { BlurView } from "expo-blur";
 import EmailInput from "../InputFields/EmailInput";
 import { checkEmail } from "@/api/auth";
 
-const initialValues = {
-  email: "",
-};
+
 
 interface Props {
+  email: string;
   openLoginScreen: (email: string, displayName: string, profileImage: string) => void;
   openRegisterScreen: (email: string) => void;
 }
 
-const EmailForm: React.FC<Props> = ({ openLoginScreen, openRegisterScreen }) => {
+const EmailForm: React.FC<Props> = ({ email, openLoginScreen, openRegisterScreen }) => {
+  const initialValues = { email };
 
   const onSubmitHandler = async (values: typeof initialValues) => {
     try {
+      console.log(values);
+
       const data = await checkEmail(values.email);
 
       if (data.exists) {
@@ -39,6 +41,7 @@ const EmailForm: React.FC<Props> = ({ openLoginScreen, openRegisterScreen }) => 
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize
       validationSchema={emailValidation}
       onSubmit={onSubmitHandler}
     >
@@ -49,7 +52,7 @@ const EmailForm: React.FC<Props> = ({ openLoginScreen, openRegisterScreen }) => 
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(400).duration(400)}>
             <Text style={styles.subtitle}>
-              Please enter your email address to continue
+              Please enter your email address to be able to find parties near you.
             </Text>
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(600).duration(400)}>
@@ -66,8 +69,7 @@ const EmailForm: React.FC<Props> = ({ openLoginScreen, openRegisterScreen }) => 
             <View style={styles.buttonContainer}>
               <Button
                 disabled={
-                  Object.keys(formik.errors).length > 0 ||
-                  Object.keys(formik.touched).length === 0
+                  Object.keys(formik.errors).length > 0
                 }
                 onPress={formik.handleSubmit}
                 title="Continue"

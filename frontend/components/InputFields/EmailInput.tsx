@@ -1,9 +1,6 @@
 import {
   AntDesign,
   Entypo,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
 } from "@expo/vector-icons";
 import { Text } from "../Themed";
 import { ICON_SIZE, InputProps, styles } from "./common";
@@ -42,7 +39,7 @@ const EmailInput: React.FC<InputProps> = ({
     <BlurView
       style={[styles.container, { borderColor: tint }]}
       intensity={isFocused || status === "success" ? 80 : 50}
-      tint="dark"
+      tint="light"
     >
       <View style={styles.iconContainer}>
         <Entypo name={"email"} size={ICON_SIZE} color={color} />
