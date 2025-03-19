@@ -4,7 +4,11 @@ import { useAuth } from '@/context/AuthProvider';
 import { useEffect } from 'react';
 
 export default function AppLayout() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
 
   if (!user) {
     return <Redirect href="/(auth)" />;
