@@ -1,9 +1,12 @@
+import { RoleBasedRedirect } from "@/components/Middleware/middleware";
 import { Stack } from "expo-router";
 
 export default function UserLayout() {
     return (
-        <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-        </Stack>
+        <RoleBasedRedirect>
+            <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+            </Stack>
+        </RoleBasedRedirect>
     )
 }

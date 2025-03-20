@@ -13,10 +13,10 @@ export const checkEmail = async (email: string) => {
     }
 };
 
-export const register = async (email: string, password: string) => {
+export const register = async (email: string, displayName: string, password: string) => {
     try {
-        const response = await api.post('/register', { email, password });
-        return response.data;
+        const response = await api.post('/register', { email, displayName, password });
+        return response;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response?.data?.message) {

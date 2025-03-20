@@ -17,8 +17,9 @@ export class AuthController {
     }
 
     @Post('register')
+    @HttpCode(200)
     async register(@Body() body: RegisterDto) {
-        return this.authService.register(body.email, body.password, body.role || Role.USER);
+        return this.authService.register(body.email, body.password, body.displayName, body.role || Role.USER);
     }
 
     @UseGuards(LocalAuthGuard)

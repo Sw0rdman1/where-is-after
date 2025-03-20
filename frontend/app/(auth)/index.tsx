@@ -8,12 +8,6 @@ import LoadingScreen from "@/components/Loading/LoadingScreen";
 const BACKGROUND_IMAGE = require("../../assets/images/auth/bg7.jpg");
 
 const WelcomeScreen = () => {
-  const { isLoading, user } = useAuth();
-
-  if (isLoading || user) {
-    return <LoadingScreen />;
-  }
-
   return (
     <View style={styles.container}>
       <StatusBar style="light" />

@@ -28,7 +28,7 @@ export class AuthService {
         }
     }
 
-    async register(email: string, password: string, role: Role = Role.USER) {
+    async register(email: string, password: string, displayName: string, role: Role = Role.USER) {
         const userExists = await this.usersService.findByEmail(email);
 
         if (userExists) {
@@ -42,6 +42,7 @@ export class AuthService {
         // Create the user
         const user = await this.usersService.create(
             email,
+            displayName,
             password,
             verificationCode,
             expires

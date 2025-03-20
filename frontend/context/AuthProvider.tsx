@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { getProfile, login } from '@/api/auth';
+import { getProfile, login, register } from '@/api/auth';
 
 export interface User {
     _id: string;
@@ -39,6 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loadAuthData();
     }, []);
 
+
     const loginHandler = async (email: string, password: string) => {
         const data = await login(email, password);
 
@@ -49,7 +50,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             await AsyncStorage.setItem('user', JSON.stringify(user));
             await AsyncStorage.setItem('token', accessToken);
             await AsyncStorage.setItem('refreshToken', refreshToken);
-            router.replace('/');
         }
     };
 
@@ -58,6 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setAccessToken(null);
         await AsyncStorage.removeItem('user');
         await AsyncStorage.removeItem('token');
+        router.replace('/(auth)');
     };
 
     return (

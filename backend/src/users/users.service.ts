@@ -13,10 +13,11 @@ export class UsersService {
     return this.userModel.findOne({ email }).select('displayName profileImage').exec()
   }
 
-  async create(email: string, password: string, verificationCode: string, expires: Date, role: Role = Role.USER): Promise<User> {
+  async create(email: string, displayName: string, password: string, verificationCode: string, expires: Date, role: Role = Role.USER): Promise<User> {
     const hashedPassword = await argon2.hash(password);
     const user = new this.userModel({
       email,
+      displayName,
       password: hashedPassword,
       verificationCode,
       verificationCodeExpires: expires,

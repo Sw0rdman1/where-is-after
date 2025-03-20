@@ -1,9 +1,9 @@
-import { AuthProvider } from '@/context/AuthProvider';
+import { AuthProvider, useAuth } from '@/context/AuthProvider';
 import { cacheImages } from '@/utils/cache';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
@@ -50,19 +50,36 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
+    </AuthProvider>
+  );
 }
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const { isLoading, user } = useAuth();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (user && user.isVerified) {
+      const role = user.role === 'admin' ? 'admin' : 'user';
+      router.replace(`/(protected)/(${role})`);
+    } else {
+      router.replace('/(auth)');
+    }
+
+  }, [isLoading, user]);
+
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AuthProvider>
-        <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(protected)" options={{ headerShown: false }} />
-        </Stack>
-      </AuthProvider>
-    </ThemeProvider>
+      <Stack screenOptions={{ headerShown: false, animation: 'fade', gestureEnabled: false }}>
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(protected)" />
+      </Stack>
+    </ThemeProvider >
   );
 }

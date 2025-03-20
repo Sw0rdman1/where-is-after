@@ -10,6 +10,10 @@ export class RegisterDto {
     @MinLength(6, { message: 'min-length-password' })
     password: string;
 
+    @IsNotEmpty({ message: 'required-displayname' })
+    @MinLength(6, { message: 'min-length-displayname' })
+    displayName: string;
+
     @IsOptional()
     @IsEnum(Role)
     role?: Role;
