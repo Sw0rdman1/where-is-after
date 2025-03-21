@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
 import { getProfile, login, register } from '@/api/auth';
 
 export interface User {
@@ -14,6 +13,7 @@ interface AuthContextType {
     user: User | null;
     accessToken: string | null;
     isLoading: boolean;
+    registrationHandler: (email: string, displayName: string, password: string) => Promise<string>;
     loginHandler: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
@@ -55,6 +55,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
+    const registrationHandler = async (email: string, displayName: string, password: string) => {
+        const data = await register(email, displayName, password);
+
+        if (data.user) {
+            const { user } = data;
+            setUser(user);
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+        }
+
+        return data.message
+    }
+
     const logout = async () => {
         setUser(null);
         setAccessToken(null);
@@ -63,7 +75,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ user, accessToken, isLoading, loginHandler, logout }}>
+        <AuthContext.Provider value={{ user, accessToken, isLoading, loginHandler, registrationHandler, logout }}>
             {children}
         </AuthContext.Provider>
     );

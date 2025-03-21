@@ -113,11 +113,12 @@ const styles = StyleSheet.create({
     toast: {
         width: '100%',
         padding: 12,
-        height: 60,
+        paddingVertical: 16,
         borderRadius: 12,
         justifyContent: 'center',
     },
     content: {
+        width: '90%',
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,

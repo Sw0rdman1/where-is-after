@@ -1,8 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
 export const handleApiError = (error: unknown): Error => {
-    console.error('API Error:', error);
-
     if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message;
 

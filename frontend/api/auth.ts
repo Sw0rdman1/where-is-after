@@ -16,20 +16,9 @@ export const checkEmail = async (email: string) => {
 export const register = async (email: string, displayName: string, password: string) => {
     try {
         const response = await api.post('/register', { email, displayName, password });
-        return response;
+        return response.data;
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            if (error.response?.data?.message) {
-                const errorMessage = error.response.data.message;
-                if (Array.isArray(errorMessage)) {
-                    throw new Error(errorMessage[0]);
-                } else if (typeof errorMessage === 'string') {
-                    throw new Error(errorMessage);
-                }
-            }
-            throw 'Something went wrong. Please try again.';
-        }
-        throw 'Network error. Please check your connection.';
+        throw handleApiError(error);
     }
 };
 
@@ -38,10 +27,7 @@ export const login = async (email: string, password: string) => {
         const response = await api.post('/login', { email, password });
         return response.data;
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            throw error.response?.data?.message || 'Login failed. Please try again.';
-        }
-        throw 'Network error. Please check your connection.';
+        throw handleApiError(error);
     }
 };
 
@@ -49,8 +35,7 @@ export const getToken = async () => {
     try {
         return await AsyncStorage.getItem('token');
     } catch (error) {
-        console.error("Error getting token:", error);
-        return null;
+        throw handleApiError(error);
     }
 };
 
@@ -59,10 +44,7 @@ export const sendVerificationCode = async (email: string) => {
         const response = await api.post('/resend-verification-code', { email });
         return response.data;
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            throw error.response?.data?.message || 'Failed to send verification code. Please try again.';
-        }
-        throw 'Network error. Please check your connection.';
+        throw handleApiError(error);
     }
 };
 
@@ -71,12 +53,7 @@ export const verifyUser = async (userId: string, verificationCode: string) => {
         const response = await api.post('/verify-email', { userId, verificationCode });
         return response.data;
     } catch (error) {
-
-        if (axios.isAxiosError(error)) {
-            console.log('Error verifying user:', error.response?.data?.message);
-            throw error.response?.data?.message || 'Verification failed. Please try again.';
-        }
-        throw 'Network error. Please check your connection.';
+        throw handleApiError(error);
     }
 }
 

@@ -9,10 +9,13 @@ import { BlurView } from "expo-blur";
 import PasswordInput from "../InputFields/PasswordInput";
 import DisplayNameInput from "../InputFields/DisplayNameInput";
 import PasswordValidation from "../InputFields/PasswordValidation";
+import { useToast } from "@/context/ToastProvider";
 
 interface Props { email: string; }
 
 const RegistrationForm: React.FC<Props> = ({ email }) => {
+    const { registrationHandler } = useAuth();
+    const { showToast } = useToast();
 
     const initialValues = {
         email,
@@ -20,9 +23,16 @@ const RegistrationForm: React.FC<Props> = ({ email }) => {
         password: "",
     };
 
-
     const onSubmitHandler = async (values: typeof initialValues) => {
-
+        try {
+            const message = await registrationHandler(values.email, values.displayName, values.password);
+            showToast({
+                message,
+                severity: "success",
+            });
+        } catch (error) {
+            console.error("Login failed", error);
+        }
     };
 
 

@@ -25,7 +25,6 @@ const VerifyEmailForm = () => {
         try {
             const data = await sendVerificationCode(user?.email || "");
             showToast({ message: data.message, severity: "success" });
-
         } catch (error) {
             console.error("Resend email failed", error);
         }
@@ -34,8 +33,8 @@ const VerifyEmailForm = () => {
     const onSubmitHandler = async (values: typeof initialValues) => {
         try {
             await verifyUser(values.userId, values.verificationCode.join(''));
-        } catch (error) {
-            showToast({ message: "Verification failed", severity: "error" });
+        } catch (error: any) {
+            showToast({ message: error.message, severity: "error" });
         }
     };
 
@@ -75,7 +74,6 @@ const VerifyEmailForm = () => {
                             userId={formik.values.userId}
                             code={formik.values.verificationCode}
                             setCode={(code) => {
-                                console.log(formik.errors);
                                 formik.setFieldValue("verificationCode", code)
                             }}
                             submitCode={onSubmitHandler}
@@ -85,7 +83,10 @@ const VerifyEmailForm = () => {
                         <Text style={styles.subtitle}>
                             Didn't receive the code?
                         </Text>
-                        <TouchableOpacity onPress={resendMailHandler}>
+                        <TouchableOpacity onPress={() => {
+                            resendMailHandler()
+                            formik.values.verificationCode = new Array(6).fill('')
+                        }}>
                             <Text style={[styles.subtitle, { fontWeight: "bold", color: link, fontSize: 18 }]}>
                                 Resend
                             </Text>

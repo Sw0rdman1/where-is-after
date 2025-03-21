@@ -1,5 +1,5 @@
 
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as argon2 from 'argon2';
@@ -50,7 +50,7 @@ export class AuthService {
 
         await this.emailService.sendVerificationCode(email, verificationCode);
 
-        return { message: 'Registration successful. Please check your email for the verification code.' };
+        return { user, message: 'Registration successful. Please check your email for the verification code.' };
 
     }
 
@@ -122,15 +122,15 @@ export class AuthService {
         const user = await this.usersService.findById(userId);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new NotFoundException('User not found');
         }
 
         if (user.verificationCodeExpires && user.verificationCodeExpires < new Date()) {
-            throw new Error('Verification code expired');
+            throw new BadRequestException('Verification code expired');
         }
 
         if (user.verificationCode !== code) {
-            throw new Error('Invalid verification code');
+            throw new BadRequestException('Invalid verification code');
         }
 
         // Set user as verified
@@ -144,11 +144,11 @@ export class AuthService {
         const user = await this.usersService.findByEmail(email);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new NotFoundException('User not found');
         }
 
         if (user.isVerified) {
-            throw new Error('User already verified');
+            throw new BadRequestException('User already verified');
         }
 
         const verificationCode = generateVerificationCode();
@@ -168,7 +168,7 @@ export class AuthService {
         const user = await this.usersService.findById(id);
 
         if (!user) {
-            throw new Error('User not found');
+            throw new NotFoundException('User not found');
         }
 
         return user;
