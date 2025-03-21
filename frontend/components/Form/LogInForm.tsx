@@ -10,6 +10,7 @@ import { BlurView } from "expo-blur";
 import EmailInput from "../InputFields/EmailInput";
 import PasswordInput from "../InputFields/PasswordInput";
 import { Image } from "expo-image";
+import Avatar from "../Image/Avatar";
 
 interface Props {
   email: string;
@@ -47,10 +48,7 @@ const LogInForm: React.FC<Props> = ({ email, user }) => {
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(400).duration(400)}>
             <View style={styles.userProfileContainer}>
-              <Image
-                source={{ uri: user?.profileImage }}
-                style={styles.userProfileImage}
-              />
+              <Avatar source={user?.profileImage} size={50} />
               <View style={styles.userProfileTextContainer}>
                 <Text style={styles.name}>{user?.displayName}</Text>
                 <Text style={styles.email}>{email}</Text>
