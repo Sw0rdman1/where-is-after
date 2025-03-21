@@ -9,6 +9,7 @@ import { sendVerificationCode, verifyUser } from "@/api/auth";
 import VerificationCodeInput from "../InputFields/VerificationCodeInput";
 import { useColors } from "@/hooks/useColors";
 import { useToast } from "@/context/ToastProvider";
+import { router } from "expo-router";
 
 
 const VerifyEmailForm = () => {
@@ -32,7 +33,9 @@ const VerifyEmailForm = () => {
 
     const onSubmitHandler = async (values: typeof initialValues) => {
         try {
-            await verifyUser(values.userId, values.verificationCode.join(''));
+            const data = await verifyUser(values.userId, values.verificationCode.join(''));
+            await logout()
+            showToast({ message: data.message, severity: "success" });
         } catch (error: any) {
             showToast({ message: error.message, severity: "error" });
         }
