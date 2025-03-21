@@ -10,6 +10,7 @@ import PasswordInput from "../InputFields/PasswordInput";
 import DisplayNameInput from "../InputFields/DisplayNameInput";
 import PasswordValidation from "../InputFields/PasswordValidation";
 import { useToast } from "@/context/ToastProvider";
+import TermsAndConditions from "../TermsAndConditions/TermsAndConditions";
 
 interface Props { email: string; }
 
@@ -78,17 +79,16 @@ const RegistrationForm: React.FC<Props> = ({ email }) => {
                         />
                         <PasswordValidation password={formik.values.password} />
                     </Animated.View>
-                    <Animated.View entering={FadeInDown.delay(1000).duration(400)}>
-                        <View style={styles.buttonContainer}>
-                            <Button
-                                disabled={
-                                    Object.keys(formik.errors).length > 0 ||
-                                    Object.keys(formik.touched).length === 0
-                                }
-                                onPress={formik.handleSubmit}
-                                title="Log In"
-                            />
-                        </View>
+                    <TermsAndConditions />
+                    <Animated.View entering={FadeInDown.delay(1000).duration(400)} style={styles.buttonContainer}>
+                        <Button
+                            disabled={
+                                Object.keys(formik.errors).length > 0 ||
+                                Object.keys(formik.touched).length === 0
+                            }
+                            onPress={formik.handleSubmit}
+                            title="Agree & Register"
+                        />
                     </Animated.View>
                 </BlurView>
             )}
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
         paddingHorizontal: 10,
         paddingVertical: 20,
-        gap: 25,
+        gap: 20,
         borderRadius: 20,
         overflow: "hidden",
     },
