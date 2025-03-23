@@ -64,7 +64,10 @@ const VerifyEmailForm = () => {
                         <VerificationCodeInput
                             userId={formik.values.userId}
                             code={formik.values.verificationCode}
-                            setCode={(code) => formik.setFieldValue("verificationCode", code)}
+                            setCode={(code) => {
+                                console.log(formik.errors);
+                                formik.setFieldValue("verificationCode", code)
+                            }}
                             submitCode={onSubmitHandler}
                         />
                     </Animated.View>
@@ -83,8 +86,7 @@ const VerifyEmailForm = () => {
                         <View style={styles.buttonContainer}>
                             <Button
                                 disabled={
-                                    Object.keys(formik.errors).length > 0 ||
-                                    Object.keys(formik.touched).length === 0
+                                    Object.keys(formik.errors).length > 0
                                 }
                                 onPress={formik.handleSubmit}
                                 title="Verify"

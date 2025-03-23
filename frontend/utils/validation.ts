@@ -19,7 +19,7 @@ export const registrationValidation = Yup.object().shape({
 });
 
 export const verifyEmailValidation = Yup.object().shape({
-    verificationCode: Yup.array().required('Code is required').min(6, 'Code must be 6 characters long').max(6, 'Code must be 6 characters long'),
+    verificationCode: Yup.array().of(Yup.string().required('Each item must be a string')).length(6, 'You must provide exactly 6 items').required('Verification code is required')
 });
 
 
