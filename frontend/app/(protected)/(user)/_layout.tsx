@@ -1,3 +1,4 @@
+import Header from "@/components/Header/Header";
 import { RoleBasedRedirect } from "@/components/Middleware/middleware";
 import TabBar from "@/components/TabBar/TabBar";
 import { FontAwesome } from "@expo/vector-icons";
@@ -8,7 +9,7 @@ export default function UserLayout() {
         <RoleBasedRedirect>
             <Tabs
                 tabBar={(props) => <TabBar {...props} />}
-                screenOptions={{ headerShown: false }}
+                screenOptions={{ header: () => <Header /> }}
             >
                 <Tabs.Screen
                     name="index"

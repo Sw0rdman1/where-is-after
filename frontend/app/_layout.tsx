@@ -21,6 +21,10 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [fontsLoaded] = useFonts({
+    'PermanentMarker': require('../assets/fonts/PermanentMarker-Regular.ttf'),
+    ...FontAwesome.font,
+  });
 
   useEffect(() => {
     async function loadResourcesAndDataAsync() {
@@ -47,7 +51,7 @@ export default function RootLayout() {
 
 
 
-  if (!appIsReady) {
+  if (!appIsReady || !fontsLoaded) {
     return null;
   }
 

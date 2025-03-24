@@ -16,7 +16,7 @@ export default function MainScreen() {
     return (
         <View style={[styles.container, { paddingTop: top }]}>
             <View style={styles.header}>
-                <View style={styles.headerContent}>
+                {/* <View style={styles.headerContent}>
                     <Avatar source={user?.profileImage} size={40} />
                     <View style={styles.textContainer}>
                         <Text style={styles.displayName}>
@@ -29,7 +29,7 @@ export default function MainScreen() {
                 </View>
                 <TouchableOpacity style={styles.button} onPress={handleLogout}>
                     <Text style={styles.buttonText}>Log out</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
         </View>
