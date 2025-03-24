@@ -6,7 +6,7 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useColors } from "@/hooks/useColors";
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
-    const tabWidth = state.routes.length * 70 + 20;
+    const tabWidth = state.routes.length * 70;
     const { tint, background, surface, text } = useColors();
 
     return (
@@ -15,7 +15,6 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
                 flexDirection: "row",
                 backgroundColor: surface,
                 borderRadius: 70,
-                paddingHorizontal: 10,
                 margin: 10,
                 position: "absolute",
                 bottom: 30,
@@ -33,8 +32,6 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
             }}
         >
             {state.routes.map((route, index) => {
-                const { options } = descriptors[route.key];
-                const label = options.tabBarLabel ?? route.name;
                 const isFocused = state.index === index;
 
                 const onPress = () => {
