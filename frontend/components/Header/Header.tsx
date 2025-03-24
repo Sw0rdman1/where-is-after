@@ -4,6 +4,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Avatar from "../Image/Avatar";
 import { useColors } from "@/hooks/useColors";
+import { BlurView } from "expo-blur";
 
 
 const Header = () => {
@@ -12,10 +13,10 @@ const Header = () => {
     const { tint } = useColors();
 
     return (
-        <View style={[styles.container, { paddingTop: top + 20 }]}>
+        <BlurView style={[styles.container, { paddingTop: top + 5 }]} intensity={20} tint='dark'>
             <Text style={[styles.title, { color: tint }]}>Gde je After?</Text>
             <Avatar source={user?.profileImage} size={35} />
-        </View>
+        </BlurView>
     );
 };
 
@@ -28,7 +29,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginHorizontal: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         backgroundColor: "transparent",
         zIndex: 100,
     },
