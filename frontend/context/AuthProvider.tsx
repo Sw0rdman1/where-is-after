@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getProfile, login, register } from '@/api/auth';
+import { getProfile, login, register, verifyUser } from '@/api/auth';
 
 export interface User {
     _id: string;
@@ -17,6 +17,7 @@ interface AuthContextType {
     isLoading: boolean;
     registrationHandler: (email: string, displayName: string, password: string) => Promise<string>;
     loginHandler: (email: string, password: string) => Promise<void>;
+    verifyHandler: (userId: string, verificationCode: string) => Promise<string>;
     logout: () => Promise<void>;
 }
 
@@ -69,6 +70,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return data.message
     }
 
+    const verifyHandler = async (userId: string, verificationCode: string) => {
+        const data = await verifyUser(userId, verificationCode);
+
+        if (data.user && data.accessToken && data.refreshToken) {
+            const { user, accessToken, refreshToken } = data;
+            setUser(user);
+            setAccessToken(accessToken);
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+            await AsyncStorage.setItem('token', accessToken);
+            await AsyncStorage.setItem('refreshToken', refreshToken);
+        }
+
+        return data.message
+    }
+
     const logout = async () => {
         setUser(null);
         setAccessToken(null);
@@ -77,7 +93,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ user, accessToken, isLoading, loginHandler, registrationHandler, logout }}>
+        <AuthContext.Provider value={{ user, accessToken, isLoading, loginHandler, registrationHandler, verifyHandler, logout }}>
             {children}
         </AuthContext.Provider>
     );

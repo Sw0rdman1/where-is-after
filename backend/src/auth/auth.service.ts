@@ -137,7 +137,9 @@ export class AuthService {
 
         await this.usersService.verify(userId);
 
-        return { message: 'Email verified successfully' };
+        const userData = await this.login(user);
+
+        return { message: 'Email verified successfully', ...userData };
     }
 
     async resendVerificationCode(email: string) {

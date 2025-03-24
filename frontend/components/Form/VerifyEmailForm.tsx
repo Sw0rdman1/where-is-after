@@ -13,7 +13,7 @@ import { router } from "expo-router";
 
 
 const VerifyEmailForm = () => {
-    const { user, logout } = useAuth();
+    const { user, logout, verifyHandler } = useAuth();
     const { link } = useColors();
     const { showToast } = useToast();
 
@@ -33,9 +33,8 @@ const VerifyEmailForm = () => {
 
     const onSubmitHandler = async (values: typeof initialValues) => {
         try {
-            const data = await verifyUser(values.userId, values.verificationCode.join(''));
-            await logout()
-            showToast({ message: data.message, severity: "success" });
+            const data = await verifyHandler(values.userId, values.verificationCode.join(""));
+            showToast({ message: data, severity: "success" });
         } catch (error: any) {
             showToast({ message: error.message, severity: "error" });
         }
