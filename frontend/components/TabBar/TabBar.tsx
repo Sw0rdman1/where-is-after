@@ -4,6 +4,7 @@ import { View } from "../Themed";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useColors } from "@/hooks/useColors";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
     const tabWidth = state.routes.length * 70;
@@ -67,9 +68,9 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
                                 justifyContent: "center",
                             }}
                         >
-                            <Ionicons
-                                name={route.name === "index" ? "home" : "settings"}
-                                size={24}
+                            <FontAwesome
+                                name={route.name === "index" ? "map" : "cog"}
+                                size={22}
                                 color={isFocused ? tint : text}
                             />
                         </View>
