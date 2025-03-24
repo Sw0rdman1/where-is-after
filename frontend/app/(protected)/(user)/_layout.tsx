@@ -1,12 +1,26 @@
 import { RoleBasedRedirect } from "@/components/Middleware/middleware";
-import { Stack } from "expo-router";
+import TabBar from "@/components/TabBar/TabBar";
+import { FontAwesome } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
 
 export default function UserLayout() {
     return (
         <RoleBasedRedirect>
-            <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-            </Stack>
+            <Tabs
+                tabBar={(props) => <TabBar {...props} />}
+                screenOptions={{ headerShown: false }}
+            >
+                <Tabs.Screen
+                    name="index"
+                    options={{ title: 'Home', }}
+                />
+                <Tabs.Screen
+                    name="settings"
+                    options={{
+                        title: 'Settings',
+                    }}
+                />
+            </Tabs>
         </RoleBasedRedirect>
     )
 }
