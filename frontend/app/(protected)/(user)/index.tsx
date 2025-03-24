@@ -1,39 +1,36 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useAuth } from '@/context/AuthProvider';
-import { sendVerificationCode, verifyUser } from '@/api/auth';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Avatar from '@/components/Image/Avatar';
 
 export default function MainScreen() {
     const { user, logout } = useAuth();
+    const { top } = useSafeAreaInsets();
 
     const handleLogout = () => {
         logout();
     }
 
-    const handleVerify = async () => {
-        if (!user) return
-        const data = await sendVerificationCode(user.email);
-    }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>
-                {user?.email}
-            </Text>
-            <Text style={styles.title}>
-                {user?.role}
-            </Text>
-            <Text style={styles.title}>
-                {user?.isVerified ? 'Verified' : 'Not verified'}
-            </Text>
-            {!user?.isVerified &&
-                <TouchableOpacity style={styles.button} onPress={handleVerify}>
-                    <Text style={styles.buttonText}>Verify</Text>
+        <View style={[styles.container, { paddingTop: top }]}>
+            <View style={styles.header}>
+                <View style={styles.headerContent}>
+                    <Avatar source={user?.profileImage} size={40} />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.displayName}>
+                            {user?.displayName}
+                        </Text>
+                        <Text style={styles.role}>
+                            {user?.role}
+                        </Text>
+                    </View>
+                </View>
+                <TouchableOpacity style={styles.button} onPress={handleLogout}>
+                    <Text style={styles.buttonText}>Log out</Text>
                 </TouchableOpacity>
-            }
-            <TouchableOpacity style={styles.button} onPress={handleLogout}>
-                <Text style={styles.buttonText}>Log out</Text>
-            </TouchableOpacity>
+            </View>
 
         </View>
     );
@@ -43,23 +40,37 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         gap: 20,
     },
-    title: {
-        fontSize: 20,
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 20,
+    },
+    headerContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    textContainer: {
+        flexDirection: 'column',
+    },
+    displayName: {
+        fontSize: 18,
         fontWeight: 'bold',
     },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
+    email: {
+        fontSize: 14,
+    },
+    role: {
+        fontSize: 14,
     },
     button: {
-        marginTop: 20,
         padding: 10,
         backgroundColor: 'red',
-        borderRadius: 5,
+        borderRadius: 10,
     },
     buttonText: {
         color: 'white',

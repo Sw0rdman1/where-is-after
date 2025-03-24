@@ -4,6 +4,8 @@ import { getProfile, login, register } from '@/api/auth';
 
 export interface User {
     _id: string;
+    displayName: string;
+    profileImage: string;
     email: string;
     isVerified: boolean;
     role: string;

@@ -4,8 +4,8 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 const RUZVELTOVA_IP_ADRESS = "0.24";
 const SCRIPTTIC_IP_ADRESS = `20.227`;
 
-const DA_LI_SI_KUCI = false;
-const MOBILNI_PODACI = true
+const DA_LI_SI_KUCI = true;
+const MOBILNI_PODACI = false
 
 let API_URL = `http://192.168.${DA_LI_SI_KUCI ? RUZVELTOVA_IP_ADRESS : SCRIPTTIC_IP_ADRESS}:3000/auth`; // Ensure this is correct
 
