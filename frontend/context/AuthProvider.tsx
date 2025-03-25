@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getProfile, login, register, verifyUser } from '@/api/auth';
 import * as Location from 'expo-location';
 import { Region } from 'react-native-maps';
+import { convertLocationToRegion } from '@/utils/map';
 
 export interface User {
     _id: string;
@@ -11,7 +12,7 @@ export interface User {
     email: string;
     isVerified: boolean;
     role: string;
-    currentLocation: Region | null;
+    currentLocation: Region;
 }
 
 interface AuthContextType {
@@ -46,12 +47,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     const { status } = await Location.requestForegroundPermissionsAsync();
                     if (status === 'granted') {
                         const locationData = await Location.getCurrentPositionAsync({});
-                        userData.currentLocation = {
-                            latitude: locationData.coords.latitude,
-                            longitude: locationData.coords.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                        };
+                        userData.currentLocation = convertLocationToRegion(locationData);
 
                     } else {
                         console.warn('Location permission denied');

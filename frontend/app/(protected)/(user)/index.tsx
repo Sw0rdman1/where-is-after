@@ -2,22 +2,19 @@ import { StyleSheet } from 'react-native';
 import { View } from '@/components/Themed';
 import MapView from 'react-native-maps';
 import { useAuth } from '@/context/AuthProvider';
+import { useGlobalContext } from '@/context/GlobalProvider';
 
-const BELGRADE = {
-    latitude: 44.7866,
-    longitude: 20.4489,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-}
 
-export default function MainScreen() {
+export default function MapScreen() {
     const { user } = useAuth();
+    const { mapRef } = useGlobalContext();
 
     return (
         <View style={[styles.container]}>
             <MapView
+                ref={mapRef}
                 style={styles.map}
-                initialRegion={user?.currentLocation || BELGRADE}
+                initialRegion={user?.currentLocation}
                 showsMyLocationButton
                 showsUserLocation
                 userInterfaceStyle="dark"

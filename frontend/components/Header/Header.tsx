@@ -13,10 +13,10 @@ const Header = () => {
     const { tint } = useColors();
 
     return (
-        <View style={[styles.container, { paddingTop: top }]}>
+        <BlurView intensity={20} tint="dark" style={[styles.container, { paddingTop: top }]} >
             <Text style={[styles.title, { color: tint }]}>Gde je After?</Text>
             <Avatar source={user?.profileImage} size={45} />
-        </View>
+        </BlurView>
     );
 };
 

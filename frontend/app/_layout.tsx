@@ -1,4 +1,5 @@
 import { AuthProvider, useAuth } from '@/context/AuthProvider';
+import { GlobalProvider } from '@/context/GlobalProvider';
 import { ToastProvider } from '@/context/ToastProvider';
 import { cacheImages } from '@/utils/cache';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -56,9 +57,11 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <RootLayoutNav />
-    </AuthProvider>
+    <GlobalProvider>
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
+    </GlobalProvider>
   );
 }
 

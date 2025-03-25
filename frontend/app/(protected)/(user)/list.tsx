@@ -1,14 +1,20 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet } from 'react-native'
+import { Text, View } from '@/components/Themed'
 
-const settings = () => {
+const ListScreen = () => {
     return (
-        <View>
-            <Text>settings</Text>
+        <View style={styles.container}>
+            <Text>ListScreen</Text>
         </View>
     )
 }
 
-export default settings
+export default ListScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+})

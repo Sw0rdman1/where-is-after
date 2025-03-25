@@ -5,10 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useColors } from "@/hooks/useColors";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useAuth } from "@/context/AuthProvider";
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
     const tabWidth = state.routes.length * 70;
     const { tint, surface, text } = useColors();
+    const { mapRef } = useGlobalContext();
+    const { user } = useAuth();
 
     const renderIcon = (routeName: string, isFocused: boolean) => {
         switch (routeName) {
@@ -19,6 +23,11 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
             default:
                 return <FontAwesome name="home" size={24} color={isFocused ? tint : text} />;
         }
+    };
+
+    const navigateToUserLocation = () => {
+        if (!user?.currentLocation) return;
+        mapRef?.current?.animateToRegion(user?.currentLocation, 1000);
     };
 
     return (
@@ -55,6 +64,8 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
 
                     if (!isFocused && !event.defaultPrevented) {
                         navigation.navigate(route.name);
+                    } else if (route.name === "index") {
+                        navigateToUserLocation()
                     }
                 };
 
