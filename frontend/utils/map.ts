@@ -17,4 +17,22 @@ const convertLocationToRegion = (location: Location.LocationObject): Region => {
     };
 }
 
-export { convertLocationToRegion };
+const getCurrentLocation = async (): Promise<Region> => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status === 'granted') {
+        const locationData = await Location.getCurrentPositionAsync({});
+        return convertLocationToRegion(locationData);
+    } else {
+        console.warn('Location permission denied');
+    }
+
+    return {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0,
+        longitudeDelta: 0,
+    };
+
+}
+
+export { getCurrentLocation };

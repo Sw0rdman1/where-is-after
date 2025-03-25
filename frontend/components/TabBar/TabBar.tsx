@@ -20,6 +20,8 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
                 return <FontAwesome name="map" size={24} color={isFocused ? tint : text} />;
             case "list":
                 return <FontAwesome name="list" size={24} color={isFocused ? tint : text} />;
+            case "profile":
+                return <FontAwesome name="user" size={24} color={isFocused ? tint : text} />;
             default:
                 return <FontAwesome name="home" size={24} color={isFocused ? tint : text} />;
         }

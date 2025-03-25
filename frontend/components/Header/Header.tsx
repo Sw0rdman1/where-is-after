@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Avatar from "../Image/Avatar";
 import { useColors } from "@/hooks/useColors";
 import { BlurView } from "expo-blur";
+import { router } from "expo-router";
 
 
 const Header = () => {
@@ -12,10 +13,14 @@ const Header = () => {
     const { top } = useSafeAreaInsets();
     const { tint } = useColors();
 
+    const onPress = () => {
+        router.navigate("/profile");
+    }
+
     return (
         <BlurView intensity={20} tint="dark" style={[styles.container, { paddingTop: top }]} >
             <Text style={[styles.title, { color: tint }]}>Gde je After?</Text>
-            <Avatar source={user?.profileImage} size={45} />
+            <Avatar onPress={onPress} source={user?.profileImage} size={45} />
         </BlurView>
     );
 };

@@ -12,6 +12,7 @@ export default function MapScreen() {
     return (
         <View style={[styles.container]}>
             <MapView
+                key={user?.currentLocation?.latitude}
                 ref={mapRef}
                 style={styles.map}
                 initialRegion={user?.currentLocation}

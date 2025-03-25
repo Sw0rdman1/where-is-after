@@ -13,6 +13,7 @@ export default function UserLayout() {
             >
                 <Tabs.Screen name="index" />
                 <Tabs.Screen name="list" />
+                <Tabs.Screen name="profile" options={{ headerShown: false }} />
             </Tabs>
         </RoleBasedRedirect>
     )

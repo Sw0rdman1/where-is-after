@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getProfile, login, register, verifyUser } from '@/api/auth';
 import * as Location from 'expo-location';
 import { Region } from 'react-native-maps';
-import { convertLocationToRegion } from '@/utils/map';
+import { getCurrentLocation } from '@/utils/map';
 
 export interface User {
     _id: string;
@@ -44,14 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     userData = await getProfile(JSON.parse(storedUser)._id);
                     setAccessToken(storedToken);
 
-                    const { status } = await Location.requestForegroundPermissionsAsync();
-                    if (status === 'granted') {
-                        const locationData = await Location.getCurrentPositionAsync({});
-                        userData.currentLocation = convertLocationToRegion(locationData);
-
-                    } else {
-                        console.warn('Location permission denied');
-                    }
+                    userData.currentLocation = await getCurrentLocation()
                 }
             } catch (error) {
                 console.error('Error loading auth data:', error);
@@ -65,13 +58,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, []);
 
 
-
-
     const loginHandler = async (email: string, password: string) => {
         const data = await login(email, password);
 
         if (data.user && data.accessToken && data.refreshToken) {
             const { user, accessToken, refreshToken } = data;
+            user.currentLocation = await getCurrentLocation()
             setUser(user);
             setAccessToken(accessToken);
             await AsyncStorage.setItem('user', JSON.stringify(user));
@@ -97,6 +89,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         if (data.user && data.accessToken && data.refreshToken) {
             const { user, accessToken, refreshToken } = data;
+            user.currentLocation = await getCurrentLocation()
             setUser(user);
             setAccessToken(accessToken);
             await AsyncStorage.setItem('user', JSON.stringify(user));
