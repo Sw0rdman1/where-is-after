@@ -11,16 +11,8 @@ export default function UserLayout() {
                 tabBar={(props) => <TabBar {...props} />}
                 screenOptions={{ header: () => <Header /> }}
             >
-                <Tabs.Screen
-                    name="index"
-                    options={{ title: 'Home', }}
-                />
-                <Tabs.Screen
-                    name="settings"
-                    options={{
-                        title: 'Settings',
-                    }}
-                />
+                <Tabs.Screen name="index" />
+                <Tabs.Screen name="list" />
             </Tabs>
         </RoleBasedRedirect>
     )

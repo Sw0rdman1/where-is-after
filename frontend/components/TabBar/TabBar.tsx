@@ -8,7 +8,18 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
     const tabWidth = state.routes.length * 70;
-    const { tint, background, surface, text } = useColors();
+    const { tint, surface, text } = useColors();
+
+    const renderIcon = (routeName: string, isFocused: boolean) => {
+        switch (routeName) {
+            case "index":
+                return <FontAwesome name="map" size={24} color={isFocused ? tint : text} />;
+            case "list":
+                return <FontAwesome name="list" size={24} color={isFocused ? tint : text} />;
+            default:
+                return <FontAwesome name="home" size={24} color={isFocused ? tint : text} />;
+        }
+    };
 
     return (
         <View
@@ -68,11 +79,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
                                 justifyContent: "center",
                             }}
                         >
-                            <FontAwesome
-                                name={route.name === "index" ? "map" : "cog"}
-                                size={22}
-                                color={isFocused ? tint : text}
-                            />
+                            {renderIcon(route.name, isFocused)}
                         </View>
                     </TouchableOpacity>
                 );
