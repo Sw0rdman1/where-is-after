@@ -4,6 +4,12 @@ import MapView from 'react-native-maps';
 import { useAuth } from '@/context/AuthProvider';
 import { useGlobalContext } from '@/context/GlobalProvider';
 
+const BELGRADE = {
+    latitude: 44.787197,
+    longitude: 20.457273,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+}
 
 export default function MapScreen() {
     const { user } = useAuth();
