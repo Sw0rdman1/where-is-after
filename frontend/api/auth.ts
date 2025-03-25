@@ -6,7 +6,7 @@ import { handleApiError } from '@/utils/errorHandler';
 
 export const checkEmail = async (email: string) => {
     try {
-        const response = await api.get('/check-email', { params: { email } });
+        const response = await api.get('/auth/check-email', { params: { email } });
         return response.data;
     } catch (error) {
         throw handleApiError(error);
@@ -15,7 +15,7 @@ export const checkEmail = async (email: string) => {
 
 export const register = async (email: string, displayName: string, password: string) => {
     try {
-        const response = await api.post('/register', { email, displayName, password });
+        const response = await api.post('/auth/register', { email, displayName, password });
         return response.data;
     } catch (error) {
         throw handleApiError(error);
@@ -24,7 +24,7 @@ export const register = async (email: string, displayName: string, password: str
 
 export const login = async (email: string, password: string) => {
     try {
-        const response = await api.post('/login', { email, password });
+        const response = await api.post('/auth/login', { email, password });
         return response.data;
     } catch (error) {
         throw handleApiError(error);
@@ -41,7 +41,7 @@ export const getToken = async () => {
 
 export const sendVerificationCode = async (email: string) => {
     try {
-        const response = await api.post('/resend-verification-code', { email });
+        const response = await api.post('/auth/resend-verification-code', { email });
         return response.data;
     } catch (error) {
         throw handleApiError(error);
@@ -50,7 +50,7 @@ export const sendVerificationCode = async (email: string) => {
 
 export const verifyUser = async (userId: string, verificationCode: string) => {
     try {
-        const response = await api.post('/verify-email', { userId, verificationCode });
+        const response = await api.post('/auth/verify-email', { userId, verificationCode });
         return response.data;
     } catch (error) {
         throw handleApiError(error);
@@ -60,7 +60,7 @@ export const verifyUser = async (userId: string, verificationCode: string) => {
 
 export const getProfile = async (id: string) => {
     try {
-        const response = await api.get('/profile', { params: { id } });
+        const response = await api.get('/auth/profile', { params: { id } });
         return response.data as User;
     } catch (error) {
         throw handleApiError(error);

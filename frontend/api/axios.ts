@@ -7,10 +7,10 @@ const SCRIPTTIC_IP_ADRESS = `20.227`;
 const DA_LI_SI_KUCI = true;
 const MOBILNI_PODACI = true
 
-let API_URL = `http://192.168.${DA_LI_SI_KUCI ? RUZVELTOVA_IP_ADRESS : SCRIPTTIC_IP_ADRESS}:3000/auth`; // Ensure this is correct
+let API_URL = `http://192.168.${DA_LI_SI_KUCI ? RUZVELTOVA_IP_ADRESS : SCRIPTTIC_IP_ADRESS}:3000`; // Ensure this is correct
 
 if (MOBILNI_PODACI) {
-    API_URL = `http://172.20.10.11:3000/auth`; // Ensure this is correct 
+    API_URL = `http://172.20.10.11:3000`; // Ensure this is correct 
 }
 
 
@@ -30,7 +30,7 @@ const refreshAuthToken = async () => {
         const refreshToken = await AsyncStorage.getItem("refreshToken");
         if (!refreshToken) throw new Error("No refresh token available");
 
-        const { data } = await axios.post(`${API_URL}/refresh`, {}, { withCredentials: true });
+        const { data } = await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
 
         if (!data?.accessToken) {
             await AsyncStorage.removeItem("token");
@@ -51,7 +51,9 @@ axiosInstance.interceptors.request.use(
     async (config) => {
         try {
             const token = await AsyncStorage.getItem("token");
+
             if (token) {
+
                 config.headers.Authorization = `Bearer ${token}`;
             }
         } catch (error) {
