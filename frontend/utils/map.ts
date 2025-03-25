@@ -35,4 +35,14 @@ const getCurrentLocation = async (): Promise<Region> => {
 
 }
 
-export { getCurrentLocation };
+const convertVenueLocationToRegion = (venue: any): Region => {
+
+    return {
+        longitude: venue.location.coordinates[0],
+        latitude: venue.location.coordinates[1],
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+    }
+}
+
+export { getCurrentLocation, convertVenueLocationToRegion };

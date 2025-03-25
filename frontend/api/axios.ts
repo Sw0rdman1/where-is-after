@@ -30,7 +30,7 @@ const refreshAuthToken = async () => {
         const refreshToken = await AsyncStorage.getItem("refreshToken");
         if (!refreshToken) throw new Error("No refresh token available");
 
-        const { data } = await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
+        const { data } = await axios.post(`${API_URL}/auth/refresh`, { refreshToken }, { withCredentials: true });
 
         if (!data?.accessToken) {
             await AsyncStorage.removeItem("token");
@@ -53,7 +53,6 @@ axiosInstance.interceptors.request.use(
             const token = await AsyncStorage.getItem("token");
 
             if (token) {
-
                 config.headers.Authorization = `Bearer ${token}`;
             }
         } catch (error) {

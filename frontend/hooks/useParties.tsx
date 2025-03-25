@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getParties } from '@/api/parties';
 import { useAuth } from '@/context/AuthProvider';
+import { Region } from 'react-native-maps';
 
 interface Party {
     _id: string;
@@ -10,7 +11,7 @@ interface Party {
     venue: {
         _id: string;
         name: string;
-        location?: string;
+        location: Region;
     };
 }
 
@@ -34,7 +35,7 @@ export const useParties = (radius: number, date: string) => {
 
                 const response = await getParties(user.currentLocation, radius, new Date(date));
 
-                setParties(response.data);
+                setParties(response);
 
             } catch (err: any) {
                 setError(err.response?.data?.message || 'Failed to fetch parties');

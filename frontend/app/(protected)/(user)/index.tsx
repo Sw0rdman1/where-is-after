@@ -1,16 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { useAuth } from '@/context/AuthProvider';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { useParties } from '@/hooks/useParties';
-
-const BELGRADE = {
-    latitude: 44.787197,
-    longitude: 20.457273,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-}
 
 export default function MapScreen() {
     const { user } = useAuth();
@@ -21,6 +14,7 @@ export default function MapScreen() {
         return <View><Text>Loading...</Text></View>;
     }
 
+
     return (
         <View style={[styles.container]}>
             <MapView
@@ -30,7 +24,19 @@ export default function MapScreen() {
                 showsMyLocationButton
                 showsUserLocation
                 userInterfaceStyle="dark"
-            />
+            >
+                {(parties) && parties.map(party => (
+                    <Marker
+                        key={party._id}
+                        coordinate={{
+                            latitude: party.venue.location?.latitude,
+                            longitude: party.venue.location?.longitude,
+                        }}
+                        title={party.name}
+                        description={party.description}
+                    />
+                ))}
+            </MapView>
         </View>
     );
 }

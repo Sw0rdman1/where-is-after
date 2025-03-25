@@ -96,7 +96,14 @@ export class AuthService {
         return this.usersService.updateRefreshToken(userID, null);
     }
 
-    async refresh(refreshToken: string, email: string) {
+    async getEmailFromRefreshToken(refreshToken: string) {
+        const decoded = this.jwtService.decode(refreshToken) as any;
+        return decoded.email;
+    }
+
+    async refresh(refreshToken: string) {
+        const email = await this.getEmailFromRefreshToken(refreshToken);
+
         const user = await this.usersService.findByEmail(email);
 
         if (!user) {

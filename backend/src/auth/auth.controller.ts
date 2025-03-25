@@ -31,12 +31,12 @@ export class AuthController {
 
     @Post('logout')
     async logout(@Body() body: RefreshTokenDto) {
-        return this.authService.logout(body.email);
+        return this.authService.logout(body.refreshToken);
     }
 
     @Post('refresh')
     async refresh(@Body() body: RefreshTokenDto) {
-        return this.authService.refresh(body.refreshToken, body.email);
+        return this.authService.refresh(body.refreshToken);
     }
 
     @Post('verify-email')
