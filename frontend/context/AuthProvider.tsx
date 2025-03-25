@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getProfile, login, register, verifyUser } from '@/api/auth';
+import * as Location from 'expo-location';
+import { Region } from 'react-native-maps';
 
 export interface User {
     _id: string;
@@ -9,6 +11,7 @@ export interface User {
     email: string;
     isVerified: boolean;
     role: string;
+    currentLocation: Region | null;
 }
 
 interface AuthContextType {
@@ -30,15 +33,38 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     useEffect(() => {
         const loadAuthData = async () => {
-            const storedUser = await AsyncStorage.getItem('user');
-            const storedToken = await AsyncStorage.getItem('token');
-            if (storedUser && storedToken) {
-                const user = await getProfile(JSON.parse(storedUser)._id);
-                setUser(user);
-                setAccessToken(storedToken);
+            let userData: User | null = null;
+
+            try {
+                const storedUser = await AsyncStorage.getItem('user');
+                const storedToken = await AsyncStorage.getItem('token');
+
+                if (storedUser && storedToken) {
+                    userData = await getProfile(JSON.parse(storedUser)._id);
+                    setAccessToken(storedToken);
+
+                    const { status } = await Location.requestForegroundPermissionsAsync();
+                    if (status === 'granted') {
+                        const locationData = await Location.getCurrentPositionAsync({});
+                        userData.currentLocation = {
+                            latitude: locationData.coords.latitude,
+                            longitude: locationData.coords.longitude,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        };
+
+                    } else {
+                        console.warn('Location permission denied');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading auth data:', error);
+            } finally {
+                setUser(userData);
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
+
         loadAuthData();
     }, []);
 

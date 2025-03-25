@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { View } from '@/components/Themed';
 import MapView from 'react-native-maps';
+import { useAuth } from '@/context/AuthProvider';
 
-const BACKGROUND_IMAGE = require("../../../assets/images/auth/bg7.jpg");
 const BELGRADE = {
     latitude: 44.7866,
     longitude: 20.4489,
@@ -11,12 +11,13 @@ const BELGRADE = {
 }
 
 export default function MainScreen() {
+    const { user } = useAuth();
 
     return (
         <View style={[styles.container]}>
             <MapView
                 style={styles.map}
-                initialRegion={BELGRADE}
+                initialRegion={user?.currentLocation || BELGRADE}
                 showsMyLocationButton
                 showsUserLocation
                 userInterfaceStyle="dark"
