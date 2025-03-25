@@ -13,10 +13,10 @@ const Header = () => {
     const { tint } = useColors();
 
     return (
-        <BlurView style={[styles.container, { paddingTop: top }]} intensity={30} tint='dark'>
+        <View style={[styles.container, { paddingTop: top }]}>
             <Text style={[styles.title, { color: tint }]}>Gde je After?</Text>
-            <Avatar source={user?.profileImage} size={40} />
-        </BlurView>
+            <Avatar source={user?.profileImage} size={45} />
+        </View>
     );
 };
 
@@ -35,10 +35,17 @@ const styles = StyleSheet.create({
         zIndex: 100,
     },
     title: {
-        fontSize: 30,
+        fontSize: 34,
         fontWeight: "bold",
-        color: "white",
         fontFamily: "PermanentMarker",
+        shadowColor: "black",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
 });
 

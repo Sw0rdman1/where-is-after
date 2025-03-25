@@ -1,6 +1,5 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, View } from '@/components/Themed';
-import { Image } from 'expo-image';
+import { StyleSheet } from 'react-native';
+import { View } from '@/components/Themed';
 import MapView from 'react-native-maps';
 
 const BACKGROUND_IMAGE = require("../../../assets/images/auth/bg7.jpg");
@@ -20,6 +19,7 @@ export default function MainScreen() {
                 initialRegion={BELGRADE}
                 showsMyLocationButton
                 showsUserLocation
+                userInterfaceStyle="dark"
             />
         </View>
     );
