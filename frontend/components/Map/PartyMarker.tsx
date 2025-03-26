@@ -62,7 +62,6 @@ interface Props {
 const CustomCallout: React.FC<Props> = ({ party }) => {
     const [calloutWidth, setCalloutWidth] = useState(0);
     const { text } = useColors();
-    const darkMode = isDarkMode()
 
     useEffect(() => {
         const width = calculateTextWidth(party.venue.name, 16) + CALLOUT_IMAGE_SIZE + CALLOUT_PADDING;
@@ -74,11 +73,11 @@ const CustomCallout: React.FC<Props> = ({ party }) => {
         <Callout tooltip >
             <BlurView
                 style={[styles.calloutContainer, { boxShadow: text, width: calloutWidth }]}
-                intensity={60}
+                intensity={80}
                 tint={'light'}
             >
                 <Image
-                    source={PARTY_IMAGE}
+                    source={{ uri: party.venue.logo }}
                     style={styles.calloutLogo}
                 />
                 <View style={styles.calloutTextContainer}>

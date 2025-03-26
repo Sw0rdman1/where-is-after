@@ -44,7 +44,7 @@ const UserLocation: React.FC<Props> = ({ location }) => {
     return (
         <Marker coordinate={location} anchor={{ x: 0.5, y: 0.5 }} onPress={() => { }}>
             <View style={styles.wrapper}>
-                <Animated.View style={[styles.pulse, animatedStyle, { backgroundColor: `${tint}` }]} />
+                {/* <Animated.View style={[styles.pulse, animatedStyle, { backgroundColor: `${tint}` }]} /> */}
                 <View style={[styles.markerContainer]}>
                     <Avatar size={30} source={user?.profileImage} />
                 </View>

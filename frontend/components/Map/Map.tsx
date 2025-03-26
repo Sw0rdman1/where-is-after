@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthProvider';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { useParties } from '@/hooks/useParties';
 import PartyMarker from './PartyMarker';
+import { AnimatedMapView } from 'react-native-maps/lib/MapView';
 
 const Map = () => {
     const { user } = useAuth();
@@ -12,26 +13,21 @@ const Map = () => {
     const { parties, loading } = useParties(10000, '2025-03-25');
 
     const renderMarkers = () => {
-        console.log('renderMarkers');
-
         return parties.map((party, index) => (
             <PartyMarker key={party._id} party={party} index={index} />
         ))
     }
 
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <Text>Loading...</Text>
-            </View>
-        );
-    }
+
     return (
         <MapView
             ref={mapRef}
             style={styles.container}
             initialRegion={user?.currentLocation}
             userInterfaceStyle="dark"
+            loadingEnabled
+            loadingIndicatorColor='#666666'
+            loadingBackgroundColor='#333333'
         >
             <UserLocation location={user?.currentLocation} />
             {renderMarkers()}
