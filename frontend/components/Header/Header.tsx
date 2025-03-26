@@ -18,7 +18,7 @@ const Header = () => {
     }
 
     return (
-        <BlurView intensity={10} tint="dark" style={[styles.container, { paddingTop: top }]} >
+        <BlurView intensity={20} tint="dark" style={[styles.container, { paddingTop: top }]} >
             <Text style={[styles.title, { color: tint }]}>Gde je After?</Text>
             <Avatar onPress={onPress} source={user?.profileImage} size={45} />
         </BlurView>

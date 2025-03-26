@@ -10,7 +10,7 @@ import { AnimatedMapView } from 'react-native-maps/lib/MapView';
 const Map = () => {
     const { user } = useAuth();
     const { mapRef } = useGlobalContext();
-    const { parties, loading } = useParties(10000, '2025-03-25');
+    const { parties, loading } = useParties();
 
     const renderMarkers = () => {
         return parties.map((party, index) => (

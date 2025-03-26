@@ -33,9 +33,7 @@ export const getParties = async (location: Region, radius: number, date: Date) =
             };
         });
 
-
         return parties;
-
     } catch (error) {
         handleApiError(error);
     }

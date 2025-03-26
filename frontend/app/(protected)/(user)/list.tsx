@@ -1,10 +1,25 @@
-import { StyleSheet } from 'react-native'
+import { FlatList, StyleSheet } from 'react-native'
 import { Text, View } from '@/components/Themed'
+import { Party, useParties } from '@/hooks/useParties';
+import PartyCard from '@/components/Party/PartyCard';
 
 const ListScreen = () => {
+    const { parties } = useParties();
+
+    const renderItem = ({ item }: { item: Party }) => (
+        <PartyCard party={item} />
+    );
+
     return (
         <View style={styles.container}>
-            <Text>ListScreen</Text>
+            <FlatList
+                style={{ width: '100%', padding: 10 }}
+                data={parties}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id.toString()}
+                ListHeaderComponent={() => <View style={{ height: 120 }} />}
+                ListFooterComponent={() => <View style={{ height: 120 }} />}
+            />
         </View>
     )
 }
@@ -16,5 +31,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        width: '100%',
     },
 })

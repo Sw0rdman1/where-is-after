@@ -18,11 +18,14 @@ export interface Party {
 }
 
 
-export const useParties = (radius: number, date: string) => {
+export const useParties = () => {
     const [parties, setParties] = useState<Party[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [radius, setRadius] = useState<number>(10000);
+    const [date, setDate] = useState<string>('2025-03-25');
     const { user } = useAuth();
+
 
 
     useEffect(() => {
