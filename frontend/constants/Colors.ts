@@ -5,7 +5,7 @@ export default {
   light: {
     text: "#EAEAEA",
     placeholderText: "#A0A0A0",
-    background: "#1a1a1a",
+    background: "#121212",
     surface: "#1E1E1E",
     tint,
     tintLowOpacity,
