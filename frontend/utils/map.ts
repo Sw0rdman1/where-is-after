@@ -45,4 +45,13 @@ const convertVenueLocationToRegion = (venue: any): Region => {
     }
 }
 
-export { getCurrentLocation, convertVenueLocationToRegion };
+const TEXT_MIN_WIDTH = 80;
+
+const calculateTextWidth = (text: string, fontSize: number) => {
+    const averageCharWidth = fontSize * 0.6;
+    const textLength = text.length;
+    const width = textLength * averageCharWidth;
+    return Math.max(width + 40, TEXT_MIN_WIDTH);
+};
+
+export { getCurrentLocation, convertVenueLocationToRegion, calculateTextWidth };

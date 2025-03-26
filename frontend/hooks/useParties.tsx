@@ -11,6 +11,8 @@ export interface Party {
     venue: {
         _id: string;
         name: string;
+        description: string;
+        logo: string;
         location: Region;
     };
 }

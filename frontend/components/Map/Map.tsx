@@ -1,16 +1,23 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
 import MapView from 'react-native-maps'
 import UserLocation from './UserLocation';
 import { useAuth } from '@/context/AuthProvider';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { useParties } from '@/hooks/useParties';
-import PartyMarkers from './PartyMarkers';
+import PartyMarker from './PartyMarker';
 
 const Map = () => {
     const { user } = useAuth();
     const { mapRef } = useGlobalContext();
     const { parties, loading } = useParties(10000, '2025-03-25');
+
+    const renderMarkers = () => {
+        console.log('renderMarkers');
+
+        return parties.map((party, index) => (
+            <PartyMarker key={party._id} party={party} index={index} />
+        ))
+    }
 
     if (loading) {
         return (
@@ -27,7 +34,7 @@ const Map = () => {
             userInterfaceStyle="dark"
         >
             <UserLocation location={user?.currentLocation} />
-            <PartyMarkers parties={parties} />
+            {renderMarkers()}
         </MapView>
     )
 }

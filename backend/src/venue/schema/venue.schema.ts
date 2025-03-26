@@ -12,6 +12,12 @@ export class Venue extends Document {
     name: string;
 
     @Prop({ required: true })
+    description: string;
+
+    @Prop({ required: true })
+    logo: string;
+
+    @Prop({ required: true })
     category: string; // e.g., Club, DJ, Catering
 
     @Prop({ default: 0 })

@@ -40,10 +40,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 const storedUser = await AsyncStorage.getItem('user');
                 const storedToken = await AsyncStorage.getItem('token');
 
-                console.log('Stored User:', storedUser);
-                console.log('Stored Token:', storedToken);
-
-
                 if (storedUser && storedToken) {
                     userData = await getProfile(JSON.parse(storedUser)._id);
                     setAccessToken(storedToken);
@@ -66,8 +62,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const data = await login(email, password);
 
         if (data.user && data.accessToken && data.refreshToken) {
-            console.log(data);
-
             data.user.currentLocation = await getCurrentLocation()
             setUser(data.user);
             setAccessToken(accessToken);
