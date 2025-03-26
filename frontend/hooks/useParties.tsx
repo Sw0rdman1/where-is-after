@@ -3,7 +3,7 @@ import { getParties } from '@/api/parties';
 import { useAuth } from '@/context/AuthProvider';
 import { Region } from 'react-native-maps';
 
-interface Party {
+export interface Party {
     _id: string;
     name: string;
     description?: string;
