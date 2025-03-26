@@ -4,13 +4,13 @@ import { ToastProvider } from '@/context/ToastProvider';
 import { cacheImages } from '@/utils/cache';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
-
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -19,6 +19,9 @@ export const unstable_settings = {
 };
 
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
+
 
 export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -57,11 +60,13 @@ export default function RootLayout() {
   }
 
   return (
-    <GlobalProvider>
-      <AuthProvider>
-        <RootLayoutNav />
-      </AuthProvider>
-    </GlobalProvider>
+    <QueryClientProvider client={queryClient}>
+      <GlobalProvider>
+        <AuthProvider>
+          <RootLayoutNav />
+        </AuthProvider>
+      </GlobalProvider>
+    </QueryClientProvider>
   );
 }
 

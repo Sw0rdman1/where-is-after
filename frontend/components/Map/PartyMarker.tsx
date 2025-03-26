@@ -6,7 +6,7 @@ import { isDarkMode, useColors } from '@/hooks/useColors';
 import { useEffect, useRef, useState } from 'react';
 import { Text } from '../Themed';
 import { calculateTextWidth } from '@/utils/map';
-import { Party } from '@/hooks/useParties';
+import Party from '@/models/Party';
 
 const SVG_MARKER_WIDTH = 40
 const SVG_MARKER_HEIGHT = 50

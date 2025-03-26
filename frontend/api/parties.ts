@@ -2,9 +2,9 @@ import { handleApiError } from "@/utils/errorHandler";
 import { Region } from "react-native-maps";
 import api from "./axios";
 import { convertVenueLocationToRegion } from "@/utils/map";
-import { Party } from "@/hooks/useParties";
+import Party from "@/models/Party";
 
-export const getParties = async (location: Region, radius: number, date: Date) => {
+export const getParties = async (location: Region, radius: number, date: Date): Promise<Party[]> => {
     try {
         const response = await api.get('/parties/nearby', {
             params: {
@@ -14,6 +14,9 @@ export const getParties = async (location: Region, radius: number, date: Date) =
                 date
             },
         });
+
+        console.log(response.data);
+
 
         const parties = response.data.map((party: Party) => {
             const venueLocation = convertVenueLocationToRegion(party.venue);
@@ -36,5 +39,6 @@ export const getParties = async (location: Region, radius: number, date: Date) =
         return parties;
     } catch (error) {
         handleApiError(error);
+        return [];
     }
 }

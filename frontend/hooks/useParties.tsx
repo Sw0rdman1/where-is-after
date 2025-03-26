@@ -1,56 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { getParties } from '@/api/parties';
 import { useAuth } from '@/context/AuthProvider';
-import { Region } from 'react-native-maps';
+import { useState } from 'react';
 
-export interface Party {
-    _id: string;
-    name: string;
-    description?: string;
-    date: string;
-    venue: {
-        _id: string;
-        name: string;
-        description: string;
-        logo: string;
-        location: Region;
-    };
-}
+const STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
 
 export const useParties = () => {
-    const [parties, setParties] = useState<Party[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [radius, setRadius] = useState<number>(10000);
-    const [date, setDate] = useState<string>('2025-03-25');
     const { user } = useAuth();
+    const [radius, setRadius] = useState(10000);
+    const [date, setDate] = useState(new Date('2025-03-25'));
 
+    const fetchParties = async () => {
+        if (!user?.currentLocation) {
+            throw new Error('User location not found');
+        }
+        return await getParties(user.currentLocation, radius, date);
+    };
 
+    const { data: parties, isLoading, isError, error } = useQuery({
+        queryKey: ['parties', user?.currentLocation, radius, date],
+        queryFn: fetchParties,
+        staleTime: STALE_TIME
+    });
 
-    useEffect(() => {
-        const fetchParties = async () => {
-            setLoading(true);
-            setError(null);
-
-            try {
-                if (!user?.currentLocation) {
-                    throw new Error('User location not found');
-                }
-
-                const response = await getParties(user.currentLocation, radius, new Date(date));
-
-                setParties(response);
-
-            } catch (err: any) {
-                setError(err.response?.data?.message || 'Failed to fetch parties');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchParties();
-    }, [radius, date]);
-
-    return { parties, loading, error };
+    return {
+        parties: parties || [],
+        loading: isLoading,
+        error: isError ? error?.message || 'Failed to fetch parties' : null,
+    };
 };

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './axios';
-import { User } from '@/context/AuthProvider';
 import { handleApiError } from '@/utils/errorHandler';
+import User from '@/models/User';
 
 export const checkEmail = async (email: string) => {
     try {

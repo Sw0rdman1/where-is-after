@@ -1,7 +1,8 @@
 import { FlatList, StyleSheet } from 'react-native'
 import { Text, View } from '@/components/Themed'
-import { Party, useParties } from '@/hooks/useParties';
+import { useParties } from '@/hooks/useParties';
 import PartyCard from '@/components/Party/PartyCard';
+import Party from '@/models/Party';
 
 const ListScreen = () => {
     const { parties } = useParties();

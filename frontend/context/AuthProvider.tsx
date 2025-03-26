@@ -4,16 +4,7 @@ import { getProfile, login, register, verifyUser } from '@/api/auth';
 import * as Location from 'expo-location';
 import { Region } from 'react-native-maps';
 import { getCurrentLocation } from '@/utils/map';
-
-export interface User {
-    _id: string;
-    displayName: string;
-    profileImage: string;
-    email: string;
-    isVerified: boolean;
-    role: string;
-    currentLocation: Region;
-}
+import User from '@/models/User';
 
 interface AuthContextType {
     user: User | null;

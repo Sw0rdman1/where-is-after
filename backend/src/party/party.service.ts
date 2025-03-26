@@ -35,6 +35,7 @@ export class PartyService {
 
         const endOfDay = new Date(partyDate.getTime() + 24 * 60 * 60 * 1000 - 1);  // End of the selected day
 
+        log(`Searching for parties on ${partyDate} near ${latitude}, ${longitude} within ${radius} meters`);
 
         return this.partyModel
             .find({

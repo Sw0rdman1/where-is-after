@@ -1,8 +1,8 @@
-import { Party } from '@/hooks/useParties'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useColors } from '@/hooks/useColors'
 import { Image } from 'expo-image'
 import { Text } from '../Themed'
+import Party from '@/models/Party'
 
 interface PartyCardProps {
     party: Party
