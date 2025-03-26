@@ -8,7 +8,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAuth } from "@/context/AuthProvider";
 
-const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
+const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
     const tabWidth = state.routes.length * 70;
     const { tint, surface, text } = useColors();
     const { mapRef } = useGlobalContext();

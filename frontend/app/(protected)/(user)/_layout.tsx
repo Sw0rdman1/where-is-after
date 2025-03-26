@@ -8,11 +8,11 @@ export default function UserLayout() {
         <RoleBasedRedirect>
             <Tabs
                 tabBar={(props) => <TabBar {...props} />}
-                screenOptions={{ header: () => <Header /> }}
+                screenOptions={{ header: (props) => <Header {...props} /> }}
             >
                 <Tabs.Screen name="index" />
                 <Tabs.Screen name="list" />
-                <Tabs.Screen name="profile" options={{ headerShown: false }} />
+                <Tabs.Screen name="profile" />
             </Tabs>
         </RoleBasedRedirect>
     )
