@@ -29,12 +29,14 @@ const Header: React.FC<BottomTabHeaderProps> = ({ route }) => {
         switch (routeName) {
             case "index":
                 return <Avatar onPress={onPress} source={user?.profileImage} size={45} />
+
             case "list":
                 return (
                     <TouchableOpacity style={[styles.button, { backgroundColor: `${tint}90` }]} >
                         <Ionicons name="filter-sharp" size={22} color={text} />
                     </TouchableOpacity>
                 )
+
             case "profile":
                 return (
                     <TouchableOpacity onPress={handleLogout} style={[styles.button, { backgroundColor: error }]}>
