@@ -1,7 +1,6 @@
 import Header from "@/components/Header/Header";
 import { RoleBasedRedirect } from "@/components/Middleware/middleware";
 import TabBar from "@/components/TabBar/TabBar";
-import { FontAwesome } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
 export default function UserLayout() {

@@ -1,7 +1,6 @@
 import { Image, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { View } from "@/components/Themed";
-import AuthContent from "@/components/AuthContent/AuthContent";
 import VerifyEmailForm from "@/components/Form/VerifyEmailForm";
 
 const BACKGROUND_IMAGE = require("../../assets/images/auth/bg7.jpg");

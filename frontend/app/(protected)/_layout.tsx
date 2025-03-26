@@ -1,8 +1,5 @@
-import { Text } from 'react-native';
-import { Redirect, Stack, useRouter } from 'expo-router';
-import { useAuth } from '@/context/AuthProvider';
-import { useEffect } from 'react';
 import { ProtectedRoute } from '@/components/Middleware/middleware';
+import { Stack } from 'expo-router';
 
 export default function AppLayout() {
 

@@ -5,17 +5,9 @@ import { verifyUser } from '@/api/auth';
 
 export default function MainScreen() {
     const { user, logout } = useAuth();
-    const verificationCode = '123456';
-
     const handleLogout = () => {
         logout();
     }
-
-    const handleVerify = async () => {
-        if (!user) return
-        const data = await verifyUser(user._id, verificationCode);
-    }
-
 
     return (
         <View style={styles.container}>
@@ -28,10 +20,6 @@ export default function MainScreen() {
             <Text style={styles.title}>
                 {user?.isVerified ? 'Verified' : 'Not verified'}
             </Text>
-            <TouchableOpacity style={styles.button} onPress={handleVerify}>
-                <Text style={styles.buttonText}>Verify</Text>
-            </TouchableOpacity>
-
             <TouchableOpacity style={styles.button} onPress={handleLogout}>
                 <Text style={styles.buttonText}>Log out</Text>
             </TouchableOpacity>
