@@ -42,18 +42,13 @@ const UserLocation: React.FC<Props> = ({ location }) => {
     }
 
     return (
-        <Marker coordinate={location} anchor={{ x: 0.5, y: 0.5 }}>
+        <Marker coordinate={location} anchor={{ x: 0.5, y: 0.5 }} onPress={() => { }}>
             <View style={styles.wrapper}>
                 <Animated.View style={[styles.pulse, animatedStyle, { backgroundColor: `${tint}` }]} />
                 <View style={[styles.markerContainer]}>
                     <Avatar size={30} source={user?.profileImage} />
                 </View>
             </View>
-            <Callout>
-                <View style={styles.calloutContainer}>
-                    <Text style={styles.calloutText}>You are here!</Text>
-                </View>
-            </Callout>
         </Marker>
     );
 };
@@ -72,6 +67,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     calloutContainer: {
+        width: 150,
         padding: 10,
         backgroundColor: 'white',
         borderRadius: 10,
