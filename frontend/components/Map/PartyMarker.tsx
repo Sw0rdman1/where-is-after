@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Text } from '../Themed';
 import { calculateTextWidth } from '@/utils/map';
 import Party from '@/models/Party';
+import { router } from 'expo-router';
 
 const SVG_MARKER_WIDTH = 40
 const SVG_MARKER_HEIGHT = 50
@@ -107,6 +108,7 @@ const PartyMarker: React.FC<Props> = ({ party, index }) => {
     const markerRef = useRef<MapMarker>(null);
 
     const handleCalloutPress = () => {
+        router.push(`/party/${party._id}`)
         markerRef.current?.hideCallout();
     };
 

@@ -13,7 +13,7 @@ const PartyCard: React.FC<PartyCardProps> = ({ party }) => {
     const { surface } = useColors()
 
     const handlePress = () => {
-        router.push(`/(protected)/(user)/(modals)/party/${party._id}`)
+        router.push(`/party/${party._id}`)
     }
 
     return (

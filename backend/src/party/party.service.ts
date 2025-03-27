@@ -22,7 +22,7 @@ export class PartyService {
                         type: 'Point',
                         coordinates: [longitude, latitude],
                     },
-                    $maxDistance: radius, // Radius in meters (from frontend)
+                    $maxDistance: radius,
                 },
             },
         });
@@ -30,23 +30,25 @@ export class PartyService {
         const venueIds = nearbyVenues.map(venue => venue._id);
 
         const partyDate = date
-            ? moment.utc(date).startOf('day').toDate()  // Start of the provided date in UTC
-            : moment.utc().startOf('day').toDate();  // Default to today in UTC
+            ? moment.utc(date).startOf('day').toDate()
+            : moment.utc().startOf('day').toDate();
 
-        const endOfDay = new Date(partyDate.getTime() + 24 * 60 * 60 * 1000 - 1);  // End of the selected day
-
-        log(`Searching for parties on ${partyDate} near ${latitude}, ${longitude} within ${radius} meters`);
+        const endOfDay = new Date(partyDate.getTime() + 24 * 60 * 60 * 1000 - 1);
 
         return this.partyModel
             .find({
-                venue: { $in: venueIds }, // Matches any venue ID in the provided array
+                venue: { $in: venueIds },
                 date: {
-                    $gte: partyDate, // Start of the selected date
-                    $lt: endOfDay, // End of the selected date (23:59:59.999)
+                    $gte: partyDate,
+                    $lt: endOfDay,
                 },
             })
-            .populate('venue') // Populates venue details
-            .exec(); // Ensures it's a proper Promise
+            .populate('venue')
+            .exec();
 
+    }
+
+    async getPartyById(id: string) {
+        return this.partyModel.findById(id).populate('venue').exec();
     }
 }
