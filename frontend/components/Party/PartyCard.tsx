@@ -3,6 +3,7 @@ import { useColors } from '@/hooks/useColors'
 import { Image } from 'expo-image'
 import { Text } from '../Themed'
 import Party from '@/models/Party'
+import { router } from 'expo-router'
 
 interface PartyCardProps {
     party: Party
@@ -11,8 +12,12 @@ interface PartyCardProps {
 const PartyCard: React.FC<PartyCardProps> = ({ party }) => {
     const { surface } = useColors()
 
+    const handlePress = () => {
+        router.push(`/(protected)/(user)/(modals)/party/${party._id}`)
+    }
+
     return (
-        <TouchableOpacity style={[styles.container, { backgroundColor: surface }]}>
+        <TouchableOpacity style={[styles.container, { backgroundColor: surface }]} onPress={handlePress}>
             <Image source={{ uri: party.venue.logo }} style={styles.image} />
             <View style={styles.textContainer}>
                 <Text style={styles.party}>{party.name}</Text>
