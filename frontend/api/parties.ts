@@ -23,3 +23,13 @@ export const getParties = async (location: Region, radius: number, date: Date): 
         return [];
     }
 }
+
+export const getParty = async (id: string): Promise<Party | null> => {
+    try {
+        const response = await api.get(`/parties/${id}`);
+        return getPartyFromResponse(response.data);
+    } catch (error) {
+        handleApiError(error);
+        return null;
+    }
+}

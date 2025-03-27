@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getParties } from '@/api/parties';
+import { getParties, getParty } from '@/api/parties';
 import { useAuth } from '@/context/AuthProvider';
 import { useState } from 'react';
 
@@ -30,3 +30,24 @@ export const useParties = () => {
         error: isError ? error?.message || 'Failed to fetch parties' : null,
     };
 };
+
+
+export const useParty = (partyId: string) => {
+    const fetchParty = async () => {
+        console.log('fetching party', partyId);
+
+        return await getParty(partyId);
+    };
+
+    const { data: party, isLoading, isError, error } = useQuery({
+        queryKey: ['party', partyId],
+        queryFn: fetchParty,
+        staleTime: STALE_TIME
+    });
+
+    return {
+        party,
+        loading: isLoading,
+        error: isError ? error?.message || 'Failed to fetch party' : null,
+    };
+}
