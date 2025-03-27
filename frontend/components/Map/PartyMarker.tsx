@@ -40,7 +40,7 @@ const SvgMarker = ({ imageUri }: { imageUri: string }) => {
 
                 <Path
                     d="M50 0C22.4 0 0 22.4 0 50c0 22.1 17.5 48.6 35.8 78.3 7.2 11.9 21.1 11.9 28.4 0C82.5 98.6 100 72.1 100 50 100 22.4 77.6 0 50 0z"
-                    fill={tint}
+                    fill={`${tint}`}
                     mask="url(#mask)"
                 />
             </Svg>
