@@ -8,11 +8,13 @@ import { BlurView } from "expo-blur";
 import { sendVerificationCode, verifyUser } from "@/api/auth";
 import VerificationCodeInput from "../InputFields/VerificationCodeInput";
 import { useColors } from "@/hooks/useColors";
+import { useToast } from "@/context/ToastProvider";
 
 
 const VerifyEmailForm = () => {
     const { user } = useAuth();
     const { link } = useColors();
+    const { showToast } = useToast();
 
     const initialValues = {
         userId: user?._id || "",
@@ -22,7 +24,7 @@ const VerifyEmailForm = () => {
     const resendMailHandler = async () => {
         try {
             const data = await sendVerificationCode(user?.email || "");
-            console.log(data);
+            showToast({ message: data.message, severity: "success" });
 
         } catch (error) {
             console.error("Resend email failed", error);
@@ -33,7 +35,7 @@ const VerifyEmailForm = () => {
         try {
             await verifyUser(values.userId, values.verificationCode.join(''));
         } catch (error) {
-            console.error("Verification email failed", error);
+            showToast({ message: "Verification failed", severity: "error" });
         }
     };
 

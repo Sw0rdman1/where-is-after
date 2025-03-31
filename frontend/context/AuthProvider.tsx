@@ -39,6 +39,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loadAuthData();
     }, []);
 
+    
+
 
     const loginHandler = async (email: string, password: string) => {
         const data = await login(email, password);

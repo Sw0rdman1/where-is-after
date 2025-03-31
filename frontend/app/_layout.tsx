@@ -1,4 +1,5 @@
 import { AuthProvider, useAuth } from '@/context/AuthProvider';
+import { ToastProvider } from '@/context/ToastProvider';
 import { cacheImages } from '@/utils/cache';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
@@ -76,10 +77,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false, animation: 'fade', gestureEnabled: false }}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(protected)" />
-      </Stack>
-    </ThemeProvider >
+      <ToastProvider>
+        <Stack screenOptions={{ headerShown: false, animation: 'fade', gestureEnabled: false }}>
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(protected)" />
+        </Stack>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
