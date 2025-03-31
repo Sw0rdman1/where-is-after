@@ -1,8 +1,9 @@
-import { TOAST_DURATION } from '@/context/ToastProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
+
+export const TOAST_DURATION = 3000;
 
 interface ToastContainerProps {
     toasts: { id: string; message: string; severity: 'success' | 'error' | 'info' }[];

@@ -68,6 +68,8 @@ function RootLayoutNav() {
     if (user && user.isVerified) {
       const role = user.role === 'admin' ? 'admin' : 'user';
       router.replace(`/(protected)/(${role})`);
+    } else if (user && !user.isVerified) {
+      router.replace('/(auth)/verify');
     } else {
       router.replace('/(auth)');
     }

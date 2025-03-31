@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loadAuthData();
     }, []);
 
-    
+
 
 
     const loginHandler = async (email: string, password: string) => {
@@ -60,7 +60,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setAccessToken(null);
         await AsyncStorage.removeItem('user');
         await AsyncStorage.removeItem('token');
-        router.replace('/(auth)');
     };
 
     return (

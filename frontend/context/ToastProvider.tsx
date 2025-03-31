@@ -1,7 +1,6 @@
-import ToastContainer from '@/components/Toast/ToastContainer';
+import ToastContainer, { TOAST_DURATION } from '@/components/Toast/ToastContainer';
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
-export const TOAST_DURATION = 3000;
 
 interface ToastMessage {
     id: string;

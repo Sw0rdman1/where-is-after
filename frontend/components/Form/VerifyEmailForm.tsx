@@ -12,7 +12,7 @@ import { useToast } from "@/context/ToastProvider";
 
 
 const VerifyEmailForm = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const { link } = useColors();
     const { showToast } = useToast();
 
@@ -38,6 +38,14 @@ const VerifyEmailForm = () => {
             showToast({ message: "Verification failed", severity: "error" });
         }
     };
+
+    const signOutHandler = async () => {
+        try {
+            await logout();
+        } catch (error) {
+            showToast({ message: "Error loging out", severity: "error" });
+        }
+    }
 
 
     return (
@@ -95,9 +103,22 @@ const VerifyEmailForm = () => {
                             />
                         </View>
                     </Animated.View>
+                    <Animated.View entering={FadeInDown.delay(1000).duration(400)}>
+                        <View style={styles.notYourAccountContainer}>
+                            <Text style={styles.subtitle}>
+                                Not your account?
+                            </Text>
+                            <TouchableOpacity onPress={signOutHandler}>
+                                <Text style={[styles.subtitle, { fontWeight: "bold", color: link, fontSize: 18 }]}>
+                                    Sign out
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Animated.View>
                 </BlurView>
-            )}
-        </Formik>
+            )
+            }
+        </Formik >
     );
 };
 
@@ -109,7 +130,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
         paddingHorizontal: 10,
         paddingVertical: 40,
-        gap: 35,
+        gap: 25,
         borderRadius: 20,
         overflow: "hidden",
     },
@@ -122,6 +143,7 @@ const styles = StyleSheet.create({
     subtitleContainer: {
         marginLeft: 10,
         gap: 5,
+        marginBottom: 10,
     },
     subtitle: {
         fontSize: 16,
@@ -133,10 +155,17 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row",
         gap: 5,
+        marginTop: 10,
     },
     buttonContainer: {
-        marginTop: 10,
         marginHorizontal: 20,
+    },
+    notYourAccountContainer: {
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        gap: 5,
     },
 
 });
