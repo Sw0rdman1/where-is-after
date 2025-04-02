@@ -34,8 +34,6 @@ export const useParties = () => {
 
 export const useParty = (partyId: string) => {
     const fetchParty = async () => {
-        console.log('fetching party', partyId);
-
         return await getParty(partyId);
     };
 
