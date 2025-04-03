@@ -12,7 +12,7 @@ export const formatDateWithDay = (date: Date, weekday: weekdayOptions, locale: s
         month: '2-digit',
         year: '2-digit',
     };
-    return date.toLocaleDateString(locale, options);
+    return date.toLocaleDateString(locale, options).charAt(0).toUpperCase() + date.toLocaleDateString(locale, options).slice(1);
 };
 
 export const formatTime = (date: Date, locale: string = defaultLocale): string => {

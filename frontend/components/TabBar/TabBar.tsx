@@ -7,6 +7,7 @@ import { useColors } from "@/hooks/useColors";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAuth } from "@/context/AuthProvider";
+import { BlurView } from "expo-blur";
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
     const tabWidth = state.routes.length * 70;
@@ -33,10 +34,11 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
     };
 
     return (
-        <View
+        <BlurView
+            intensity={100}
+            tint="dark"
             style={{
                 flexDirection: "row",
-                backgroundColor: surface,
                 borderRadius: 70,
                 margin: 10,
                 position: "absolute",
@@ -51,6 +53,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
                 elevation: 5,
                 alignSelf: "center",
                 width: tabWidth,
+                overflow: "hidden",
 
             }}
         >
@@ -97,7 +100,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
                     </TouchableOpacity>
                 );
             })}
-        </View>
+        </BlurView>
     );
 };
 
