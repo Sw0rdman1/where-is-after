@@ -7,6 +7,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useColors } from "@/hooks/useColors";
 import PartyLoading from "@/components/Party/PartyLoading";
+import PartyNotFound from "@/components/Party/PartyNotFound";
 
 export default function PartyScreen() {
     const { partyId } = useLocalSearchParams();
@@ -19,13 +20,7 @@ export default function PartyScreen() {
 
     if (loading) return <PartyLoading />;
 
-    if (!party) {
-        return (
-            <View style={styles.centered}>
-                <Text>Party not found</Text>
-            </View>
-        );
-    }
+    if (!party) return <PartyNotFound />
 
     return (
         <View style={styles.container}>

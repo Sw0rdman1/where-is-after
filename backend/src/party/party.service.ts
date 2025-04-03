@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Party } from './schema/party.schema';
 import { Venue } from 'src/venue/schema/venue.schema';
 import * as moment from "moment";
 import { log } from 'console';
+import { validateMongoID } from 'src/utils/validation';
 
 @Injectable()
 export class PartyService {
@@ -49,6 +50,18 @@ export class PartyService {
     }
 
     async getPartyById(id: string) {
-        return this.partyModel.findById(id).populate('venue').exec();
+
+        validateMongoID(id);
+
+        const party = await this.partyModel
+            .findById(id)
+            .populate('venue')
+            .exec();
+
+        if (!party) {
+            throw new NotFoundException('Party not found');
+        }
+
+        return party;
     }
 }

@@ -5,8 +5,8 @@ export default {
   light: {
     text: "#EAEAEA",
     placeholderText: "#A0A0A0",
-    background: "#1E1E1E",
-    surface: "#121212",
+    background: "#121212",
+    surface: "#1E1E1E",
     tint,
     tintLowOpacity,
     error: "#ff5555",
@@ -20,7 +20,7 @@ export default {
   dark: {
     text: "#EAEAEA",
     placeholderText: "#A0A0A0",
-    background: "#121212",
+    background: "#1E1E1E",
     surface: "#1E1E1E",
     tint,
     tintLowOpacity,

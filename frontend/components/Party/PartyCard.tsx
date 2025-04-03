@@ -13,7 +13,7 @@ const PartyCard: React.FC<PartyCardProps> = ({ party }) => {
     const { surface } = useColors()
 
     const handlePress = () => {
-        router.push(`/party/${party._id}`)
+        router.push(`/party/1${party._id}`)
     }
 
     return (
