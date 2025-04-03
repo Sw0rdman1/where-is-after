@@ -6,6 +6,7 @@ import { useRouter, useLocalSearchParams, router } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useColors } from "@/hooks/useColors";
+import PartyLoading from "@/components/Party/PartyLoading";
 
 export default function PartyScreen() {
     const { partyId } = useLocalSearchParams();
@@ -16,13 +17,7 @@ export default function PartyScreen() {
         router.back();
     }
 
-    if (loading) {
-        return (
-            <View style={styles.centered}>
-                <Text>Loading...</Text>
-            </View>
-        );
-    }
+    if (loading) return <PartyLoading />;
 
     if (!party) {
         return (
