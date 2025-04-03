@@ -59,7 +59,7 @@ export class PartyService {
             .exec();
 
         if (!party) {
-            throw new NotFoundException('Party not found');
+            throw new NotFoundException(`Party with id ${id} not found`);
         }
 
         return party;

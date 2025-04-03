@@ -1,9 +1,14 @@
 import { Text, View } from '@/components/Themed';
+import { useVenue } from '@/hooks/useVenues';
 import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet } from 'react-native'
 
 const VenueScreen = () => {
     const { venueId } = useLocalSearchParams();
+    const { venue, loading } = useVenue(venueId as string);
+
+    console.log(venue);
+
 
     return (
         <View style={styles.container}>
