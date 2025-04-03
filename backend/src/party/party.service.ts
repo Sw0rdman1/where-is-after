@@ -39,7 +39,7 @@ export class PartyService {
         return this.partyModel
             .find({
                 venue: { $in: venueIds },
-                date: {
+                startDate: {
                     $gte: partyDate,
                     $lt: endOfDay,
                 },

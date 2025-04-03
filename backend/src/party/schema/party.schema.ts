@@ -10,7 +10,13 @@ export class Party extends Document {
     description: string;
 
     @Prop({ required: true })
-    date: Date;
+    image: string;
+
+    @Prop({ required: true })
+    startDate: Date;
+
+    @Prop({ required: true })
+    endDate: Date;
 
     @Prop({ type: Types.ObjectId, ref: 'Venue', required: true })
     venue: Types.ObjectId;
