@@ -1,5 +1,4 @@
-import { View, Text } from "@/components/Themed";
-import Button from "@/components/Button/Button";
+import { View, Text, ScrollView } from "@/components/Themed";
 import { useParty } from "@/hooks/useParties";
 import { Image } from "expo-image";
 import { useRouter, useLocalSearchParams, router } from "expo-router";
@@ -23,36 +22,36 @@ export default function PartyScreen() {
     if (!party) return <PartyNotFound />
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <TouchableOpacity
                 style={[styles.backButton, { backgroundColor: background }]}
                 onPress={handleBack}
             >
                 <Ionicons name="chevron-back" size={24} color={tint} />
             </TouchableOpacity>
-            <Image source={{ uri: party.venue.logo }} style={styles.logo} />
-            <Text style={styles.title}>{party.name}</Text>
-            <Text style={styles.date}>{new Date(party.date).toLocaleDateString()}</Text>
-            <Text style={styles.description}>{party.description}</Text>
-
-            <View style={styles.venueContainer}>
-                <Text style={styles.venueTitle}>Venue</Text>
-                <Text style={styles.venueName}>{party.venue.name}</Text>
-                <Text style={styles.venueDescription}>{party.venue.description}</Text>
+            <Image source={{ uri: party.image }} style={styles.partyImage} />
+            <View style={styles.textContainer}>
+                <Text style={[styles.title, { color: tint }]}>
+                    {party.name}
+                </Text>
+                <Text style={styles.description}>
+                    {party.description}
+                </Text>
             </View>
 
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 8,
     },
     backButton: {
         position: "absolute",
-        top: 12,
-        left: 12,
+        top: 20,
+        left: 20,
         zIndex: 1,
         height: 35,
         width: 35,
@@ -60,49 +59,27 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    centered: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    logo: {
+    partyImage: {
         width: "100%",
-        height: 250,
-        borderRadius: 8,
+        height: 350,
+        borderRadius: 16,
+    },
+    textContainer: {
+        flex: 1,
+        marginTop: 8,
     },
     title: {
-        fontSize: 24,
+        fontSize: 32,
         fontWeight: "bold",
         marginTop: 12,
-    },
-    date: {
-        fontSize: 16,
-        color: "gray",
-        marginTop: 4,
+        fontFamily: "PermanentMarker",
     },
     description: {
-        fontSize: 16,
-        textAlign: "center",
-        marginVertical: 12,
-    },
-    venueContainer: {
-        marginTop: 16,
-    },
-    venueTitle: {
         fontSize: 18,
-        fontWeight: "bold",
-    },
-    venueName: {
-        fontSize: 16,
-        marginTop: 4,
-    },
-    venueDescription: {
-        fontSize: 14,
-        color: "gray",
-        marginTop: 4,
-    },
-    venueLocation: {
-        fontSize: 14,
-        marginTop: 4,
+        marginTop: 8,
+        lineHeight: 24,
+        textAlign: "justify",
+        marginBottom: 20,
+        fontStyle: "italic",
     },
 });
