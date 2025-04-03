@@ -22,7 +22,8 @@ export default function PartyScreen() {
     }
 
     const handleVenuePress = () => {
-        // router.push(`/venue/${party.venue._id}`);
+        if (!party?.venue?._id) return;
+        router.push(`/venue/${party.venue._id}`);
     }
 
     if (loading) return <PartyLoading />;
@@ -57,8 +58,8 @@ export default function PartyScreen() {
                         {formatTime(party.startDate)} - {formatTime(party.endDate)}
                     </Text>
                 </View>
-                <View style={{ alignItems: "center", marginTop: 5, flexDirection: "row", gap: 5 }}>
-                    <Ionicons name="location" size={20} color={ICON_COLOR} />
+                <View style={{ alignItems: "center", marginTop: 10, flexDirection: "row", gap: 5 }}>
+                    <Ionicons name="location" size={24} color={ICON_COLOR} />
                     <TouchableOpacity style={[styles.venueContainer, { backgroundColor: surface }]} onPress={handleVenuePress}>
                         <Image source={{ uri: party.venue.logo }} style={{ width: 30, height: 30, borderRadius: 15 }} />
                         <Text style={[styles.text, { color: tint }]}>
