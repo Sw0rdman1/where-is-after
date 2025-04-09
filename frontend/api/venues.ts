@@ -2,7 +2,7 @@ import { handleApiError } from "@/utils/errorHandler";
 import Venue from "@/models/Venue";
 import { useAxios } from "@/context/ApiProvider";
 
-export const usePartyAPI = () => {
+export const useVenueAPI = () => {
     const api = useAxios();
 
     const getVenue = async (id: string): Promise<Venue | null> => {

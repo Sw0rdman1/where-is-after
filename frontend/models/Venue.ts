@@ -5,6 +5,7 @@ interface Venue {
     name: string;
     description: string;
     logo: string;
+    images: string[];
     location: Region;
 }
 

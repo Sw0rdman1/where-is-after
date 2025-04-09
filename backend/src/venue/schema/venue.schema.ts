@@ -18,6 +18,9 @@ export class Venue extends Document {
     logo: string;
 
     @Prop({ required: true })
+    images: string[]; // Array of image URLs
+
+    @Prop({ required: true })
     category: string; // e.g., Club, DJ, Catering
 
     @Prop({ default: 0 })
