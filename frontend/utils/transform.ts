@@ -34,6 +34,6 @@ export const getVenueFromResponse = (response: any): Venue => {
         description: response.description,
         location: location,
         images: response.images,
-        socials: response.venue.socials,
+        socials: response.socials,
     };
 }

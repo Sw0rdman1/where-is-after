@@ -8,6 +8,7 @@ import {
 import * as Linking from 'expo-linking';
 import * as ClipboardAPI from 'expo-clipboard';
 import { Feather } from '@expo/vector-icons';
+import { useColors } from '@/hooks/useColors';
 
 type ShareButtonProps = {
     message: string;
@@ -15,7 +16,7 @@ type ShareButtonProps = {
     buttonLabel?: string;
     iconSize?: number;
     color?: string;
-    url?: string; // for sharing links/images especially on web
+    url?: string;
 };
 
 const ShareButton: React.FC<ShareButtonProps> = ({
@@ -23,9 +24,12 @@ const ShareButton: React.FC<ShareButtonProps> = ({
     title,
     buttonLabel = 'Share',
     iconSize = 24,
-    color = '#25D366', // WhatsApp green
+    color,
     url,
 }) => {
+    const { tint, surface } = useColors();
+    const defaultColor = color || tint;
+
     const onShare = async () => {
         try {
             // For Web: try navigator.share first
@@ -68,11 +72,17 @@ const ShareButton: React.FC<ShareButtonProps> = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 padding: 10,
+                flexGrow: 1,
+                justifyContent: 'center',
                 gap: 8,
+                backgroundColor: surface,
+                borderRadius: 8,
             }}
         >
-            <Feather name="share-2" size={iconSize} color={color} />
-            <Text style={{ color, fontSize: 16 }}>{buttonLabel}</Text>
+            <Feather name="share-2" size={iconSize} color={defaultColor} />
+            <Text style={{ color: defaultColor, fontSize: 16, fontWeight: 'bold' }}>
+                {buttonLabel}
+            </Text>
         </TouchableOpacity>
     );
 };

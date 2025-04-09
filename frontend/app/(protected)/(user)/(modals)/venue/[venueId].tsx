@@ -4,6 +4,7 @@ import ShareButton from '@/components/Button/ShareButton';
 import { ImageSlider } from '@/components/Image/ImageSlider';
 import { ScrollView, Text, View } from '@/components/Themed';
 import Title from '@/components/Typography/Title';
+import { useColors } from '@/hooks/useColors';
 import { useVenue } from '@/hooks/useVenues';
 import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet } from 'react-native'
@@ -11,6 +12,7 @@ import { StyleSheet } from 'react-native'
 const VenueScreen = () => {
     const { venueId } = useLocalSearchParams();
     const { venue, loading } = useVenue(venueId as string);
+    const { text } = useColors();
 
     if (loading) {
         return (
@@ -28,15 +30,15 @@ const VenueScreen = () => {
         )
     }
 
-    console.log(venue);
-
-
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} bounces={false}>
             <ModalBackButton top={16} left={16} />
             <ImageSlider images={[venue.logo, ...venue.images]} />
             <View style={styles.textContainer}>
                 <Title text={venue.name} />
+
+            </View>
+            <View style={styles.buttonsContainer}>
                 <ShareButton
                     message={`Check out this venue: ${venue.name}`}
                     title={`Share ${venue.name}`}
@@ -46,6 +48,7 @@ const VenueScreen = () => {
                     latitude={venue.location.latitude}
                     longitude={venue.location.longitude}
                     label={venue.name}
+                    color={text}
                 />
             </View>
 
@@ -65,7 +68,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     textContainer: {
-        flex: 1,
         padding: 12,
+    },
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 8,
+        gap: 16,
     },
 })

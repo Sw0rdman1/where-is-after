@@ -1,8 +1,9 @@
 // components/OpenInMapsButton.tsx
 
 import React from 'react';
-import { Platform, TouchableOpacity, Text, Linking, Alert, View } from 'react-native';
+import { Platform, TouchableOpacity, Text, Linking, Alert, ActionSheetIOS, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useColors } from '@/hooks/useColors';
 
 type OpenInMapsButtonProps = {
     latitude: number;
@@ -17,33 +18,65 @@ const OpenInMapsButton: React.FC<OpenInMapsButtonProps> = ({
     latitude,
     longitude,
     label = 'Selected Location',
-    buttonLabel = 'Open in Maps',
+    buttonLabel = 'Get Directions',
     iconSize = 24,
-    color = '#007AFF',
+    color
 }) => {
-    const handleOpenMaps = async () => {
-        const coords = `${latitude},${longitude}`;
-        const mapLabel = encodeURIComponent(label);
+    const { tint, surface } = useColors();
+    const defaultColor = color || tint;
 
-        let url = '';
+    const coords = `${latitude},${longitude}`;
+    const encodedLabel = encodeURIComponent(label);
+
+    const openInAppleMaps = () => {
+        const url = `http://maps.apple.com/?ll=${coords}&q=${encodedLabel}`;
+        Linking.openURL(url).catch(() => Alert.alert('Error', 'Could not open Apple Maps'));
+    };
+
+    const openInGoogleMaps = () => {
+        const url = `comgooglemaps://?q=${coords}`;
+        Linking.canOpenURL(url).then((supported) => {
+            if (supported) {
+                Linking.openURL(url);
+            } else {
+                // Fallback to Google Maps web
+                const webUrl = `https://www.google.com/maps/search/?api=1&query=${coords}`;
+                Linking.openURL(webUrl).catch(() =>
+                    Alert.alert('Error', 'Could not open Google Maps')
+                );
+            }
+        });
+    };
+
+    const handleOpenMaps = () => {
         if (Platform.OS === 'ios') {
-            // Apple Maps fallback
-            url = `http://maps.apple.com/?ll=${coords}&q=${mapLabel}`;
-        } else {
-            // Android: trigger chooser
-            url = `geo:${coords}?q=${coords}(${mapLabel})`;
-        }
-
-        const supported = await Linking.canOpenURL(url);
-
-        if (supported) {
-            Linking.openURL(url);
-        } else {
-            // fallback to Google Maps web
-            const webUrl = `https://www.google.com/maps/search/?api=1&query=${coords}`;
-            Linking.openURL(webUrl).catch((err) =>
-                Alert.alert('Error', 'Cannot open maps.')
+            ActionSheetIOS.showActionSheetWithOptions(
+                {
+                    options: ['Cancel', 'Open in Apple Maps', 'Open in Google Maps'],
+                    cancelButtonIndex: 0,
+                },
+                (buttonIndex) => {
+                    if (buttonIndex === 1) {
+                        openInAppleMaps();
+                    } else if (buttonIndex === 2) {
+                        openInGoogleMaps();
+                    }
+                }
             );
+        } else {
+            // Android: trigger chooser via geo: URI
+            const geoUrl = `geo:${coords}?q=${coords}(${encodedLabel})`;
+            Linking.canOpenURL(geoUrl)
+                .then((supported) => {
+                    if (supported) {
+                        Linking.openURL(geoUrl);
+                    } else {
+                        // fallback to Google Maps web
+                        const webUrl = `https://www.google.com/maps/search/?api=1&query=${coords}`;
+                        Linking.openURL(webUrl);
+                    }
+                })
+                .catch(() => Alert.alert('Error', 'Could not open map'));
         }
     };
 
@@ -54,11 +87,17 @@ const OpenInMapsButton: React.FC<OpenInMapsButtonProps> = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 padding: 10,
+                flexGrow: 1,
+                justifyContent: 'center',
                 gap: 8,
+                backgroundColor: surface,
+                borderRadius: 8,
             }}
         >
-            <Feather name="map-pin" size={iconSize} color={color} />
-            <Text style={{ color, fontSize: 16 }}>{buttonLabel}</Text>
+            <Feather name="map-pin" size={iconSize} color={defaultColor} />
+            <Text style={{ color: defaultColor, fontSize: 16, fontWeight: 'bold' }}>
+                {buttonLabel}
+            </Text>
         </TouchableOpacity>
     );
 };
