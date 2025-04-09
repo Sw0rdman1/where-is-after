@@ -1,3 +1,4 @@
+import { ApiProvider } from '@/context/ApiProvider';
 import { AuthProvider, useAuth } from '@/context/AuthProvider';
 import { GlobalProvider } from '@/context/GlobalProvider';
 import { ToastProvider } from '@/context/ToastProvider';
@@ -60,13 +61,15 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GlobalProvider>
-        <AuthProvider>
-          <RootLayoutNav />
-        </AuthProvider>
-      </GlobalProvider>
-    </QueryClientProvider>
+    <ApiProvider>
+      <QueryClientProvider client={queryClient}>
+        <GlobalProvider>
+          <AuthProvider>
+            <RootLayoutNav />
+          </AuthProvider>
+        </GlobalProvider>
+      </QueryClientProvider>
+    </ApiProvider>
   );
 }
 
@@ -78,8 +81,12 @@ function RootLayoutNav() {
     if (isLoading) return;
 
     if (user && user.isVerified) {
-      const role = user.role === 'admin' ? 'admin' : 'user';
-      router.replace(`/(protected)/(${role})`);
+      if (user.role === 'admin') {
+        router.replace(`/(protected)/(admin)`);
+      }
+      if (user.role === 'user') {
+        router.replace(`/(protected)/(user)/(tabs)`);
+      }
     } else if (user && !user.isVerified) {
       router.replace('/(auth)/verify');
     } else {

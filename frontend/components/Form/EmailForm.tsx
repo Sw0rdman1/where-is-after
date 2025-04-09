@@ -8,7 +8,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { router } from "expo-router";
 import { BlurView } from "expo-blur";
 import EmailInput from "../InputFields/EmailInput";
-import { checkEmail } from "@/api/auth";
+import { useAuthAPI } from "@/api/auth";
 
 
 
@@ -20,6 +20,7 @@ interface Props {
 
 const EmailForm: React.FC<Props> = ({ email, openLoginScreen, openRegisterScreen }) => {
   const initialValues = { email };
+  const { checkEmail } = useAuthAPI();
 
   const onSubmitHandler = async (values: typeof initialValues) => {
     try {

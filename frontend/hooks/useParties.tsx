@@ -1,15 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { getParties, getParty } from '@/api/parties';
 import { useAuth } from '@/context/AuthProvider';
 import { useState } from 'react';
+import { usePartyAPI } from '@/api/parties';
 
 const STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
 
 export const useParties = () => {
     const { user } = useAuth();
+    const { getParties } = usePartyAPI();
     const [radius, setRadius] = useState(10000);
     const [date, setDate] = useState(new Date('2025-03-25'));
+
 
     const fetchParties = async () => {
         if (!user?.currentLocation) {
@@ -33,6 +35,8 @@ export const useParties = () => {
 
 
 export const useParty = (partyId: string) => {
+    const { getParty } = usePartyAPI();
+
     const fetchParty = async () => {
         return await getParty(partyId);
     };

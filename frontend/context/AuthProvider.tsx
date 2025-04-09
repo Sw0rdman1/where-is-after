@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getProfile, login, register, verifyUser } from '@/api/auth';
+import { useAuthAPI } from '@/api/auth';
 import * as Location from 'expo-location';
 import { Region } from 'react-native-maps';
 import { getCurrentLocation } from '@/utils/map';
@@ -22,6 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const { getProfile, login, register, verifyUser } = useAuthAPI();
 
     useEffect(() => {
         const loadAuthData = async () => {
