@@ -76,7 +76,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
                 justifyContent: 'center',
                 gap: 8,
                 backgroundColor: surface,
-                borderRadius: 8,
+                borderRadius: 24,
             }}
         >
             <Feather name="share-2" size={iconSize} color={defaultColor} />

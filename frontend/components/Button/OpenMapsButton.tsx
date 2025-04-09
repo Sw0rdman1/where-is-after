@@ -87,15 +87,15 @@ const OpenInMapsButton: React.FC<OpenInMapsButtonProps> = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 padding: 10,
-                flexGrow: 1,
                 justifyContent: 'center',
                 gap: 8,
                 backgroundColor: surface,
                 borderRadius: 8,
+                marginHorizontal: 16,
             }}
         >
             <Feather name="map-pin" size={iconSize} color={defaultColor} />
-            <Text style={{ color: defaultColor, fontSize: 16, fontWeight: 'bold' }}>
+            <Text style={{ color: defaultColor, fontSize: 22, fontWeight: 'bold' }}>
                 {buttonLabel}
             </Text>
         </TouchableOpacity>

@@ -2,6 +2,21 @@ import Party from "@/models/Party";
 import { convertVenueLocationToRegion } from "./map";
 import Venue from "@/models/Venue";
 
+const INSTAGRAM_PREFIX = "https://www.instagram.com/";
+const FACEBOOK_PREFIX = "https://www.facebook.com/";
+const TIKTOK_PREFIX = "https://www.tiktok.com/@";
+
+const transformSocials = (socials: any) => {
+    if (!socials) return {}
+
+    return {
+        website: socials.website,
+        instagram: socials.instagram ? `${INSTAGRAM_PREFIX}${socials.instagram}` : "",
+        facebook: socials.facebook ? `${FACEBOOK_PREFIX}${socials.facebook}` : "",
+        tiktok: socials.tiktok ? `${TIKTOK_PREFIX}${socials.tiktok}` : "",
+    };
+}
+
 export const getPartyFromResponse = (response: any): Party => {
     const venueLocation = convertVenueLocationToRegion(response.venue);
 
@@ -19,7 +34,7 @@ export const getPartyFromResponse = (response: any): Party => {
             description: response.venue.description,
             location: venueLocation,
             images: response.venue.images,
-            socials: response.venue.socials,
+            socials: transformSocials(response.venue.socials),
         },
     };
 }
@@ -34,6 +49,6 @@ export const getVenueFromResponse = (response: any): Venue => {
         description: response.description,
         location: location,
         images: response.images,
-        socials: response.socials,
+        socials: transformSocials(response.socials),
     };
 }
