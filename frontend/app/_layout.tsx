@@ -1,4 +1,4 @@
-import { ApiProvider } from '@/context/ApiProvider';
+import { AxiosProvider } from '@/context/ApiProvider';
 import { AuthProvider, useAuth } from '@/context/AuthProvider';
 import { GlobalProvider } from '@/context/GlobalProvider';
 import { ToastProvider } from '@/context/ToastProvider';
@@ -61,15 +61,15 @@ export default function RootLayout() {
   }
 
   return (
-    <ApiProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AxiosProvider>
         <GlobalProvider>
           <AuthProvider>
             <RootLayoutNav />
           </AuthProvider>
         </GlobalProvider>
-      </QueryClientProvider>
-    </ApiProvider>
+      </AxiosProvider >
+    </QueryClientProvider>
   );
 }
 

@@ -7,6 +7,8 @@ import { ActivityIndicator, Button, StyleSheet } from "react-native";
 import { refreshAuthToken } from "@/api/axios";
 import { Text, View } from "@/components/Themed";
 
+const CELLULAR_IP_ADRESS = '172.20.10.11'
+
 
 const API_PORT = Constants.expoConfig?.extra?.API_PORT || "3000";
 const IS_PRODUCTION = Constants.expoConfig?.extra?.IS_PRODUCTION === "true";
@@ -14,11 +16,17 @@ const PRODUCTION_API_URL = Constants.expoConfig?.extra?.PRODUCTION_API_URL;
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig { _retry?: boolean }
 
-const AxiosContext = createContext<AxiosInstance | null>(null);
+interface AxiosAPI {
+    get: AxiosInstance["get"];
+    post: AxiosInstance["post"];
+    put: AxiosInstance["put"];
+    delete: AxiosInstance["delete"];
+}
 
+const AxiosContext = createContext<AxiosAPI | null>(null);
 
 export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [axiosInstance, setAxiosInstance] = useState<AxiosInstance | null>(null);
+    const [axiosInstance, setAxiosInstance] = useState<AxiosAPI | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,9 +35,18 @@ export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             let apiUrl = PRODUCTION_API_URL;
 
             if (!IS_PRODUCTION) {
-                const ip = await Network.getIpAddressAsync();
-                if (!ip) throw new Error("No internet connection or local IP unavailable");
-                apiUrl = `http://${ip}:${API_PORT}`;
+                const networkState = await Network.getNetworkStateAsync();
+
+                if (networkState.type === Network.NetworkStateType.CELLULAR) {
+                    const cellularIp = CELLULAR_IP_ADRESS;
+                    apiUrl = `http://${cellularIp}:${API_PORT}`;
+                } else {
+                    const ip = await Network.getIpAddressAsync();
+                    if (!ip) throw new Error("No internet connection or local IP unavailable");
+                    apiUrl = `http://${ip}:${API_PORT}`;
+                }
+
+
             }
 
             const instance = axios.create({
@@ -64,7 +81,14 @@ export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 }
             );
 
-            setAxiosInstance(instance);
+            const api: AxiosAPI = {
+                get: instance.get.bind(instance),
+                post: instance.post.bind(instance),
+                put: instance.put.bind(instance),
+                delete: instance.delete.bind(instance),
+            };
+
+            setAxiosInstance(api);
         } catch (err: any) {
             console.error("Axios init error:", err);
             setError(err.message || "Failed to set up Axios");
@@ -106,7 +130,7 @@ export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     );
 };
 
-export const useAxios = (): AxiosInstance => {
+export const useAxios = (): AxiosAPI => {
     const context = useContext(AxiosContext);
     if (!context) throw new Error("useAxios must be used within AxiosProvider");
     return context;

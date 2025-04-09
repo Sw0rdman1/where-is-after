@@ -7,6 +7,7 @@ import { Role } from 'src/users/schema/role.enum';
 import { User } from 'src/users/schema/user.schema';
 import { generateVerificationCode } from 'src/utils/random';
 import { EmailService } from 'src/email/email.service';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
