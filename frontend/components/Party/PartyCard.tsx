@@ -20,7 +20,7 @@ const PartyCard: React.FC<PartyCardProps> = ({ party }) => {
     }
 
     return (
-        <TouchableOpacity style={[styles.container, { backgroundColor: surface }]} onPress={handlePress}>
+        <TouchableOpacity activeOpacity={0.7} style={[styles.container, { backgroundColor: surface }]} onPress={handlePress}>
             <Image source={{ uri: party.image }} style={styles.image} />
             <View style={styles.textContainer}>
                 <Text style={styles.party}>{party.name}</Text>

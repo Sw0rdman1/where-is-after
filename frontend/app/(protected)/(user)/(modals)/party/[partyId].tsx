@@ -59,9 +59,9 @@ export default function PartyScreen() {
                     </Text>
                 </View>
                 <View style={{ alignItems: "center", marginTop: 10, flexDirection: "row", gap: 5 }}>
-                    <Ionicons name="location" size={24} color={ICON_COLOR} />
+                    <Ionicons name="location" size={20} color={ICON_COLOR} />
                     <TouchableOpacity style={[styles.venueContainer, { backgroundColor: surface }]} onPress={handleVenuePress}>
-                        <Image source={{ uri: party.venue.logo }} style={{ width: 30, height: 30, borderRadius: 15 }} />
+                        <Image source={{ uri: party.venue.logo }} style={{ width: 25, height: 25, borderRadius: 15 }} />
                         <Text style={[styles.text, { color: tint }]}>
                             {party.venue.name}
                         </Text>
@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
     venueContainer: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 5,
         padding: 6,
         borderRadius: 26,
         paddingRight: 15,
