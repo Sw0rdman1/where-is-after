@@ -42,7 +42,8 @@
     "react-native-web": "~0.19.13",
     "yup": "^1.6.1",
     "expo-network": "~7.0.5",
-    "expo-constants": "~17.0.8"
+    "expo-constants": "~17.0.8",
+    "expo-clipboard": "~7.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

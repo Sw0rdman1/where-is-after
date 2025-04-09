@@ -36,7 +36,6 @@ const getCurrentLocation = async (): Promise<Region> => {
 }
 
 const convertVenueLocationToRegion = (venue: any): Region => {
-
     return {
         longitude: venue.location.coordinates[0],
         latitude: venue.location.coordinates[1],

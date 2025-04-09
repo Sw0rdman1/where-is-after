@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { VenueCategory } from './venue.category.enum';
 
 class Location {
     type: 'Point';
@@ -18,13 +19,22 @@ export class Venue extends Document {
     logo: string;
 
     @Prop({ required: true })
-    images: string[]; // Array of image URLs
-
-    @Prop({ required: true })
-    category: string; // e.g., Club, DJ, Catering
+    images: string[];
 
     @Prop({ default: 0 })
     rating: number;
+
+    @Prop({ type: String, enum: VenueCategory, required: true })
+    category: VenueCategory;
+
+    @Prop({ type: Object, default: {} })
+    socials: {
+        website?: string;
+        instagram?: string;
+        facebook?: string;
+        tiktok?: string;
+        [key: string]: string | undefined;
+    };
 
     @Prop({
         type: { type: String, enum: ['Point'], default: 'Point' },

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { PartyCategory } from './party.category.schema';
 
 @Schema({ timestamps: true })
 export class Party extends Document {
@@ -11,6 +12,9 @@ export class Party extends Document {
 
     @Prop({ required: true })
     image: string;
+
+    @Prop({ type: String, enum: PartyCategory, required: true })
+    category: PartyCategory;
 
     @Prop({ required: true })
     startDate: Date;

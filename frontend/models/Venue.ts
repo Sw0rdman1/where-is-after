@@ -7,6 +7,12 @@ interface Venue {
     logo: string;
     images: string[];
     location: Region;
+    socials: {
+        website?: string;
+        instagram?: string;
+        facebook?: string;
+        tiktok?: string;
+    }
 }
 
 export default Venue;

@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 8,
         lineHeight: 24,
-        textAlign: "justify",
         fontStyle: "italic",
         marginBottom: 8,
     },

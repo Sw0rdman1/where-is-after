@@ -6,11 +6,9 @@ const Title = ({ text }: { text: string }) => {
     const { tint } = useColors()
 
     return (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} bounces={false}>
-            <Text style={[styles.title, { color: tint }]} numberOfLines={1}>
-                {text}
-            </Text>
-        </ScrollView>
+        <Text style={[styles.title, { color: tint }]} >
+            {text}
+        </Text>
     )
 }
 

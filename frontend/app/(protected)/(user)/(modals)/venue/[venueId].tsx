@@ -1,6 +1,8 @@
 import ModalBackButton from '@/components/Button/ModalBackButton';
+import OpenInMapsButton from '@/components/Button/OpenMapsButton';
+import ShareButton from '@/components/Button/ShareButton';
 import { ImageSlider } from '@/components/Image/ImageSlider';
-import { Text, View } from '@/components/Themed';
+import { ScrollView, Text, View } from '@/components/Themed';
 import Title from '@/components/Typography/Title';
 import { useVenue } from '@/hooks/useVenues';
 import { useLocalSearchParams } from 'expo-router';
@@ -26,14 +28,28 @@ const VenueScreen = () => {
         )
     }
 
+    console.log(venue);
+
+
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} bounces={false}>
             <ModalBackButton top={16} left={16} />
             <ImageSlider images={[venue.logo, ...venue.images]} />
             <View style={styles.textContainer}>
                 <Title text={venue.name} />
+                <ShareButton
+                    message={`Check out this venue: ${venue.name}`}
+                    title={`Share ${venue.name}`}
+                    buttonLabel="Share Venue"
+                />
+                <OpenInMapsButton
+                    latitude={venue.location.latitude}
+                    longitude={venue.location.longitude}
+                    label={venue.name}
+                />
             </View>
-        </View>
+
+        </ScrollView>
     )
 }
 

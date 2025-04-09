@@ -67,10 +67,14 @@ const styles = StyleSheet.create({
     container: {
         width: width - 16,
         height: 350,
+        borderRadius: 16,
+        overflow: 'hidden',
     },
     imageWrapper: {
         width: width - 16,
         height: 350,
+        borderRadius: 16,
+
     },
     image: {
         borderRadius: 16,
