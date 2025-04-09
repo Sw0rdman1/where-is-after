@@ -8,18 +8,16 @@ import { useColors } from "@/hooks/useColors";
 import PartyLoading from "@/components/Party/PartyLoading";
 import PartyNotFound from "@/components/Party/PartyNotFound";
 import { formatDateWithDay, formatTime } from "@/utils/date";
+import ModalBackButton from "@/components/Button/ModalBackButton";
+import Title from "@/components/Typography/Title";
 
 
 export default function PartyScreen() {
     const { partyId } = useLocalSearchParams();
     const { party, loading } = useParty(partyId as string);
-    const { background, tint, placeholderText, surface, text } = useColors();
+    const { tint, placeholderText, surface } = useColors();
 
     const ICON_COLOR = placeholderText
-
-    const handleBack = () => {
-        router.back();
-    }
 
     const handleVenuePress = () => {
         if (!party?.venue?._id) return;
@@ -32,17 +30,11 @@ export default function PartyScreen() {
 
     return (
         <ScrollView style={styles.container}>
-            <TouchableOpacity
-                style={[styles.backButton, { backgroundColor: background }]}
-                onPress={handleBack}
-            >
-                <Ionicons name="chevron-back" size={24} color={tint} />
-            </TouchableOpacity>
+            <ModalBackButton />
             <Image source={{ uri: party.image }} style={styles.partyImage} />
             <View style={styles.textContainer}>
-                <Text style={[styles.title, { color: tint }]}>
-                    {party.name}
-                </Text>
+                <Title text={party.name} />
+
                 <Text style={styles.description}>
                     {party.description}
                 </Text>
@@ -77,17 +69,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 8,
     },
-    backButton: {
-        position: "absolute",
-        top: 12,
-        left: 12,
-        zIndex: 1,
-        height: 35,
-        width: 35,
-        borderRadius: 20,
-        justifyContent: "center",
-        alignItems: "center",
-    },
     partyImage: {
         width: "100%",
         height: 350,
@@ -95,15 +76,9 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         flex: 1,
-        marginTop: 8,
         padding: 12,
     },
-    title: {
-        fontSize: 32,
-        fontWeight: "bold",
-        marginTop: 12,
-        fontFamily: "PermanentMarker",
-    },
+
     description: {
         fontSize: 20,
         marginTop: 8,

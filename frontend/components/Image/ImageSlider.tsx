@@ -46,31 +46,34 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                 scrollEventThrottle={16}
                 bounces={false}
             />
-            <View style={styles.indicatorOverlay}>
-                {images.map((_, index) => (
-                    <View
-                        key={index}
-                        style={[
-                            styles.dot,
-                            index === activeIndex && styles.activeDot,
-                        ]}
-                    />
-                ))}
-            </View>
+            {images.length > 1 &&
+                <View style={styles.indicatorOverlay}>
+                    {images.map((_, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.dot,
+                                index === activeIndex && styles.activeDot,
+                            ]}
+                        />
+                    ))}
+                </View>
+            }
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        width,
+        width: width - 16,
         height: 350,
     },
     imageWrapper: {
-        width,
+        width: width - 16,
         height: 350,
     },
     image: {
+        borderRadius: 16,
         width: '100%',
         height: '100%',
     },
