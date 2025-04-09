@@ -54,7 +54,8 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
                 alignSelf: "center",
                 width: tabWidth,
                 overflow: "hidden",
-
+                borderWidth: 1,
+                borderColor: 'gray',
             }}
         >
             {state.routes.map((route, index) => {
