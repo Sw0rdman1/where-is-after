@@ -6,6 +6,7 @@ import Constants from "expo-constants";
 import { ActivityIndicator, Button, StyleSheet } from "react-native";
 import { refreshAuthToken } from "@/api/axios";
 import { Text, View } from "@/components/Themed";
+import { useColors } from "@/hooks/useColors";
 
 const CELLULAR_IP_ADRESS = '172.20.10.11'
 
@@ -29,6 +30,7 @@ export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [axiosInstance, setAxiosInstance] = useState<AxiosAPI | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { tint } = useColors();
 
     const initializeAxios = async () => {
         try {
@@ -104,8 +106,7 @@ export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (loading) {
         return (
             <View style={styles.center}>
-                <ActivityIndicator size="large" />
-                <Text>Loading network info...</Text>
+                <ActivityIndicator size="large" color={tint} />
             </View>
         );
     }
