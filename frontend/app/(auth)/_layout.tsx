@@ -2,6 +2,7 @@ import LoadingScreen from "@/components/Loading/LoadingScreen";
 import { useAuth } from "@/context/AuthProvider";
 import { ImageBackground } from "expo-image";
 import { router, Slot } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -25,6 +26,7 @@ export default function AuthLayout() {
             source={BACKGROUND_IMAGE}
             style={styles.background}
         >
+            <StatusBar style="light" />
             <View style={styles.overlay}>
                 <Slot />
             </View>

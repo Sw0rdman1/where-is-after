@@ -3,14 +3,10 @@ import { StatusBar } from "expo-status-bar";
 import { View } from "@/components/Themed";
 import VerifyEmailForm from "@/components/Form/VerifyEmailForm";
 
-const BACKGROUND_IMAGE = require("../../assets/images/auth/bg7.jpg");
-
 const VerifyEmailScreen = () => {
 
     return (
         <View style={styles.container}>
-            <StatusBar style="light" />
-            <Image style={styles.backgroundImage} source={BACKGROUND_IMAGE} />
             <VerifyEmailForm />
         </View>
     );

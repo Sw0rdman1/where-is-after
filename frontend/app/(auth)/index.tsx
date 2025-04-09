@@ -1,13 +1,9 @@
-import { Image, StyleSheet, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View } from "react-native";
 import AuthContent from "@/components/AuthContent/AuthContent";
-
-const BACKGROUND_IMAGE = require("../../assets/images/auth/bg7.jpg");
 
 const WelcomeScreen = () => {
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
       <AuthContent />
     </View>
   );
@@ -21,5 +17,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
-
 });
