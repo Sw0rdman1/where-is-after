@@ -11,6 +11,7 @@ import { formatDateWithDay, formatTime } from "@/utils/date";
 import ModalBackButton from "@/components/Button/ModalBackButton";
 import Title from "@/components/Typography/Title";
 import { PeopleAtending } from "@/components/Party/PeopleAtending";
+import ShareButton from "@/components/Button/ShareButton";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -41,11 +42,15 @@ export default function PartyScreen() {
         <ScrollView style={styles.container}>
             <ModalBackButton />
             <Image source={{ uri: party.image }} style={styles.partyImage} />
+            <ShareButton
+                message={`Check out this venue: ${party.name}`}
+                title={`Share ${party.name}`}
+            />
             <View style={styles.textContainer}>
                 <Title text={party.name} />
 
                 <View style={styles.dateAndTimeContainer}>
-                    <Ionicons name="calendar" size={20} color={ICON_COLOR} />
+                    <Ionicons name="calendar" size={22} color={ICON_COLOR} />
                     <Text style={styles.text}>
                         {formatDateWithDay(party.startDate)}
                     </Text>
@@ -57,7 +62,7 @@ export default function PartyScreen() {
                     </Text>
                 </View>
                 <View style={{ alignItems: "center", marginTop: 10, flexDirection: "row", gap: 5 }}>
-                    <Ionicons name="location" size={20} color={ICON_COLOR} />
+                    <Ionicons name="location" size={22} color={ICON_COLOR} />
                     <TouchableOpacity style={[styles.venueContainer, { backgroundColor: surface }]} onPress={handleVenuePress}>
                         <Image source={{ uri: party.venue.logo }} style={{ width: 25, height: 25, borderRadius: 15 }} />
                         <Text style={[styles.text, { color: tint }]}>
@@ -69,6 +74,7 @@ export default function PartyScreen() {
                 <Text style={styles.description}>
                     {party.description}
                 </Text>
+
             </View>
         </ScrollView >
     );
@@ -81,20 +87,18 @@ const styles = StyleSheet.create({
     },
     partyImage: {
         width: "100%",
-        height: 300,
+        height: 250,
         borderRadius: 16,
     },
     textContainer: {
         flex: 1,
         padding: 12,
+        gap: 5,
     },
-
     description: {
-        fontSize: 20,
-        marginTop: 8,
+        fontSize: 18,
         lineHeight: 24,
         fontStyle: "italic",
-        marginBottom: 8,
     },
     dateAndTimeContainer: {
         flexDirection: "row",

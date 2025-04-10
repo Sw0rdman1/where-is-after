@@ -9,6 +9,7 @@ import * as Linking from 'expo-linking';
 import * as ClipboardAPI from 'expo-clipboard';
 import { Feather } from '@expo/vector-icons';
 import { useColors } from '@/hooks/useColors';
+import { BUTTON_MODAL_SIZE, BUTTON_MODAL_TOP } from './common';
 
 type ShareButtonProps = {
     message: string;
@@ -22,12 +23,12 @@ type ShareButtonProps = {
 const ShareButton: React.FC<ShareButtonProps> = ({
     message,
     title,
-    buttonLabel = 'Share',
-    iconSize = 24,
+    buttonLabel,
+    iconSize = 20,
     color,
     url,
 }) => {
-    const { tint, surface } = useColors();
+    const { tint, background } = useColors();
     const defaultColor = color || tint;
 
     const onShare = async () => {
@@ -69,20 +70,23 @@ const ShareButton: React.FC<ShareButtonProps> = ({
         <TouchableOpacity
             onPress={onShare}
             style={{
-                flexDirection: 'row',
+                position: 'absolute',
+                top: BUTTON_MODAL_TOP,
+                right: 16,
+                height: BUTTON_MODAL_SIZE,
+                width: BUTTON_MODAL_SIZE,
                 alignItems: 'center',
-                padding: 10,
-                flexGrow: 1,
                 justifyContent: 'center',
-                gap: 8,
-                backgroundColor: surface,
+                backgroundColor: background,
                 borderRadius: 24,
             }}
         >
             <Feather name="share-2" size={iconSize} color={defaultColor} />
-            <Text style={{ color: defaultColor, fontSize: 16, fontWeight: 'bold' }}>
-                {buttonLabel}
-            </Text>
+            {buttonLabel &&
+                <Text style={{ color: defaultColor, fontSize: 16, fontWeight: 'bold' }}>
+                    {buttonLabel}
+                </Text>
+            }
         </TouchableOpacity>
     );
 };

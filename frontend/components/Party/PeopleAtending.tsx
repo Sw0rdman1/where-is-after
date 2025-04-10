@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Text } from '../Themed';
-import { useColors } from '@/hooks/useColors';
 
-const AVATAR_SIZE = 35;
+const AVATAR_SIZE = 32;
 
 interface Person {
     name: string;
@@ -15,7 +14,6 @@ interface PeopleAtendingProps {
 }
 
 export const PeopleAtending: React.FC<PeopleAtendingProps> = ({ people }) => {
-    const { tint } = useColors();
     const maxVisible = 3;
     const visiblePeople = people.slice(0, maxVisible);
     const remaining = people.length - maxVisible;
@@ -29,17 +27,17 @@ export const PeopleAtending: React.FC<PeopleAtendingProps> = ({ people }) => {
                     <Image
                         key={index}
                         source={{ uri: person.avatar }}
-                        style={[styles.avatar, { marginLeft: index === 0 ? 0 : -15 }]}
+                        style={[styles.avatar, { marginLeft: index === 0 ? 0 : -12 }]}
                     />
                 ))}
                 {remaining > 0 && (
-                    <View style={[styles.avatar, styles.extraAvatar, { marginLeft: -15 }]}>
+                    <View style={[styles.avatar, styles.extraAvatar, { marginLeft: -12 }]}>
                         <Text style={styles.extraText}>+{remaining}</Text>
                     </View>
                 )}
             </View>
             <View style={styles.textContainer}>
-                <Text style={{ fontWeight: 'bold' }}>{names}</Text>
+                <Text style={{ ...styles.attendingText, fontWeight: 'bold' }}>{names}</Text>
                 <Text style={styles.attendingText}>
                     {remaining > 0 ? `and ${remaining} others` : ''} are going
                 </Text>
@@ -83,6 +81,6 @@ const styles = StyleSheet.create({
         gap: 1,
     },
     attendingText: {
-        fontSize: 16,
+        fontSize: 14,
     },
 });

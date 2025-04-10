@@ -1,6 +1,5 @@
 import { StyleSheet, Text } from 'react-native'
 import { useColors } from '@/hooks/useColors'
-import { ScrollView } from '../Themed'
 
 const Title = ({ text }: { text: string }) => {
     const { tint } = useColors()
@@ -18,7 +17,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 34,
         fontWeight: "bold",
-        marginTop: 6,
         fontFamily: "PermanentMarker",
     },
 })
