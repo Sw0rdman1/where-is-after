@@ -31,7 +31,7 @@ const PartyCard: React.FC<PartyCardProps> = ({ party }) => {
                     <View style={styles.dateContainer}>
                         <Ionicons name="calendar" size={20} color={tint} />
                         <Text style={[styles.date, { color: placeholderText }]}>
-                            {formatDateWithDay(party.startDate, 'short', 'sr-RS')}
+                            {formatDateWithDay(party.startDate)}
                         </Text>
                     </View>
                     <View style={styles.timeContainer}>

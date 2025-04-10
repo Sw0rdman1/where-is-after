@@ -10,6 +10,15 @@ import PartyNotFound from "@/components/Party/PartyNotFound";
 import { formatDateWithDay, formatTime } from "@/utils/date";
 import ModalBackButton from "@/components/Button/ModalBackButton";
 import Title from "@/components/Typography/Title";
+import { PeopleAtending } from "@/components/Party/PeopleAtending";
+
+const partyPeople = [
+    { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
+    { name: 'Marko', avatar: 'https://randomuser.me/api/portraits/men/2.jpg' },
+    { name: 'Lena', avatar: 'https://randomuser.me/api/portraits/women/3.jpg' },
+    { name: 'Jovan', avatar: 'https://randomuser.me/api/portraits/men/4.jpg' },
+    { name: 'Milica', avatar: 'https://randomuser.me/api/portraits/women/5.jpg' },
+];
 
 
 export default function PartyScreen() {
@@ -17,7 +26,7 @@ export default function PartyScreen() {
     const { party, loading } = useParty(partyId as string);
     const { tint, placeholderText, surface } = useColors();
 
-    const ICON_COLOR = placeholderText
+    const ICON_COLOR = tint
 
     const handleVenuePress = () => {
         if (!party?.venue?._id) return;
@@ -35,17 +44,14 @@ export default function PartyScreen() {
             <View style={styles.textContainer}>
                 <Title text={party.name} />
 
-                <Text style={styles.description}>
-                    {party.description}
-                </Text>
                 <View style={styles.dateAndTimeContainer}>
                     <Ionicons name="calendar" size={20} color={ICON_COLOR} />
                     <Text style={styles.text}>
-                        {formatDateWithDay(party.startDate, 'long')}
+                        {formatDateWithDay(party.startDate)}
                     </Text>
-                </View>
-                <View style={styles.dateAndTimeContainer}>
-                    <Ionicons name="time" size={20} color={ICON_COLOR} />
+                    <Text style={[styles.text, { color: placeholderText }]}>
+                        at
+                    </Text>
                     <Text style={styles.text}>
                         {formatTime(party.startDate)} - {formatTime(party.endDate)}
                     </Text>
@@ -59,8 +65,12 @@ export default function PartyScreen() {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                <PeopleAtending people={partyPeople} />
+                <Text style={styles.description}>
+                    {party.description}
+                </Text>
             </View>
-        </ScrollView>
+        </ScrollView >
     );
 }
 
@@ -71,7 +81,7 @@ const styles = StyleSheet.create({
     },
     partyImage: {
         width: "100%",
-        height: 350,
+        height: 300,
         borderRadius: 16,
     },
     textContainer: {
@@ -89,7 +99,7 @@ const styles = StyleSheet.create({
     dateAndTimeContainer: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 5,
+        gap: 3,
         marginTop: 15,
     },
     text: {

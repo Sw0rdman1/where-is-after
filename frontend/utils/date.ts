@@ -2,18 +2,16 @@ import * as Localization from 'expo-localization';
 
 const defaultLocale = Localization.getLocales()[0].languageTag;
 
-type weekdayOptions = 'long' | 'short' | 'narrow';
 
-export const formatDateWithDay = (date: Date, weekday: weekdayOptions, locale: string = defaultLocale): string => {
-
+export const formatDateWithDay = (date: Date, locale: string = defaultLocale): string => {
     const options: Intl.DateTimeFormatOptions = {
-        weekday,
+        weekday: 'short',
         day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
+        month: 'short',
+        year: 'numeric',
     };
 
-    return date.toLocaleDateString(locale, options).charAt(0).toUpperCase() + date.toLocaleDateString(locale, options).slice(1);
+    return date.toLocaleDateString(locale, options).replace(/,/g, '');
 };
 
 export const formatTime = (date: Date, locale: string = defaultLocale): string => {
