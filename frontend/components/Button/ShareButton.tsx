@@ -71,6 +71,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
             onPress={onShare}
             style={{
                 position: 'absolute',
+                zIndex: 100,
                 top: BUTTON_MODAL_TOP,
                 right: 16,
                 height: BUTTON_MODAL_SIZE,

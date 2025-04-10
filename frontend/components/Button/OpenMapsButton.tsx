@@ -4,6 +4,7 @@ import React from 'react';
 import { Platform, TouchableOpacity, Text, Linking, Alert, ActionSheetIOS, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useColors } from '@/hooks/useColors';
+import { handleOpenMaps } from '@/utils/map';
 
 type OpenInMapsButtonProps = {
     latitude: number;
@@ -28,61 +29,11 @@ const OpenInMapsButton: React.FC<OpenInMapsButtonProps> = ({
     const coords = `${latitude},${longitude}`;
     const encodedLabel = encodeURIComponent(label);
 
-    const openInAppleMaps = () => {
-        const url = `http://maps.apple.com/?ll=${coords}&q=${encodedLabel}`;
-        Linking.openURL(url).catch(() => Alert.alert('Error', 'Could not open Apple Maps'));
-    };
 
-    const openInGoogleMaps = () => {
-        const url = `comgooglemaps://?q=${coords}`;
-        Linking.canOpenURL(url).then((supported) => {
-            if (supported) {
-                Linking.openURL(url);
-            } else {
-                // Fallback to Google Maps web
-                const webUrl = `https://www.google.com/maps/search/?api=1&query=${coords}`;
-                Linking.openURL(webUrl).catch(() =>
-                    Alert.alert('Error', 'Could not open Google Maps')
-                );
-            }
-        });
-    };
-
-    const handleOpenMaps = () => {
-        if (Platform.OS === 'ios') {
-            ActionSheetIOS.showActionSheetWithOptions(
-                {
-                    options: ['Cancel', 'Open in Apple Maps', 'Open in Google Maps'],
-                    cancelButtonIndex: 0,
-                },
-                (buttonIndex) => {
-                    if (buttonIndex === 1) {
-                        openInAppleMaps();
-                    } else if (buttonIndex === 2) {
-                        openInGoogleMaps();
-                    }
-                }
-            );
-        } else {
-            // Android: trigger chooser via geo: URI
-            const geoUrl = `geo:${coords}?q=${coords}(${encodedLabel})`;
-            Linking.canOpenURL(geoUrl)
-                .then((supported) => {
-                    if (supported) {
-                        Linking.openURL(geoUrl);
-                    } else {
-                        // fallback to Google Maps web
-                        const webUrl = `https://www.google.com/maps/search/?api=1&query=${coords}`;
-                        Linking.openURL(webUrl);
-                    }
-                })
-                .catch(() => Alert.alert('Error', 'Could not open map'));
-        }
-    };
 
     return (
         <TouchableOpacity
-            onPress={handleOpenMaps}
+            onPress={() => handleOpenMaps(coords, encodedLabel)}
             style={{
                 flexDirection: 'row',
                 alignItems: 'center',

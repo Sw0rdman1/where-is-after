@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { ActionSheetIOS, Alert, Dimensions, Linking, Platform } from "react-native";
 import { Region } from "react-native-maps";
 import * as Location from 'expo-location';
 
@@ -53,4 +53,56 @@ const calculateTextWidth = (text: string, fontSize: number) => {
     return Math.max(width + 40, TEXT_MIN_WIDTH);
 };
 
-export { getCurrentLocation, convertVenueLocationToRegion, calculateTextWidth };
+const openInAppleMaps = (coords: string, encodedLabel: string) => {
+    const url = `http://maps.apple.com/?ll=${coords}&q=${encodedLabel}`;
+    Linking.openURL(url).catch(() => Alert.alert('Error', 'Could not open Apple Maps'));
+};
+
+const openInGoogleMaps = (coords: string) => {
+    const url = `comgooglemaps://?q=${coords}`;
+    Linking.canOpenURL(url).then((supported) => {
+        if (supported) {
+            Linking.openURL(url);
+        } else {
+            // Fallback to Google Maps web
+            const webUrl = `https://www.google.com/maps/search/?api=1&query=${coords}`;
+            Linking.openURL(webUrl).catch(() =>
+                Alert.alert('Error', 'Could not open Google Maps')
+            );
+        }
+    });
+};
+
+const handleOpenMaps = (coords: string, encodedLabel: string) => {
+    if (Platform.OS === 'ios') {
+        ActionSheetIOS.showActionSheetWithOptions(
+            {
+                options: ['Cancel', 'Open in Apple Maps', 'Open in Google Maps'],
+                cancelButtonIndex: 0,
+            },
+            (buttonIndex) => {
+                if (buttonIndex === 1) {
+                    openInAppleMaps(coords, encodedLabel);
+                } else if (buttonIndex === 2) {
+                    openInGoogleMaps(coords)
+                }
+            }
+        );
+    } else {
+        // Android: trigger chooser via geo: URI
+        const geoUrl = `geo:${coords}?q=${coords}(${encodedLabel})`;
+        Linking.canOpenURL(geoUrl)
+            .then((supported) => {
+                if (supported) {
+                    Linking.openURL(geoUrl);
+                } else {
+                    // fallback to Google Maps web
+                    const webUrl = `https://www.google.com/maps/search/?api=1&query=${coords}`;
+                    Linking.openURL(webUrl);
+                }
+            })
+            .catch(() => Alert.alert('Error', 'Could not open map'));
+    }
+};
+
+export { getCurrentLocation, convertVenueLocationToRegion, calculateTextWidth, handleOpenMaps };

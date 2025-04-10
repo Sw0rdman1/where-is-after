@@ -12,6 +12,9 @@ import ModalBackButton from "@/components/Button/ModalBackButton";
 import Title from "@/components/Typography/Title";
 import { PeopleAtending } from "@/components/Party/PeopleAtending";
 import ShareButton from "@/components/Button/ShareButton";
+import MapView from "react-native-maps";
+import PartyMarker from "@/components/Map/PartyMarker";
+import { handleOpenMaps } from "@/utils/map";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -34,6 +37,13 @@ export default function PartyScreen() {
         router.push(`/venue/${party.venue._id}`);
     }
 
+    const coords = `${party?.venue.location.latitude},${party?.venue.location.longitude}`;
+    const encodedLabel = encodeURIComponent(party?.venue.name || "Selected Location");
+
+
+
+
+
     if (loading) return <PartyLoading />;
 
     if (!party) return <PartyNotFound />
@@ -41,11 +51,11 @@ export default function PartyScreen() {
     return (
         <ScrollView style={styles.container}>
             <ModalBackButton />
-            <Image source={{ uri: party.image }} style={styles.partyImage} />
             <ShareButton
                 message={`Check out this venue: ${party.name}`}
                 title={`Share ${party.name}`}
             />
+            <Image source={{ uri: party.image }} style={styles.partyImage} />
             <View style={styles.textContainer}>
                 <Title text={party.name} />
 
@@ -71,9 +81,28 @@ export default function PartyScreen() {
                     </TouchableOpacity>
                 </View>
                 <PeopleAtending people={partyPeople} />
-                <Text style={styles.description}>
-                    {party.description}
-                </Text>
+                <View style={[styles.descriptionContainer, { backgroundColor: surface }]}>
+                    <Text style={{ ...styles.description, fontWeight: 'bold' }}>
+                        About party:
+                    </Text>
+                    <Text style={{ ...styles.description, fontStyle: "italic" }} numberOfLines={2}>
+                        {party.description}
+                    </Text>
+                </View>
+                <TouchableOpacity onPress={() => handleOpenMaps(coords, encodedLabel)}>
+                    <MapView
+                        style={styles.map}
+                        initialRegion={party.venue.location}
+                        userInterfaceStyle="dark"
+                        scrollEnabled={false}
+                        zoomEnabled={false}
+                        pitchEnabled={false}
+                        rotateEnabled={false}
+                        pointerEvents="none"
+                    >
+                        <PartyMarker key={party._id} party={party} />
+                    </MapView>
+                </TouchableOpacity>
 
             </View>
         </ScrollView >
@@ -95,10 +124,15 @@ const styles = StyleSheet.create({
         padding: 12,
         gap: 5,
     },
+    descriptionContainer: {
+        gap: 3,
+        padding: 5,
+        borderRadius: 8,
+        paddingLeft: 10,
+    },
     description: {
-        fontSize: 18,
-        lineHeight: 24,
-        fontStyle: "italic",
+        fontSize: 16,
+        lineHeight: 22,
     },
     dateAndTimeContainer: {
         flexDirection: "row",
@@ -117,5 +151,11 @@ const styles = StyleSheet.create({
         padding: 6,
         borderRadius: 26,
         paddingRight: 15,
+    },
+    map: {
+        width: "100%",
+        height: 150,
+        borderRadius: 16,
+        marginTop: 15,
     },
 });
