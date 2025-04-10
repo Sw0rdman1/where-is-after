@@ -15,6 +15,7 @@ import ShareButton from "@/components/Button/ShareButton";
 import MapView from "react-native-maps";
 import PartyMarker from "@/components/Map/PartyMarker";
 import { handleOpenMaps } from "@/utils/map";
+import Button from "@/components/Button/Button";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -103,7 +104,10 @@ export default function PartyScreen() {
                         <PartyMarker key={party._id} party={party} />
                     </MapView>
                 </TouchableOpacity>
-
+                <Button
+                    title="Join party 🔥"
+                    onPress={() => console.log("Join party")}
+                />
             </View>
         </ScrollView >
     );
@@ -116,13 +120,14 @@ const styles = StyleSheet.create({
     },
     partyImage: {
         width: "100%",
-        height: 250,
+        height: 300,
         borderRadius: 16,
     },
     textContainer: {
         flex: 1,
         padding: 12,
         gap: 5,
+        paddingBottom: 100
     },
     descriptionContainer: {
         gap: 3,
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 3,
-        marginTop: 15,
+        marginTop: 5,
     },
     text: {
         fontSize: 16,
@@ -157,5 +162,6 @@ const styles = StyleSheet.create({
         height: 150,
         borderRadius: 16,
         marginTop: 15,
+        marginVertical: 10,
     },
 });
