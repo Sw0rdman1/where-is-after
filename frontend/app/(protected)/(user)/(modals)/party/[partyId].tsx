@@ -1,13 +1,11 @@
 import { View, Text, ScrollView } from "@/components/Themed";
 import { useParty } from "@/hooks/useParties";
 import { Image } from "expo-image";
-import { useRouter, useLocalSearchParams, router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useColors } from "@/hooks/useColors";
 import PartyLoading from "@/components/Party/PartyLoading";
 import PartyNotFound from "@/components/Party/PartyNotFound";
-import { formatDateWithDay, formatTime } from "@/utils/date";
 import ModalBackButton from "@/components/Button/ModalBackButton";
 import Title from "@/components/Typography/Title";
 import { PeopleAtending } from "@/components/Party/PeopleAtending";
@@ -16,6 +14,7 @@ import MapView from "react-native-maps";
 import PartyMarker from "@/components/Map/PartyMarker";
 import { handleOpenMaps } from "@/utils/map";
 import Button from "@/components/Button/Button";
+import PartyInformations from "@/components/Party/PartyInformations";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -29,19 +28,11 @@ const partyPeople = [
 export default function PartyScreen() {
     const { partyId } = useLocalSearchParams();
     const { party, loading } = useParty(partyId as string);
-    const { tint, placeholderText, surface } = useColors();
+    const { surface } = useColors();
 
-    const ICON_COLOR = tint
-
-    const handleVenuePress = () => {
-        if (!party?.venue?._id) return;
-        router.push(`/venue/${party.venue._id}`);
-    }
 
     const coords = `${party?.venue.location.latitude},${party?.venue.location.longitude}`;
     const encodedLabel = encodeURIComponent(party?.venue.name || "Selected Location");
-
-
 
 
 
@@ -59,28 +50,7 @@ export default function PartyScreen() {
             <Image source={{ uri: party.image }} style={styles.partyImage} />
             <View style={styles.textContainer}>
                 <Title text={party.name} />
-
-                <View style={styles.dateAndTimeContainer}>
-                    <Ionicons name="calendar" size={22} color={ICON_COLOR} />
-                    <Text style={styles.text}>
-                        {formatDateWithDay(party.startDate)}
-                    </Text>
-                    <Text style={[styles.text, { color: placeholderText }]}>
-                        at
-                    </Text>
-                    <Text style={styles.text}>
-                        {formatTime(party.startDate)} - {formatTime(party.endDate)}
-                    </Text>
-                </View>
-                <View style={{ alignItems: "center", marginTop: 10, flexDirection: "row", gap: 5 }}>
-                    <Ionicons name="location" size={22} color={ICON_COLOR} />
-                    <TouchableOpacity style={[styles.venueContainer, { backgroundColor: surface }]} onPress={handleVenuePress}>
-                        <Image source={{ uri: party.venue.logo }} style={{ width: 25, height: 25, borderRadius: 15 }} />
-                        <Text style={[styles.text, { color: tint }]}>
-                            {party.venue.name}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <PartyInformations party={party} />
                 <PeopleAtending people={partyPeople} />
                 <View style={[styles.descriptionContainer, { backgroundColor: surface }]}>
                     <Text style={{ ...styles.description, fontWeight: 'bold' }}>
@@ -120,14 +90,14 @@ const styles = StyleSheet.create({
     },
     partyImage: {
         width: "100%",
-        height: 300,
+        height: 200,
         borderRadius: 16,
     },
     textContainer: {
         flex: 1,
         padding: 12,
         gap: 5,
-        paddingBottom: 100
+        // paddingBottom: 100
     },
     descriptionContainer: {
         gap: 3,
@@ -138,24 +108,6 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 16,
         lineHeight: 22,
-    },
-    dateAndTimeContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 3,
-        marginTop: 5,
-    },
-    text: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginLeft: 5,
-    },
-    venueContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        padding: 6,
-        borderRadius: 26,
-        paddingRight: 15,
     },
     map: {
         width: "100%",
