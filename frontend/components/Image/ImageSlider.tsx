@@ -5,12 +5,12 @@ import {
     Dimensions,
     StyleSheet,
     Modal,
-    Text,
     TouchableOpacity,
     NativeScrollEvent,
     NativeSyntheticEvent,
 } from 'react-native';
 import { Image } from 'expo-image';
+import { Text } from '../Themed';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,10 +40,9 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         setModalVisible(false);
     };
 
-    // Scroll to the correct image in the modal once it's visible
+    // Scroll modal FlatList to current image when opened
     useEffect(() => {
         if (isModalVisible && modalFlatListRef.current) {
-            // Delay to ensure modal layout is measured
             setTimeout(() => {
                 modalFlatListRef.current?.scrollToIndex({
                     index: activeIndex,
@@ -53,7 +52,17 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         }
     }, [isModalVisible]);
 
-    const renderItem = ({ item, index }: { item: string; index: number }) => (
+    // Scroll main FlatList to updated index when modal closes
+    useEffect(() => {
+        if (!isModalVisible && flatListRef.current) {
+            flatListRef.current.scrollToIndex({
+                index: activeIndex,
+                animated: true,
+            });
+        }
+    }, [isModalVisible]);
+
+    const renderItem = ({ item }: { item: string }) => (
         <TouchableOpacity
             activeOpacity={0.8}
             onPress={openModal}
@@ -83,6 +92,11 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                     onScroll={onScroll}
                     scrollEventThrottle={16}
                     bounces={false}
+                    getItemLayout={(_, index) => ({
+                        length: width,
+                        offset: width * index,
+                        index,
+                    })}
                 />
                 {images.length > 1 && (
                     <View style={styles.indicatorOverlay}>
@@ -105,14 +119,20 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                         <Text style={styles.closeText}>✕</Text>
                     </TouchableOpacity>
 
+                    <Text style={styles.imageCount}>
+                        {activeIndex + 1} / {images.length}
+                    </Text>
+
                     <FlatList
                         ref={modalFlatListRef}
                         data={images}
                         renderItem={renderModalItem}
                         keyExtractor={(_, index) => index.toString()}
                         horizontal
+                        onScroll={onScroll}
                         pagingEnabled
                         showsHorizontalScrollIndicator={false}
+                        scrollEventThrottle={16}
                         getItemLayout={(_, index) => ({
                             length: width,
                             offset: width * index,
@@ -189,5 +209,17 @@ const styles = StyleSheet.create({
     closeText: {
         fontSize: 24,
         color: 'white',
+    },
+    imageCount: {
+        position: 'absolute',
+        width: 60,
+        textAlign: 'center',
+        bottom: 50,
+        right: '50%',
+        transform: [{ translateX: 30 }],
+        zIndex: 10,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff',
     },
 });

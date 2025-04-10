@@ -40,15 +40,17 @@ export const getPartyFromResponse = (response: any): Party => {
 }
 
 export const getVenueFromResponse = (response: any): Venue => {
-    const location = convertVenueLocationToRegion(response);
+    const { venue } = response;
+
+    const location = convertVenueLocationToRegion(venue);
 
     return {
-        _id: response._id,
-        name: response.name,
-        logo: response.logo,
-        description: response.description,
+        _id: venue._id,
+        name: venue.name,
+        logo: venue.logo,
+        description: venue.description,
         location: location,
-        images: response.images,
-        socials: transformSocials(response.socials),
+        images: venue.images,
+        socials: transformSocials(venue.socials),
     };
 }

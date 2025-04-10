@@ -1,4 +1,5 @@
 import { Region } from "react-native-maps";
+import Party from "./Party";
 
 interface Venue {
     _id: string;
@@ -12,7 +13,7 @@ interface Venue {
         instagram?: string;
         facebook?: string;
         tiktok?: string;
-    }
+    },
 }
 
 export default Venue;

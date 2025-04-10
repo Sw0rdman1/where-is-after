@@ -3,17 +3,24 @@ import OpenInMapsButton from '@/components/Button/OpenMapsButton';
 import ShareButton from '@/components/Button/ShareButton';
 import { SocialButtons } from '@/components/Button/SocialMediaButtons';
 import { ImageSlider } from '@/components/Image/ImageSlider';
+import PartyMarker from '@/components/Map/PartyMarker';
+import VenueMarker from '@/components/Map/VenueMarker';
 import { ScrollView, Text, View } from '@/components/Themed';
 import Title from '@/components/Typography/Title';
 import { useColors } from '@/hooks/useColors';
 import { useVenue } from '@/hooks/useVenues';
+import { handleOpenMaps } from '@/utils/map';
 import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import MapView from 'react-native-maps';
 
 const VenueScreen = () => {
     const { venueId } = useLocalSearchParams();
     const { venue, loading } = useVenue(venueId as string);
-    const { text } = useColors();
+
+
+
 
     if (loading) {
         return (
@@ -31,9 +38,15 @@ const VenueScreen = () => {
         )
     }
 
+    const coords = `${venue.location.latitude},${venue.location.longitude}`;
+    const encodedLabel = encodeURIComponent(venue.name || "Selected Location");
+
+
     return (
-        <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} bounces={false}>
-            <ModalBackButton top={16} left={16} />
+        <ScrollView style={styles.container}  >
+            <StatusBar style="light" />
+            <ModalBackButton />
+            <ShareButton message={`Check out this venue: ${venue.name}`} title={`Share ${venue.name}`} />
             <ImageSlider images={[venue.logo, ...venue.images]} />
             <View style={styles.textContainer}>
                 <Title text={venue.name} />
@@ -41,14 +54,22 @@ const VenueScreen = () => {
                     {venue.description}
                 </Text>
                 <SocialButtons socials={venue.socials} name={venue.name} />
-
             </View>
+            <TouchableOpacity onPress={() => handleOpenMaps(coords, encodedLabel)}>
+                <MapView
+                    style={styles.map}
+                    initialRegion={venue.location}
+                    userInterfaceStyle="dark"
+                    scrollEnabled={false}
+                    zoomEnabled={false}
+                    pitchEnabled={false}
+                    rotateEnabled={false}
+                    pointerEvents="none"
+                >
+                    <VenueMarker key={venue._id} venue={venue} />
+                </MapView>
+            </TouchableOpacity>
 
-            <OpenInMapsButton
-                latitude={venue.location.latitude}
-                longitude={venue.location.longitude}
-                label={venue.name}
-            />
         </ScrollView>
     )
 }
@@ -76,5 +97,12 @@ const styles = StyleSheet.create({
         padding: 12,
         flexGrow: 1,
         gap: 16,
+    },
+    map: {
+        width: "100%",
+        height: 150,
+        borderRadius: 16,
+        marginTop: 15,
+        marginVertical: 10,
     },
 })

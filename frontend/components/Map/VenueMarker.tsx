@@ -8,6 +8,7 @@ import { Text } from '../Themed';
 import { calculateTextWidth } from '@/utils/map';
 import Party from '@/models/Party';
 import { router } from 'expo-router';
+import Venue from '@/models/Venue';
 
 const SVG_MARKER_WIDTH = 40
 const SVG_MARKER_HEIGHT = 50
@@ -56,84 +57,31 @@ const SvgMarker = ({ imageUri }: { imageUri: string }) => {
 
 
 interface Props {
-    party: Party | null;
+    venue: Venue | null;
     index?: number;
 }
 
-const CustomCallout: React.FC<Props> = ({ party }) => {
-    const [calloutWidth, setCalloutWidth] = useState(0);
-    const { text } = useColors();
-
-    useEffect(() => {
-        if (!party) return;
-        const width = calculateTextWidth(party.venue.name, 16) + CALLOUT_IMAGE_SIZE + CALLOUT_PADDING;
-        setCalloutWidth(Math.min(width, CALLOUT_MAX_WIDTH));
-    }, []);
-
-
-    if (!party) return null;
-
-    return (
-        <Callout tooltip >
-            <BlurView
-                style={[styles.calloutContainer, { boxShadow: text, width: calloutWidth }]}
-                intensity={80}
-                tint={'light'}
-            >
-                <Image
-                    source={{ uri: party.venue.logo }}
-                    style={styles.calloutLogo}
-                />
-                <View style={styles.calloutTextContainer}>
-                    <Text
-                        style={styles.calloutVenueName}
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                    >
-                        {party.venue.name}
-                    </Text>
-                    <Text
-                        style={styles.calloutPartyName}
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                    >
-                        {party.name}
-                    </Text>
-                </View>
-            </BlurView>
-        </Callout>
-    )
-}
 
 
 
-const PartyMarker: React.FC<Props> = ({ party, index }) => {
+const VenueMarker: React.FC<Props> = ({ venue, index }) => {
     const markerRef = useRef<MapMarker>(null);
 
-    const handleCalloutPress = () => {
-        if (!party) return;
-
-        router.push(`/party/${party._id}`)
-        markerRef.current?.hideCallout();
-    };
-
-    if (!party) return null;
+    if (!venue) return null;
 
     return (
         <Marker
             ref={markerRef}
-            coordinate={party.venue.location}
+            coordinate={venue.location}
             anchor={{ x: 0.5, y: 1 }}
             zIndex={index}
-            onCalloutPress={handleCalloutPress}
         >
-            <SvgMarker imageUri={party.venue.logo} />
-            <CustomCallout party={party} />
+            <SvgMarker imageUri={venue.logo} />
         </Marker>
     )
 }
 
-export default PartyMarker
+export default VenueMarker
 
 
 const styles = StyleSheet.create({

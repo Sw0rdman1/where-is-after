@@ -15,6 +15,7 @@ import PartyMarker from "@/components/Map/PartyMarker";
 import { handleOpenMaps } from "@/utils/map";
 import Button from "@/components/Button/Button";
 import PartyInformations from "@/components/Party/PartyInformations";
+import { StatusBar } from "expo-status-bar";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -42,9 +43,10 @@ export default function PartyScreen() {
 
     return (
         <ScrollView style={styles.container}>
+            <StatusBar style="light" />
             <ModalBackButton />
             <ShareButton
-                message={`Check out this venue: ${party.name}`}
+                message={`Check out this party: ${party.name}`}
                 title={`Share ${party.name}`}
             />
             <Image source={{ uri: party.image }} style={styles.partyImage} />

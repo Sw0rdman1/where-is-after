@@ -3,6 +3,7 @@ import { View, Linking, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useColors } from '@/hooks/useColors';
 import ShareButton from './ShareButton';
+import { ScrollView, Text } from '../Themed';
 
 type SocialLinks = {
     website?: string;
@@ -27,49 +28,76 @@ const openLink = async (url: string | undefined) => {
 };
 
 export const SocialButtons: React.FC<SocialButtonsProps> = ({ socials, name }) => {
-    const { surface, text } = useColors();
+    const { surface, tint } = useColors();
 
 
     return (
         <View style={styles.container}>
-            {socials.website && (
-                <TouchableOpacity onPress={() => openLink(socials.website)} style={[styles.button, { backgroundColor: surface }]}>
-                    <Ionicons name="globe-outline" size={24} color={text} />
-                </TouchableOpacity>
-            )}
-            {socials.instagram && (
-                <TouchableOpacity onPress={() => openLink(socials.instagram)} style={[styles.button, { backgroundColor: surface }]}>
-                    <Ionicons name="logo-instagram" size={24} color="#C13584" />
-                </TouchableOpacity>
-            )}
-            {socials.facebook && (
-                <TouchableOpacity onPress={() => openLink(socials.facebook)} style={[styles.button, { backgroundColor: surface }]}>
-                    <Ionicons name="logo-facebook" size={24} color="#1877F2" />
-                </TouchableOpacity>
-            )}
-            {socials.tiktok && (
-                <TouchableOpacity onPress={() => openLink(socials.tiktok)} style={[styles.button, { backgroundColor: surface }]}>
-                    <Ionicons name="logo-tiktok" size={24} color="#000" />
-                </TouchableOpacity>
-            )}
-            <ShareButton
-                message={`Check out this venue: ${name}`}
-                title={`Share ${name}`}
-                buttonLabel="Share Venue"
-                color={text}
-            />
+            <Text style={styles.title}>
+                Social medias
+            </Text>
+            <ScrollView style={styles.buttonContainer} horizontal showsHorizontalScrollIndicator={false} bounces={false}>
+                {socials.website && (
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => openLink(socials.website)} style={[styles.button, { backgroundColor: surface }]}>
+                        <Ionicons name="globe-outline" size={24} color={tint} />
+                        <Text style={styles.buttonText}>
+                            Website
+                        </Text>
+                    </TouchableOpacity>
+                )}
+                {socials.instagram && (
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => openLink(socials.instagram)} style={[styles.button, { backgroundColor: surface }]}>
+                        <Ionicons name="logo-instagram" size={24} color="#C13584" />
+                        <Text style={styles.buttonText}>
+                            Instagram
+                        </Text>
+                    </TouchableOpacity>
+                )}
+                {socials.facebook && (
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => openLink(socials.facebook)} style={[styles.button, { backgroundColor: surface }]}>
+                        <Ionicons name="logo-facebook" size={24} color="#1877F2" />
+                        <Text style={styles.buttonText}>
+                            Facebook
+                        </Text>
+                    </TouchableOpacity>
+                )}
+                {socials.tiktok && (
+                    <TouchableOpacity activeOpacity={0.7} onPress={() => openLink(socials.tiktok)} style={[styles.button, { backgroundColor: surface }]}>
+                        <Ionicons name="logo-tiktok" size={24} color="#000" />
+                        <Text style={styles.buttonText}>
+                            TikTok
+                        </Text>
+                    </TouchableOpacity>
+                )}
+            </ScrollView>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 16,
+        borderRadius: 8,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 12,
+    },
+    buttonContainer: {
         flexDirection: 'row',
         gap: 12,
-        justifyContent: 'center',
     },
     button: {
         padding: 10,
         borderRadius: 100,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 8,
+        gap: 8,
+    },
+    buttonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
