@@ -7,6 +7,7 @@ import PartyMarker from '@/components/Map/PartyMarker';
 import VenueMarker from '@/components/Map/VenueMarker';
 import { ScrollView, Text, View } from '@/components/Themed';
 import Title from '@/components/Typography/Title';
+import StarRating from '@/components/Venue/StarRating';
 import { useColors } from '@/hooks/useColors';
 import { useVenue } from '@/hooks/useVenues';
 import { handleOpenMaps } from '@/utils/map';
@@ -53,6 +54,7 @@ const VenueScreen = () => {
                 <Text style={styles.description}>
                     {venue.description}
                 </Text>
+                <StarRating averageRating={4.3} onRate={(rating) => console.log('Rated:', rating)} />
                 <SocialButtons socials={venue.socials} name={venue.name} />
             </View>
             <TouchableOpacity onPress={() => handleOpenMaps(coords, encodedLabel)}>
