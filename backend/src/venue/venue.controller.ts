@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
 import { VenueService } from './venue.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -12,8 +12,10 @@ export class VenueController {
 
   @Roles(Role.USER)
   @Get(':id')
-  async getVenueById(@Param('id') id: string) {
-    return this.VenueService.getVenueById(id);
+  async getVenueById(@Param('id') id: string, @Request() req) {
+    const userId = (req.user as any).userId;
+
+    return this.VenueService.getVenueById(id, userId);
   }
 
 }

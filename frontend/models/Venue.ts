@@ -8,6 +8,9 @@ interface Venue {
     logo: string;
     images: string[];
     location: Region;
+    rating: number;
+    numberOfRatings: number;
+    userRating: number;
     socials: {
         website?: string;
         instagram?: string;

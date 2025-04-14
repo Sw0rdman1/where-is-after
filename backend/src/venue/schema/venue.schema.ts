@@ -22,7 +22,10 @@ export class Venue extends Document {
     images: string[];
 
     @Prop({ default: 0 })
-    rating: number;
+    averageScore: number;
+
+    @Prop({ default: 0 })
+    numberOfRatings: number;
 
     @Prop({ type: String, enum: VenueCategory, required: true })
     category: VenueCategory;

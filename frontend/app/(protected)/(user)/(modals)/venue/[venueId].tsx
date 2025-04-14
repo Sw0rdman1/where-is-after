@@ -7,6 +7,7 @@ import PartyMarker from '@/components/Map/PartyMarker';
 import VenueMarker from '@/components/Map/VenueMarker';
 import { ScrollView, Text, View } from '@/components/Themed';
 import Title from '@/components/Typography/Title';
+import OpenInMaps from '@/components/Venue/OpenInMaps';
 import StarRating from '@/components/Venue/StarRating';
 import { useColors } from '@/hooks/useColors';
 import { useVenue } from '@/hooks/useVenues';
@@ -19,8 +20,6 @@ import MapView from 'react-native-maps';
 const VenueScreen = () => {
     const { venueId } = useLocalSearchParams();
     const { venue, loading } = useVenue(venueId as string);
-
-
 
 
     if (loading) {
@@ -39,39 +38,22 @@ const VenueScreen = () => {
         )
     }
 
-    const coords = `${venue.location.latitude},${venue.location.longitude}`;
-    const encodedLabel = encodeURIComponent(venue.name || "Selected Location");
-
 
     return (
-        <ScrollView style={styles.container}  >
+        <ScrollView style={styles.container}>
             <StatusBar style="light" />
             <ModalBackButton />
             <ShareButton message={`Check out this venue: ${venue.name}`} title={`Share ${venue.name}`} />
             <ImageSlider images={[venue.logo, ...venue.images]} />
-            <View style={styles.textContainer}>
+            <View style={styles.venueContainer}>
                 <Title text={venue.name} />
                 <Text style={styles.description}>
                     {venue.description}
                 </Text>
-                <StarRating averageRating={4.3} onRate={(rating) => console.log('Rated:', rating)} />
+                <StarRating userScore={venue.userRating} averageRating={venue.rating} numberOfRatings={venue.numberOfRatings} venueId={venue._id} />
+                <OpenInMaps venue={venue} />
                 <SocialButtons socials={venue.socials} name={venue.name} />
             </View>
-            <TouchableOpacity onPress={() => handleOpenMaps(coords, encodedLabel)}>
-                <MapView
-                    style={styles.map}
-                    initialRegion={venue.location}
-                    userInterfaceStyle="dark"
-                    scrollEnabled={false}
-                    zoomEnabled={false}
-                    pitchEnabled={false}
-                    rotateEnabled={false}
-                    pointerEvents="none"
-                >
-                    <VenueMarker key={venue._id} venue={venue} />
-                </MapView>
-            </TouchableOpacity>
-
         </ScrollView>
     )
 }
@@ -88,6 +70,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+
+    venueContainer: {
+        padding: 12,
+        flexGrow: 1,
+        gap: 8,
+    },
     description: {
         fontSize: 20,
         marginTop: 8,
@@ -95,16 +83,5 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         marginBottom: 8,
     },
-    textContainer: {
-        padding: 12,
-        flexGrow: 1,
-        gap: 16,
-    },
-    map: {
-        width: "100%",
-        height: 150,
-        borderRadius: 16,
-        marginTop: 15,
-        marginVertical: 10,
-    },
+
 })

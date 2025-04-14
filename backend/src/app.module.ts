@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { PartyModule } from './party/party.module';
 import { VenueModule } from './venue/venue.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { VenueModule } from './venue/venue.module';
     AuthModule,
     EmailModule,
     PartyModule,
-    VenueModule
+    VenueModule,
+    RatingModule
   ],
 })
 export class AppModule { }

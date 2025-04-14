@@ -7,33 +7,49 @@ import { Text } from '../Themed';
 import { useColors } from '@/hooks/useColors';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import Star from './Star'; // <- our new reusable component
+import { useRatingAPI } from '@/api/ratings';
 
 type Props = {
     averageRating: number;
-    onRate?: (rating: number) => void;
+    numberOfRatings: number;
+    venueId: string;
+    userScore: number | null;
 };
 
-const StarRating: React.FC<Props> = ({ averageRating, onRate }) => {
-    const [userRating, setUserRating] = useState<number | null>(null);
+const StarRating: React.FC<Props> = ({ averageRating, venueId, numberOfRatings, userScore }) => {
+    const [userRating, setUserRating] = useState<number | null>(userScore);
+    const [averageRatingState, setAverageRatingState] = useState(averageRating);
+    const [numberOfRatingsState, setNumberOfRatingsState] = useState(numberOfRatings);
     const [showConfetti, setShowConfetti] = useState(false);
     const { tint } = useColors();
+    const { createRating } = useRatingAPI();
 
-    const handleRating = (rating: number) => {
+    const handleRating = async (rating: number) => {
         setUserRating(rating);
-        onRate?.(rating);
         if (rating === 5) {
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 4000);
         }
+
+        const res = await createRating(venueId, rating);
+
+        if (res) {
+            setAverageRatingState(res.averageScore);
+            setNumberOfRatingsState(res.numberOfRatings);
+        }
+
     };
 
-    const displayedRating = userRating ?? averageRating;
+    const displayedRating = userRating ?? averageRatingState;
 
     return (
         <>
             <View style={styles.container}>
                 <Text style={styles.label}>Ratings:</Text>
                 <View style={styles.starRow}>
+                    <Text style={styles.rating}>
+                        {averageRatingState.toFixed(1)}
+                    </Text>
                     {[...Array(5)].map((_, index) => (
                         <Star
                             key={index}
@@ -46,7 +62,7 @@ const StarRating: React.FC<Props> = ({ averageRating, onRate }) => {
                         />
                     ))}
                     <Text style={styles.rating}>
-                        ({averageRating.toFixed(1)})
+                        ({numberOfRatingsState})
                     </Text>
                 </View>
             </View>
@@ -71,11 +87,10 @@ const styles = StyleSheet.create({
     starRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 5,
     },
     rating: {
+        marginHorizontal: 4,
         fontSize: 18,
         fontWeight: 'bold',
-        marginLeft: 5,
     },
 });

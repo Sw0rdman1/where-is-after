@@ -35,6 +35,9 @@ export const getPartyFromResponse = (response: any): Party => {
             location: venueLocation,
             images: response.venue.images,
             socials: transformSocials(response.venue.socials),
+            rating: response.venue.rating,
+            numberOfRatings: response.venue.numberOfRatings,
+            userRating: response.userRating,
         },
     };
 }
@@ -44,6 +47,11 @@ export const getVenueFromResponse = (response: any): Venue => {
 
     const location = convertVenueLocationToRegion(venue);
 
+    console.log("Venue location: ", location);
+
+    console.log(response);
+
+
     return {
         _id: venue._id,
         name: venue.name,
@@ -52,5 +60,8 @@ export const getVenueFromResponse = (response: any): Venue => {
         location: location,
         images: venue.images,
         socials: transformSocials(venue.socials),
+        rating: venue.rating,
+        numberOfRatings: venue.numberOfRatings,
+        userRating: response.userRating,
     };
 }
