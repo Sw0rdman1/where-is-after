@@ -27,29 +27,30 @@ const Star: React.FC<Props> = ({
     const iconName = isFilled ? 'star' : isHalf ? 'star-half-empty' : 'star-o';
 
     useEffect(() => {
-        if (userRating !== null) {
-            const active = index < userRating;
-            Animated.parallel([
-                Animated.sequence([
-                    Animated.timing(scale, {
-                        toValue: 1.4,
-                        duration: 150,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scale, {
-                        toValue: 1,
-                        duration: 150,
-                        useNativeDriver: true,
-                    }),
-                ]),
-                Animated.timing(color, {
-                    toValue: active ? 1 : 0,
-                    duration: 300,
-                    useNativeDriver: false,
+        const active = userRating !== null
+            ? index < userRating
+            : index < rating;
+
+        Animated.parallel([
+            Animated.sequence([
+                Animated.timing(scale, {
+                    toValue: 1.4,
+                    duration: 150,
+                    useNativeDriver: true,
                 }),
-            ]).start();
-        }
-    }, [userRating]);
+                Animated.timing(scale, {
+                    toValue: 1,
+                    duration: 150,
+                    useNativeDriver: true,
+                }),
+            ]),
+            Animated.timing(color, {
+                toValue: active ? 1 : 0,
+                duration: 300,
+                useNativeDriver: false,
+            }),
+        ]).start();
+    }, [userRating, rating]);
 
     const animatedColor = color.interpolate({
         inputRange: [0, 1],
@@ -57,7 +58,7 @@ const Star: React.FC<Props> = ({
     });
 
     return (
-        <Pressable onPress={() => interactive && onRate?.(index + 1)} disabled={!interactive}>
+        <Pressable onPress={() => onRate?.(index + 1)} >
             <Animated.View style={[styles.star, { transform: [{ scale }] }]}>
                 <Animated.Text style={{ color: interactive ? animatedColor : '#999' }}>
                     <FontAwesome

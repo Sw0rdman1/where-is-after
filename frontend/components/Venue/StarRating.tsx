@@ -22,10 +22,25 @@ const StarRating: React.FC<Props> = ({ averageRating, venueId, numberOfRatings, 
     const [numberOfRatingsState, setNumberOfRatingsState] = useState(numberOfRatings);
     const [showConfetti, setShowConfetti] = useState(false);
     const { tint } = useColors();
-    const { createRating } = useRatingAPI();
+    const { createRating, deleteRating } = useRatingAPI();
 
     const handleRating = async (rating: number) => {
+        if (userRating === rating) {
+            console.log('User clicked the same rating, removing it');
+            setUserRating(null);
+
+            const res = await deleteRating(venueId); // call your API to delete the rating
+
+            if (res) {
+                setAverageRatingState(res.averageScore);
+                setNumberOfRatingsState(res.numberOfRatings);
+            }
+
+            return;
+        }
+
         setUserRating(rating);
+
         if (rating === 5) {
             setShowConfetti(true);
             setTimeout(() => setShowConfetti(false), 4000);

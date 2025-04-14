@@ -13,5 +13,14 @@ export const useRatingAPI = () => {
         }
     }
 
-    return { createRating };
+    const deleteRating = async (venueId: string): Promise<any> => {
+        try {
+            const res = await api.delete(`/ratings/${venueId}`);
+            return res.data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    }
+
+    return { createRating, deleteRating };
 }
