@@ -6,6 +6,7 @@ import { ImageSlider } from '@/components/Image/ImageSlider';
 import PartyMarker from '@/components/Map/PartyMarker';
 import VenueMarker from '@/components/Map/VenueMarker';
 import { ScrollView, Text, View } from '@/components/Themed';
+import Description from '@/components/Typography/Description';
 import Title from '@/components/Typography/Title';
 import OpenInMaps from '@/components/Venue/OpenInMaps';
 import StarRating from '@/components/Venue/StarRating';
@@ -47,9 +48,7 @@ const VenueScreen = () => {
             <ImageSlider images={[venue.logo, ...venue.images]} />
             <View style={styles.venueContainer}>
                 <Title text={venue.name} />
-                <Text style={styles.description}>
-                    {venue.description}
-                </Text>
+                <Description label="About venue" description={venue.description} />
                 <StarRating userScore={venue.userRating} averageRating={venue.rating} numberOfRatings={venue.numberOfRatings} venueId={venue._id} />
                 <OpenInMaps venue={venue} />
                 <SocialButtons socials={venue.socials} name={venue.name} />
@@ -76,12 +75,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         gap: 8,
     },
-    description: {
-        fontSize: 20,
-        marginTop: 8,
-        lineHeight: 24,
-        fontStyle: "italic",
-        marginBottom: 8,
-    },
+
 
 })

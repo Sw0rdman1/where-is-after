@@ -16,6 +16,7 @@ import { handleOpenMaps } from "@/utils/map";
 import Button from "@/components/Button/Button";
 import PartyInformations from "@/components/Party/PartyInformations";
 import { StatusBar } from "expo-status-bar";
+import Description from "@/components/Typography/Description";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -54,14 +55,7 @@ export default function PartyScreen() {
                 <Title text={party.name} />
                 <PartyInformations party={party} />
                 <PeopleAtending people={partyPeople} />
-                <View style={[styles.descriptionContainer, { backgroundColor: surface }]}>
-                    <Text style={{ ...styles.description, fontWeight: 'bold' }}>
-                        About party:
-                    </Text>
-                    <Text style={{ ...styles.description, fontStyle: "italic" }} numberOfLines={2}>
-                        {party.description}
-                    </Text>
-                </View>
+                <Description label="About party" description={party.description} />
                 <TouchableOpacity onPress={() => handleOpenMaps(coords, encodedLabel)}>
                     <MapView
                         style={styles.map}
@@ -101,16 +95,7 @@ const styles = StyleSheet.create({
         gap: 5,
         // paddingBottom: 100
     },
-    descriptionContainer: {
-        gap: 3,
-        padding: 5,
-        borderRadius: 8,
-        paddingLeft: 10,
-    },
-    description: {
-        fontSize: 16,
-        lineHeight: 22,
-    },
+
     map: {
         width: "100%",
         height: 150,
