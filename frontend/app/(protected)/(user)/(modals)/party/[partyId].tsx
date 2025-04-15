@@ -36,10 +36,7 @@ export default function PartyScreen() {
         <ScrollView style={styles.container}>
             <StatusBar style="light" />
             <ModalBackButton />
-            <ShareButton
-                message={`Check out this party: ${party.name}`}
-                title={`Share ${party.name}`}
-            />
+            <ShareButton message={`Check out this party: ${party.name}`} title={`Share ${party.name}`} />
             <Image source={{ uri: party.image }} style={styles.partyImage} />
             <View style={styles.partyContainer}>
                 <Title text={party.name} />

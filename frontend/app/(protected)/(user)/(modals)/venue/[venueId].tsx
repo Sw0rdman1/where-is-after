@@ -1,24 +1,18 @@
 import ModalBackButton from '@/components/Button/ModalBackButton';
-import OpenInMapsButton from '@/components/Button/OpenMapsButton';
 import ShareButton from '@/components/Button/ShareButton';
 import { SocialButtons } from '@/components/Button/SocialMediaButtons';
 import NotFound from '@/components/Error/NotFound';
 import { ImageSlider } from '@/components/Image/ImageSlider';
 import LoadingScreen from '@/components/Loading/LoadingScreen';
-import PartyMarker from '@/components/Map/PartyMarker';
-import VenueMarker from '@/components/Map/VenueMarker';
-import { ScrollView, Text, View } from '@/components/Themed';
-import Description from '@/components/Typography/Description';
+import { ScrollView, View } from '@/components/Themed';
 import Title from '@/components/Typography/Title';
 import OpenInMaps from '@/components/Venue/OpenInMaps';
 import StarRating from '@/components/Venue/StarRating';
-import { useColors } from '@/hooks/useColors';
+import VenueInformations from '@/components/Venue/VenueInformations';
 import { useVenue } from '@/hooks/useVenues';
-import { handleOpenMaps } from '@/utils/map';
 import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import MapView from 'react-native-maps';
 
 const VenueScreen = () => {
     const { venueId } = useLocalSearchParams();
@@ -29,19 +23,19 @@ const VenueScreen = () => {
     if (!venue) return <NotFound />
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar style="light" />
             <ModalBackButton />
             <ShareButton message={`Check out this venue: ${venue.name}`} title={`Share ${venue.name}`} />
             <ImageSlider images={[venue.logo, ...venue.images]} />
-            <View style={styles.venueContainer}>
+            <ScrollView style={styles.venueContainer}>
                 <Title text={venue.name} />
-                <Description label="About venue" description={venue.description} />
+                <VenueInformations venue={venue} />
                 <StarRating userScore={venue.userRating} averageRating={venue.rating} numberOfRatings={venue.numberOfRatings} venueId={venue._id} />
                 <OpenInMaps venue={venue} />
                 <SocialButtons socials={venue.socials} name={venue.name} />
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     )
 }
 

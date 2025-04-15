@@ -40,7 +40,6 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         setModalVisible(false);
     };
 
-    // Scroll modal FlatList to current image when opened
     useEffect(() => {
         if (isModalVisible && modalFlatListRef.current) {
             setTimeout(() => {
@@ -52,7 +51,6 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         }
     }, [isModalVisible]);
 
-    // Scroll main FlatList to updated index when modal closes
     useEffect(() => {
         if (!isModalVisible && flatListRef.current) {
             flatListRef.current.scrollToIndex({
@@ -148,13 +146,13 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
 const styles = StyleSheet.create({
     container: {
         width: width - 16,
-        height: 300,
+        height: 250,
         borderRadius: 16,
         overflow: 'hidden',
     },
     imageWrapper: {
         width: width - 16,
-        height: 300,
+        height: 250,
         borderRadius: 16,
     },
     image: {
