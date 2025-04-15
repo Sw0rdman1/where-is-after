@@ -3,6 +3,7 @@ import { Text, View } from '@/components/Themed'
 import { useParties } from '@/hooks/useParties';
 import PartyCard from '@/components/Party/PartyCard';
 import Party from '@/models/Party';
+import FilterBottomSheet from '@/components/BottomSheet/FiltersBottomSheet';
 
 const ListScreen = () => {
     const { parties } = useParties();

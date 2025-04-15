@@ -9,12 +9,14 @@ import { router } from "expo-router";
 import { BottomTabHeaderProps } from "@react-navigation/bottom-tabs";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 
 const Header: React.FC<BottomTabHeaderProps> = ({ route }) => {
     const { user, logout } = useAuth();
     const { top } = useSafeAreaInsets();
     const { tint, text, error } = useColors();
+    const { filterBottomSheetRef } = useGlobalContext();
 
     const handleLogout = async () => {
         await logout()
@@ -22,6 +24,11 @@ const Header: React.FC<BottomTabHeaderProps> = ({ route }) => {
 
     const onPress = () => {
         router.navigate("/profile");
+    }
+
+    const openFilterBottomSheet = () => {
+        filterBottomSheetRef.current?.present();
+        filterBottomSheetRef.current?.snapToIndex(0);
     }
 
 
@@ -32,7 +39,7 @@ const Header: React.FC<BottomTabHeaderProps> = ({ route }) => {
 
             case "list":
                 return (
-                    <TouchableOpacity style={[styles.button, { backgroundColor: `${tint}` }]} >
+                    <TouchableOpacity style={[styles.button, { backgroundColor: tint }]} onPress={openFilterBottomSheet}>
                         <Ionicons name="filter-sharp" size={22} color={text} />
                     </TouchableOpacity>
                 )

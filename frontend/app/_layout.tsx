@@ -4,6 +4,7 @@ import { GlobalProvider } from '@/context/GlobalProvider';
 import { ToastProvider } from '@/context/ToastProvider';
 import { cacheImages } from '@/utils/cache';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
@@ -11,6 +12,7 @@ import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 export { ErrorBoundary } from 'expo-router';
@@ -61,15 +63,19 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AxiosProvider>
-        <GlobalProvider>
-          <AuthProvider>
-            <RootLayoutNav />
-          </AuthProvider>
-        </GlobalProvider>
-      </AxiosProvider >
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <QueryClientProvider client={queryClient}>
+          <AxiosProvider>
+            <GlobalProvider>
+              <AuthProvider>
+                <RootLayoutNav />
+              </AuthProvider>
+            </GlobalProvider>
+          </AxiosProvider >
+        </QueryClientProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
 
