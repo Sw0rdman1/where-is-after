@@ -1,27 +1,16 @@
-import { Callout, MapMarker, Marker } from 'react-native-maps'
+import { MapMarker, Marker } from 'react-native-maps'
 import { Image, StyleSheet, View } from 'react-native';
-import { BlurView } from 'expo-blur';
 import Svg, { Path, Defs, Circle, Mask } from "react-native-svg";
-import { isDarkMode, useColors } from '@/hooks/useColors';
-import { useEffect, useRef, useState } from 'react';
-import { Text } from '../Themed';
-import { calculateTextWidth } from '@/utils/map';
-import Party from '@/models/Party';
-import { router } from 'expo-router';
 import Venue from '@/models/Venue';
+import { useRef } from 'react';
+import { useColors } from '@/hooks/useColors';
 
-const SVG_MARKER_WIDTH = 40
-const SVG_MARKER_HEIGHT = 50
-const MARKER_IMAGE_SIZE = 30
+const SVG_MARKER_WIDTH = 20
+const SVG_MARKER_HEIGHT = 25
+const MARKER_IMAGE_SIZE = 15
 
 const TOP_OFFSET = (SVG_MARKER_HEIGHT - MARKER_IMAGE_SIZE) / 6;
 const LEFT_OFFSET = (SVG_MARKER_WIDTH - MARKER_IMAGE_SIZE) / 2;
-
-const CALLOUT_IMAGE_SIZE = 50
-const CALLOUT_PADDING = 10
-const CALLOUT_MAX_WIDTH = 300
-
-const PARTY_IMAGE = require('../../assets/images/protected/party.png')
 
 
 const SvgMarker = ({ imageUri }: { imageUri: string }) => {

@@ -5,6 +5,7 @@ import MapView from 'react-native-maps'
 import Venue from '@/models/Venue'
 import VenueMarker from '../Map/VenueMarker'
 import { Ionicons } from '@expo/vector-icons'
+import { useColors } from '@/hooks/useColors'
 
 interface Props {
     venue: Venue
@@ -13,18 +14,13 @@ interface Props {
 const OpenInMaps: React.FC<Props> = ({ venue }) => {
     const coords = `${venue.location.latitude},${venue.location.longitude}`;
     const encodedLabel = encodeURIComponent(venue.name || "Selected Location");
+    const { tint, surface } = useColors()
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Location</Text>
             <View style={styles.mapContainer}>
-                <View style={styles.adressContainer}>
-                    <Ionicons name="location-outline" size={24} color="white" />
-                    <Text style={{ color: "white", marginLeft: 10 }}>
-                        Bulevar Kralja Aleksandra 73, Beograd
-                    </Text>
-                </View>
-                <TouchableOpacity style={styles.map} onPress={() => handleOpenMaps(coords, encodedLabel)}>
+                <TouchableOpacity style={[styles.adressContainer, { backgroundColor: surface }]} onPress={() => handleOpenMaps(coords, encodedLabel)} >
                     <MapView
                         style={styles.map}
                         initialRegion={venue.location}
@@ -37,9 +33,13 @@ const OpenInMaps: React.FC<Props> = ({ venue }) => {
                     >
                         <VenueMarker key={venue._id} venue={venue} />
                     </MapView>
+                    <Text style={styles.adress}>
+                        Bulevar Kralja Aleksandra 73
+                    </Text>
+
                 </TouchableOpacity>
             </View>
-        </View>
+        </View >
     )
 }
 
@@ -49,29 +49,33 @@ const styles = StyleSheet.create({
     container: {
         width: "100%",
         marginTop: 15,
+        gap: 5,
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
     },
-    adressContainer: {
-        flex: 1,
-        padding: 10,
-        flexDirection: "row",
-        alignItems: "center",
-    },
     mapContainer: {
-        width: "100%",
-        height: 150,
         borderRadius: 16,
-        backgroundColor: "#1c1c1e",
         flexDirection: "row",
-        justifyContent: "center",
         alignItems: "center",
+        gap: 5,
+    },
+    adressContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        padding: 5,
+        paddingRight: 10,
+        borderRadius: 16,
+    },
+    adress: {
+        fontSize: 18,
+        fontWeight: "bold",
     },
     map: {
-        flex: 1,
+        height: 50,
+        width: 50,
         borderRadius: 16,
-        marginVertical: 5,
     },
 })
