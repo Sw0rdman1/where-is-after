@@ -17,6 +17,8 @@ export const PeopleAtending: React.FC<PeopleAtendingProps> = ({ people }) => {
 
     const names = visiblePeople.map(p => p.displayName).join(', ');
 
+    const verb = people.length > 1 ? 'are' : 'is';
+
     return (
         <View style={styles.container}>
             <View style={styles.avatars}>
@@ -34,9 +36,12 @@ export const PeopleAtending: React.FC<PeopleAtendingProps> = ({ people }) => {
                 )}
             </View>
             <View style={styles.textContainer}>
-                <Text style={{ ...styles.attendingText, fontWeight: 'bold' }}>{names}</Text>
+
                 <Text style={styles.attendingText}>
-                    {remaining > 0 ? `and ${remaining} others` : ''} are going
+                    <Text style={{ ...styles.attendingText, fontWeight: 'bold' }}>
+                        {names}
+                    </Text>
+                    {remaining > 0 ? `and ${remaining} others` : ''} {verb} going
                 </Text>
             </View>
         </View>
@@ -53,7 +58,6 @@ const styles = StyleSheet.create({
     avatars: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 4,
     },
     avatar: {
         width: AVATAR_SIZE,
@@ -75,9 +79,8 @@ const styles = StyleSheet.create({
     textContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
-        gap: 1,
     },
     attendingText: {
-        fontSize: 14,
+        fontSize: 16,
     },
 });

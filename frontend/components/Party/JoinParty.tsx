@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { useColors } from '@/hooks/useColors'
 
 interface JoinPartyProps {
-    isUserGoing: boolean
+    isUserGoing: boolean;
+    availablePlaces: number;
 }
 
-const JoinParty: React.FC<JoinPartyProps> = ({ isUserGoing }) => {
+const JoinParty: React.FC<JoinPartyProps> = ({ isUserGoing, availablePlaces }) => {
     const [isUserGoingState, setIsUserGoingState] = useState(isUserGoing)
     const { tint, error } = useColors()
 
@@ -17,12 +18,6 @@ const JoinParty: React.FC<JoinPartyProps> = ({ isUserGoing }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.textContainer}>
-                <Text style={styles.text}>
-                    Few places left
-                </Text>
-            </View>
-
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: isUserGoingState ? error : tint }]}
@@ -34,7 +29,11 @@ const JoinParty: React.FC<JoinPartyProps> = ({ isUserGoing }) => {
                     </Text>
                 </TouchableOpacity>
             </View>
-
+            <View style={styles.textContainer}>
+                <Text style={styles.text}>
+                    {isUserGoingState ? "You are all set 🚀" : `${availablePlaces} places left 🎉`}
+                </Text>
+            </View>
         </View>
     )
 }
@@ -50,15 +49,16 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     textContainer: {
-        flex: 2,
+        width: 80,
     },
     text: {
         textAlign: "center",
-        fontSize: 18,
+        fontSize: 14,
+        lineHeight: 20,
         fontWeight: "bold",
     },
     buttonContainer: {
-        flex: 3,
+        flex: 2,
         justifyContent: "flex-end",
     },
     button: {
