@@ -32,8 +32,8 @@ const VenueScreen = () => {
                 <Title text={venue.name} />
                 <VenueInformations venue={venue} />
                 <StarRating userScore={venue.userRating} averageRating={venue.rating} numberOfRatings={venue.numberOfRatings} venueId={venue._id} />
-                <OpenInMaps venue={venue} />
                 <SocialButtons socials={venue.socials} name={venue.name} />
+                <OpenInMaps venue={venue} />
             </ScrollView>
         </View>
     )

@@ -18,27 +18,25 @@ const OpenInMaps: React.FC<Props> = ({ venue }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Location</Text>
-            <View style={styles.mapContainer}>
-                <TouchableOpacity style={[styles.adressContainer, { backgroundColor: surface }]} onPress={() => handleOpenMaps(coords, encodedLabel)} >
-                    <MapView
-                        style={styles.map}
-                        initialRegion={venue.location}
-                        userInterfaceStyle="dark"
-                        scrollEnabled={false}
-                        zoomEnabled={false}
-                        pitchEnabled={false}
-                        rotateEnabled={false}
-                        pointerEvents="none"
-                    >
-                        <VenueMarker key={venue._id} venue={venue} />
-                    </MapView>
-                    <Text style={styles.adress}>
-                        Bulevar Kralja Aleksandra 73
-                    </Text>
+            <Text style={styles.title}>Location:</Text>
+            <TouchableOpacity style={[styles.adressContainer, { backgroundColor: surface }]} onPress={() => handleOpenMaps(coords, encodedLabel)} >
+                <MapView
+                    style={styles.map}
+                    initialRegion={venue.location}
+                    userInterfaceStyle="dark"
+                    scrollEnabled={false}
+                    zoomEnabled={false}
+                    pitchEnabled={false}
+                    rotateEnabled={false}
+                    pointerEvents="none"
+                >
+                    <VenueMarker key={venue._id} venue={venue} />
+                </MapView>
+                <Text style={styles.adress}>
+                    Bulevar Kralja Aleksandra 73
+                </Text>
 
-                </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
         </View >
     )
 }
@@ -48,8 +46,8 @@ export default OpenInMaps
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        marginTop: 15,
-        gap: 5,
+        marginTop: 25,
+        gap: 10,
     },
     title: {
         fontSize: 20,
