@@ -10,8 +10,7 @@ const Title = ({ text }: { text: string }) => {
     const { tint } = useColors()
     const translateX = useRef(new Animated.Value(0)).current
     const textWidth = text.length * ONE_LETTER_WIDTH
-    // const shouldAnimate = textWidth > screenWidth
-    const shouldAnimate = false
+    const shouldAnimate = textWidth > screenWidth
 
     useEffect(() => {
         if (!shouldAnimate) return

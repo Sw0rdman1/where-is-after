@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import { Text } from '../Themed';
 import { useColors } from '@/hooks/useColors';
-import ConfettiCannon from 'react-native-confetti-cannon';
 import Star from './Star'; // <- our new reusable component
 import { useRatingAPI } from '@/api/ratings';
 
@@ -14,13 +13,13 @@ type Props = {
     numberOfRatings: number;
     venueId: string;
     userScore: number | null;
+    setShowConfetti: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const StarRating: React.FC<Props> = ({ averageRating, venueId, numberOfRatings, userScore }) => {
+const StarRating: React.FC<Props> = ({ averageRating, venueId, numberOfRatings, userScore, setShowConfetti }) => {
     const [userRating, setUserRating] = useState<number | null>(userScore);
     const [averageRatingState, setAverageRatingState] = useState(averageRating);
     const [numberOfRatingsState, setNumberOfRatingsState] = useState(numberOfRatings);
-    const [showConfetti, setShowConfetti] = useState(false);
     const { tint } = useColors();
     const { createRating, deleteRating } = useRatingAPI();
 
@@ -80,9 +79,7 @@ const StarRating: React.FC<Props> = ({ averageRating, venueId, numberOfRatings, 
                     </Text>
                 </View>
             </View>
-            {showConfetti && (
-                <ConfettiCannon count={80} origin={{ x: 0, y: 0 }} fadeOut fallSpeed={3000} />
-            )}
+
         </>
     );
 };

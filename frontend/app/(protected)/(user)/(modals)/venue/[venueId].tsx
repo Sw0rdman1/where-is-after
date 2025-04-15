@@ -12,11 +12,14 @@ import VenueInformations from '@/components/Venue/VenueInformations';
 import { useVenue } from '@/hooks/useVenues';
 import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { useState } from 'react';
+import { StyleSheet } from 'react-native'
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const VenueScreen = () => {
     const { venueId } = useLocalSearchParams();
     const { venue, loading } = useVenue(venueId as string);
+    const [showConfetti, setShowConfetti] = useState(false);
 
     if (loading) return <LoadingScreen title="Loading venue" />;
 
@@ -31,10 +34,14 @@ const VenueScreen = () => {
             <ScrollView style={styles.venueContainer}>
                 <Title text={venue.name} />
                 <VenueInformations venue={venue} />
-                <StarRating userScore={venue.userRating} averageRating={venue.rating} numberOfRatings={venue.numberOfRatings} venueId={venue._id} />
-                <SocialButtons socials={venue.socials} name={venue.name} />
                 <OpenInMaps venue={venue} />
+
+                <StarRating setShowConfetti={setShowConfetti} userScore={venue.userRating} averageRating={venue.rating} numberOfRatings={venue.numberOfRatings} venueId={venue._id} />
+                <SocialButtons socials={venue.socials} name={venue.name} />
             </ScrollView>
+            {showConfetti && (
+                <ConfettiCannon count={80} origin={{ x: 0, y: 0 }} fadeOut fallSpeed={3000} />
+            )}
         </View>
     )
 }
@@ -51,7 +58,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
-
     venueContainer: {
         padding: 12,
         flexGrow: 1,

@@ -5,9 +5,9 @@ import Venue from '@/models/Venue';
 import { useRef } from 'react';
 import { useColors } from '@/hooks/useColors';
 
-const SVG_MARKER_WIDTH = 20
-const SVG_MARKER_HEIGHT = 25
-const MARKER_IMAGE_SIZE = 15
+const SVG_MARKER_WIDTH = 15
+const SVG_MARKER_HEIGHT = 20
+const MARKER_IMAGE_SIZE = 10
 
 const TOP_OFFSET = (SVG_MARKER_HEIGHT - MARKER_IMAGE_SIZE) / 6;
 const LEFT_OFFSET = (SVG_MARKER_WIDTH - MARKER_IMAGE_SIZE) / 2;

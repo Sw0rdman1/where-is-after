@@ -21,6 +21,9 @@ export class Venue extends Document {
     @Prop({ required: true })
     images: string[];
 
+    @Prop({ required: true })
+    address: string;
+
     @Prop({ default: 0 })
     averageScore: number;
 

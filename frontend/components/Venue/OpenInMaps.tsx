@@ -18,7 +18,7 @@ const OpenInMaps: React.FC<Props> = ({ venue }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Location:</Text>
+            <Ionicons name="location" size={22} color={tint} />
             <TouchableOpacity style={[styles.adressContainer, { backgroundColor: surface }]} onPress={() => handleOpenMaps(coords, encodedLabel)} >
                 <MapView
                     style={styles.map}
@@ -45,9 +45,11 @@ export default OpenInMaps
 
 const styles = StyleSheet.create({
     container: {
+        flexDirection: "row",
+        alignItems: "center",
         width: "100%",
-        marginTop: 25,
-        gap: 10,
+        marginBottom: 20,
+        gap: 5,
     },
     title: {
         fontSize: 20,
@@ -64,16 +66,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: 10,
         padding: 5,
-        paddingRight: 10,
+        paddingRight: 15,
         borderRadius: 16,
     },
     adress: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "bold",
     },
     map: {
-        height: 50,
-        width: 50,
+        height: 35,
+        width: 35,
         borderRadius: 16,
     },
 })
