@@ -1,12 +1,12 @@
-import { Linking, StyleSheet } from 'react-native'
-import { Text, View } from '../Themed'
-import { useColors } from '@/hooks/useColors'
-import { Image } from 'expo-image'
+import { Image } from "expo-image"
+import { Text, View } from "../Themed"
+import { useColors } from "@/hooks/useColors";
+import { StyleSheet } from "react-native";
 
 const ERROR_IMAGE = require("../../assets/images/protected/error.png");
 
-const PartyNotFound = () => {
-    const { tint, link } = useColors()
+const NotFound = () => {
+    const { tint } = useColors()
 
     return (
         <View style={styles.container}>
@@ -21,13 +21,13 @@ const PartyNotFound = () => {
             </Text>
 
             <Text style={styles.subtitle}>
-                It seems like the party you are looking for does not exist or has been deleted.
+                It seems like what are you looking for does not exist or has been deleted.
             </Text>
         </View>
     )
 }
 
-export default PartyNotFound
+export default NotFound
 
 const styles = StyleSheet.create({
     container: {

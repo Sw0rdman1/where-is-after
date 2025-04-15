@@ -46,7 +46,7 @@ export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     const ip = await Network.getIpAddressAsync();
                     if (!ip) throw new Error("No internet connection or local IP unavailable");
 
-                    apiUrl = `http://192.168.0.24:${API_PORT}`;
+                    apiUrl = `http://192.168.20.227:${API_PORT}`;
                 }
 
             }

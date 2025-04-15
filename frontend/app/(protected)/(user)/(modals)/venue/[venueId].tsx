@@ -2,7 +2,9 @@ import ModalBackButton from '@/components/Button/ModalBackButton';
 import OpenInMapsButton from '@/components/Button/OpenMapsButton';
 import ShareButton from '@/components/Button/ShareButton';
 import { SocialButtons } from '@/components/Button/SocialMediaButtons';
+import NotFound from '@/components/Error/NotFound';
 import { ImageSlider } from '@/components/Image/ImageSlider';
+import LoadingScreen from '@/components/Loading/LoadingScreen';
 import PartyMarker from '@/components/Map/PartyMarker';
 import VenueMarker from '@/components/Map/VenueMarker';
 import { ScrollView, Text, View } from '@/components/Themed';
@@ -22,23 +24,9 @@ const VenueScreen = () => {
     const { venueId } = useLocalSearchParams();
     const { venue, loading } = useVenue(venueId as string);
 
+    if (loading) return <LoadingScreen title="Loading venue" />;
 
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.text}>Loading...</Text>
-            </View>
-        )
-    }
-
-    if (!venue) {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.text}>Venue not found</Text>
-            </View>
-        )
-    }
-
+    if (!venue) return <NotFound />
 
     return (
         <ScrollView style={styles.container}>

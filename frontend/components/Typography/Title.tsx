@@ -1,56 +1,61 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Animated, StyleSheet, Text, View, Dimensions } from 'react-native'
 import { useColors } from '@/hooks/useColors'
 
 const { width: screenWidth } = Dimensions.get('window')
-
 const ONE_LETTER_WIDTH = 20
+const TEXT_GAP = screenWidth / 2 // space between the duplicated texts
 
 const Title = ({ text }: { text: string }) => {
     const { tint } = useColors()
     const translateX = useRef(new Animated.Value(0)).current
     const textWidth = text.length * ONE_LETTER_WIDTH
+    const shouldAnimate = textWidth > screenWidth
+
     useEffect(() => {
-        if (textWidth === 0 || textWidth <= screenWidth) return
+        if (!shouldAnimate) return
 
-        const overflowWidth = textWidth - screenWidth
+        const totalWidth = textWidth + TEXT_GAP
 
-        const loop = () => {
-            translateX.setValue(30)
-
+        const animate = () => {
+            translateX.setValue(0)
             Animated.timing(translateX, {
-                toValue: -overflowWidth,
-                duration: (screenWidth + overflowWidth) * 5,
+                toValue: -totalWidth,
+                duration: totalWidth * 30, // adjust speed here
                 useNativeDriver: true,
             }).start(() => {
-                // Instantly jump to right off-screen
-                translateX.setValue(30)
-
-                // Animate into view again
-                Animated.timing(translateX, {
-                    toValue: -overflowWidth,
-                    duration: (screenWidth + overflowWidth) * 5,
-                    useNativeDriver: true,
-                }).start(() => loop())
+                animate() // loop forever
             })
         }
 
-        loop()
-    }, [])
+        animate()
+    }, [shouldAnimate])
 
     return (
         <View style={styles.container}>
-            <Animated.Text
-                style={[
-                    styles.title,
-                    {
-                        color: tint, transform: [{ translateX }], maxWidth: textWidth, width: textWidth
-                    },
-                ]}
-                numberOfLines={1}
-            >
-                {text}
-            </Animated.Text>
+            {shouldAnimate ? (
+                <Animated.View
+                    style={{
+                        flexDirection: 'row',
+                        transform: [{ translateX }],
+                        width: (textWidth + TEXT_GAP) * 2,
+                    }}
+                >
+                    <Text style={[styles.title, { color: tint, width: textWidth, marginRight: TEXT_GAP }]}>
+                        {text}
+                    </Text>
+                    <Text style={[styles.title, { color: tint, width: textWidth }]}>
+                        {text}
+                    </Text>
+                </Animated.View>
+            ) : (
+                <Text
+                    style={[styles.title, { color: tint }]}
+                    numberOfLines={1}
+                >
+                    {text}
+                </Text>
+            )}
         </View>
     )
 }
@@ -62,9 +67,10 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         height: 40,
         marginBottom: 10,
+        width: screenWidth,
     },
     title: {
-        fontSize: 34,
+        fontSize: 36,
         fontWeight: 'bold',
         fontFamily: 'PermanentMarker',
     },

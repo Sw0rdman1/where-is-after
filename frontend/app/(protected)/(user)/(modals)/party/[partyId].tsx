@@ -4,8 +4,6 @@ import { Image } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useColors } from "@/hooks/useColors";
-import PartyLoading from "@/components/Party/PartyLoading";
-import PartyNotFound from "@/components/Party/PartyNotFound";
 import ModalBackButton from "@/components/Button/ModalBackButton";
 import Title from "@/components/Typography/Title";
 import { PeopleAtending } from "@/components/Party/PeopleAtending";
@@ -17,6 +15,8 @@ import Button from "@/components/Button/Button";
 import PartyInformations from "@/components/Party/PartyInformations";
 import { StatusBar } from "expo-status-bar";
 import Description from "@/components/Typography/Description";
+import LoadingScreen from "@/components/Loading/LoadingScreen";
+import NotFound from "@/components/Error/NotFound";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -32,15 +32,13 @@ export default function PartyScreen() {
     const { party, loading } = useParty(partyId as string);
     const { surface } = useColors();
 
-
     const coords = `${party?.venue.location.latitude},${party?.venue.location.longitude}`;
     const encodedLabel = encodeURIComponent(party?.venue.name || "Selected Location");
 
 
+    if (loading) return <LoadingScreen title="Loading party" />;
 
-    if (loading) return <PartyLoading />;
-
-    if (!party) return <PartyNotFound />
+    if (!party) return <NotFound />
 
     return (
         <ScrollView style={styles.container}>

@@ -1,12 +1,24 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, StyleSheet } from 'react-native'
+import { Text, View } from '../Themed'
+import { useColors } from '@/hooks/useColors'
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ title }: { title: string }) => {
+    const { tint } = useColors()
+
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
-            <Text>LoadingScreen</Text>
+        <View style={styles.container}>
+            <ActivityIndicator size="large" color={tint} />
+            <Text>{title}</Text>
         </View>
     )
 }
 
 export default LoadingScreen
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+})
