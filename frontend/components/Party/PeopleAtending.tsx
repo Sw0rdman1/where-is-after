@@ -1,16 +1,13 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Text } from '../Themed';
+import User from '@/models/User';
 
 const AVATAR_SIZE = 32;
 
-interface Person {
-    name: string;
-    avatar: string;
-}
 
 interface PeopleAtendingProps {
-    people: Person[];
+    people: Partial<User>[];
 }
 
 export const PeopleAtending: React.FC<PeopleAtendingProps> = ({ people }) => {
@@ -18,7 +15,7 @@ export const PeopleAtending: React.FC<PeopleAtendingProps> = ({ people }) => {
     const visiblePeople = people.slice(0, maxVisible);
     const remaining = people.length - maxVisible;
 
-    const names = visiblePeople.map(p => p.name).join(', ');
+    const names = visiblePeople.map(p => p.displayName).join(', ');
 
     return (
         <View style={styles.container}>
@@ -26,7 +23,7 @@ export const PeopleAtending: React.FC<PeopleAtendingProps> = ({ people }) => {
                 {visiblePeople.map((person, index) => (
                     <Image
                         key={index}
-                        source={{ uri: person.avatar }}
+                        source={{ uri: person.profileImage }}
                         style={[styles.avatar, { marginLeft: index === 0 ? 0 : -12 }]}
                     />
                 ))}

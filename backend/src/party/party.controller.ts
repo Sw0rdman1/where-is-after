@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { PartyService } from './party.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -18,8 +18,23 @@ export class PartyController {
 
   @Roles(Role.USER)
   @Get(':id')
-  async getPartyById(@Param('id') id: string) {
-    return this.partyService.getPartyById(id);
+  async getPartyById(@Param('id') id: string, @Req() req) {
+    const userId = (req.user as any).userId;
+    return this.partyService.getPartyById(id, userId);
+  }
+
+  @Roles(Role.USER)
+  @Post(':id/going')
+  async markAsGoing(@Param('id') partyId: string, @Req() req) {
+    const userId = (req.user as any).userId;
+    return this.partyService.markUserAsGoing(partyId, userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id/going')
+  async removeFromGoing(@Param('id') partyId: string, @Req() req) {
+    const userId = (req.user as any).userId;
+    return this.partyService.removeUserFromParty(partyId, userId);
   }
 
 }

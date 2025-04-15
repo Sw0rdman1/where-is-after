@@ -7,7 +7,6 @@ import ModalBackButton from "@/components/Button/ModalBackButton";
 import Title from "@/components/Typography/Title";
 import { PeopleAtending } from "@/components/Party/PeopleAtending";
 import ShareButton from "@/components/Button/ShareButton";
-import Button from "@/components/Button/Button";
 import PartyInformations from "@/components/Party/PartyInformations";
 import { StatusBar } from "expo-status-bar";
 import Description from "@/components/Typography/Description";
@@ -15,14 +14,6 @@ import LoadingScreen from "@/components/Loading/LoadingScreen";
 import NotFound from "@/components/Error/NotFound";
 import OpenInMaps from "@/components/Party/OpenInMaps";
 import JoinParty from "@/components/Party/JoinParty";
-
-const partyPeople = [
-    { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
-    { name: 'Marko', avatar: 'https://randomuser.me/api/portraits/men/2.jpg' },
-    { name: 'Lena', avatar: 'https://randomuser.me/api/portraits/women/3.jpg' },
-    { name: 'Jovan', avatar: 'https://randomuser.me/api/portraits/men/4.jpg' },
-    { name: 'Milica', avatar: 'https://randomuser.me/api/portraits/women/5.jpg' },
-];
 
 
 export default function PartyScreen() {
@@ -33,21 +24,22 @@ export default function PartyScreen() {
 
     if (!party) return <NotFound />
 
+
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar style="light" />
             <ModalBackButton />
             <ShareButton message={`Check out this party: ${party.name}`} title={`Share ${party.name}`} />
             <Image source={{ uri: party.image }} style={styles.partyImage} />
-            <View style={styles.partyContainer}>
+            <ScrollView style={styles.partyContainer}>
                 <Title text={party.name} />
                 <PartyInformations party={party} />
-                <PeopleAtending people={partyPeople} />
+                <PeopleAtending people={party.goingUsers} />
                 <Description label="About party" description={party.description} />
                 <OpenInMaps party={party} />
-                <JoinParty />
-            </View>
-        </ScrollView>
+                <JoinParty isUserGoing={party.isUserGoing} />
+            </ScrollView>
+        </View>
     );
 }
 

@@ -1,17 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Party } from './schema/party.schema';
 import { Venue } from 'src/venue/schema/venue.schema';
 import * as moment from "moment";
-import { log } from 'console';
 import { validateMongoID } from 'src/utils/validation';
+import { User } from 'src/users/schema/user.schema';
+import { log } from 'console';
 
 @Injectable()
 export class PartyService {
     constructor(
         @InjectModel(Party.name) private readonly partyModel: Model<Party>,
         @InjectModel(Venue.name) private readonly venueModel: Model<Venue>,
+        @InjectModel(User.name) private readonly userModel: Model<User>,
     ) { }
 
     async findNearbyParties(longitude: number, latitude: number, radius: number, date: string | undefined) {
@@ -49,19 +51,68 @@ export class PartyService {
 
     }
 
-    async getPartyById(id: string) {
-
+    async getPartyById(id: string, currentUserId: string) {
         validateMongoID(id);
 
         const party = await this.partyModel
             .findById(id)
             .populate('venue')
+            .populate({
+                path: 'goingUsers',
+                model: 'User',
+                select: 'displayName profileImage',
+            })
             .exec();
+
+        log(party?.goingUsers)
+
+
 
         if (!party) {
             throw new NotFoundException(`Party with id ${id} not found`);
         }
 
+        const isUserGoing = (party.goingUsers as any[]).some(user =>
+            user._id.toString() === currentUserId,
+        );
+
+        return {
+            ...party.toObject(),
+            isUserGoing,
+        };
+    }
+
+
+    async markUserAsGoing(partyId: string, userId: string): Promise<Party> {
+        const party = await this.partyModel.findById(partyId);
+        if (!party) {
+            throw new NotFoundException('Party not found');
+        }
+
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const userObjectId = new Types.ObjectId(userId);
+
+        if (!party.goingUsers.includes(userObjectId)) {
+            party.goingUsers.push(userObjectId);
+            await party.save();
+        }
+
         return party;
     }
+
+    async removeUserFromParty(partyId: string, userId: string): Promise<Party> {
+        const party = await this.partyModel.findById(partyId);
+        if (!party) throw new NotFoundException('Party not found');
+
+        party.goingUsers = party.goingUsers.filter(
+            id => id.toString() !== userId,
+        );
+
+        return await party.save();
+    }
+
 }

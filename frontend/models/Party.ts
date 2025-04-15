@@ -1,3 +1,4 @@
+import User from "./User";
 import Venue from "./Venue";
 
 interface Party {
@@ -7,7 +8,9 @@ interface Party {
     image: string;
     startDate: Date;
     endDate: Date;
-    venue: Venue
+    venue: Venue;
+    goingUsers: Partial<User>[];
+    isUserGoing: boolean;
 }
 
 export default Party;

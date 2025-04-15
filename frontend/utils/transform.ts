@@ -27,6 +27,8 @@ export const getPartyFromResponse = (response: any): Party => {
         startDate: new Date(response.startDate),
         endDate: new Date(response.endDate),
         image: response.image,
+        goingUsers: response.goingUsers,
+        isUserGoing: response.isUserGoing,
         venue: {
             _id: response.venue._id,
             name: response.venue.name,
@@ -46,11 +48,6 @@ export const getVenueFromResponse = (response: any): Venue => {
     const { venue } = response;
 
     const location = convertVenueLocationToRegion(venue);
-
-    console.log("Venue location: ", location);
-
-    console.log(response);
-
 
     return {
         _id: venue._id,

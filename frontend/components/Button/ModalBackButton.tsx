@@ -13,7 +13,7 @@ const ModalBackButton = ({ top, left }: { top?: number, left?: number }) => {
     }
     return (
         <TouchableOpacity
-            style={[styles.backButton, { backgroundColor: background, top: top || BUTTON_MODAL_TOP, left: left || 10 }]}
+            style={[styles.backButton, { backgroundColor: background, top: top || BUTTON_MODAL_TOP, left: left || 14 }]}
             onPress={handleBack}
         >
             <Ionicons name="chevron-back" size={24} color={tint} />
