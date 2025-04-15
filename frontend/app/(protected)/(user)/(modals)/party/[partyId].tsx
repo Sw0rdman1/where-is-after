@@ -14,6 +14,7 @@ import Description from "@/components/Typography/Description";
 import LoadingScreen from "@/components/Loading/LoadingScreen";
 import NotFound from "@/components/Error/NotFound";
 import OpenInMaps from "@/components/Party/OpenInMaps";
+import JoinParty from "@/components/Party/JoinParty";
 
 const partyPeople = [
     { name: 'Ana', avatar: 'https://randomuser.me/api/portraits/women/1.jpg' },
@@ -44,7 +45,7 @@ export default function PartyScreen() {
                 <PeopleAtending people={partyPeople} />
                 <Description label="About party" description={party.description} />
                 <OpenInMaps party={party} />
-                <Button title="Join party 🔥" />
+                <JoinParty />
             </View>
         </ScrollView>
     );
@@ -64,6 +65,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 12,
         gap: 5,
-        paddingBottom: 100
+        paddingBottom: 30
     },
 });
