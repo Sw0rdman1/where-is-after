@@ -37,7 +37,7 @@ export default function PartyScreen() {
                 <PeopleAtending people={party.goingUsers} />
                 <Description label="About party" description={party.description} />
                 <OpenInMaps party={party} />
-                <JoinParty isUserGoing={party.isUserGoing} availablePlaces={14} />
+                <JoinParty party={party} />
             </ScrollView>
         </View>
     );

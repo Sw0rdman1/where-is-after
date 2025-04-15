@@ -26,7 +26,6 @@ const StarRating: React.FC<Props> = ({ averageRating, venueId, numberOfRatings, 
 
     const handleRating = async (rating: number) => {
         if (userRating === rating) {
-            console.log('User clicked the same rating, removing it');
             setUserRating(null);
 
             const res = await deleteRating(venueId); // call your API to delete the rating

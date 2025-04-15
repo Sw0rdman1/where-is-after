@@ -2,18 +2,31 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text } from '../Themed'
 import { useState } from 'react'
 import { useColors } from '@/hooks/useColors'
+import { usePartyAPI } from '@/api/parties';
+import Party from '@/models/Party';
+import { useAuth } from '@/context/AuthProvider';
 
 interface JoinPartyProps {
-    isUserGoing: boolean;
-    availablePlaces: number;
+    party: Party
 }
 
-const JoinParty: React.FC<JoinPartyProps> = ({ isUserGoing, availablePlaces }) => {
-    const [isUserGoingState, setIsUserGoingState] = useState(isUserGoing)
+const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
+    const [isUserGoingState, setIsUserGoingState] = useState(party.isUserGoing)
     const { tint, error } = useColors()
+    const { joinParty, leaveParty } = usePartyAPI()
 
-    const handleButtonClick = () => {
-        setIsUserGoingState(!isUserGoingState)
+    const handleButtonClick = async () => {
+        if (isUserGoingState) {
+            const res = await leaveParty(party._id)
+            if (res) {
+                setIsUserGoingState(false)
+            }
+        } else {
+            const res = await joinParty(party._id)
+            if (res) {
+                setIsUserGoingState(true)
+            }
+        }
     }
 
     return (
@@ -30,9 +43,13 @@ const JoinParty: React.FC<JoinPartyProps> = ({ isUserGoing, availablePlaces }) =
                 </TouchableOpacity>
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.text}>
-                    {isUserGoingState ? "You are all set 🚀" : `${availablePlaces} places left 🎉`}
-                </Text>
+                {isUserGoingState ?
+                    <Text style={styles.text}>You are all set 🚀 </Text> :
+                    <Text style={styles.text}>
+                        <Text style={{ color: tint }}>{14} </Text>
+                        places left 🎉
+                    </Text>
+                }
             </View>
         </View>
     )

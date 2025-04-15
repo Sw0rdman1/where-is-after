@@ -3,9 +3,12 @@ import Party from "@/models/Party";
 import { Region } from "react-native-maps";
 import { getPartyFromResponse } from "@/utils/transform";
 import { useAxios } from "@/context/ApiProvider";
+import { useQueryClient } from '@tanstack/react-query';
+
 
 export const usePartyAPI = () => {
     const api = useAxios();
+    const queryClient = useQueryClient();
 
     const getParties = async (location: Region, radius: number, date: Date): Promise<Party[]> => {
         try {
@@ -37,8 +40,30 @@ export const usePartyAPI = () => {
         }
     }
 
+    const joinParty = async (partyId: string): Promise<any> => {
+        try {
+            const res = await api.post(`/parties/${partyId}/going`)
+            queryClient.invalidateQueries({ queryKey: ['party', partyId] });
+            return res.data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    }
+
+    const leaveParty = async (partyId: string): Promise<any> => {
+        try {
+            const res = await api.delete(`/parties/${partyId}/going`)
+            queryClient.invalidateQueries({ queryKey: ['party', partyId] });
+            return res.data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    };
+
     return {
         getParties,
-        getParty
+        getParty,
+        joinParty,
+        leaveParty,
     }
 }
