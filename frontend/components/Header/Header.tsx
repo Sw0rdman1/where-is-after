@@ -32,7 +32,7 @@ const Header: React.FC<BottomTabHeaderProps> = ({ route }) => {
 
             case "list":
                 return (
-                    <TouchableOpacity style={[styles.button, { backgroundColor: `${tint}95` }]} >
+                    <TouchableOpacity style={[styles.button, { backgroundColor: `${tint}` }]} >
                         <Ionicons name="filter-sharp" size={22} color={text} />
                     </TouchableOpacity>
                 )
