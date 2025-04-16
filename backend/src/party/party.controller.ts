@@ -24,17 +24,29 @@ export class PartyController {
   }
 
   @Roles(Role.USER)
-  @Post(':id/going')
-  async markAsGoing(@Param('id') partyId: string, @Req() req) {
+  @Post(':id/request')
+  async requestToJoin(@Param('id') partyId: string, @Req() req) {
     const userId = (req.user as any).userId;
-    return this.partyService.markUserAsGoing(partyId, userId);
+    return this.partyService.requestToJoinParty(partyId, userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN)
+  @Post(':id/accept/:userId')
+  async acceptUser(@Param('id') partyId: string, @Param('userId') userId: string) {
+    return this.partyService.acceptUserToParty(partyId, userId);
+  }
+
+  @Roles(Role.ADMIN)
+  @Post(':id/reject/:userId')
+  async rejectUser(@Param('id') partyId: string, @Param('userId') userId: string) {
+    return this.partyService.rejectUserFromParty(partyId, userId);
+  }
+
+  @Roles(Role.USER)
   @Delete(':id/going')
   async removeFromGoing(@Param('id') partyId: string, @Req() req) {
     const userId = (req.user as any).userId;
     return this.partyService.removeUserFromParty(partyId, userId);
   }
-
 }
+

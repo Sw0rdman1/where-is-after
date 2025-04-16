@@ -27,7 +27,13 @@ export class Party extends Document {
     venue: Types.ObjectId;
 
     @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
-    goingUsers: (Types.ObjectId | User)[];
+    joinRequests: Types.ObjectId[];
+
+    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+    goingUsers: Types.ObjectId[];
+
+    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+    rejectedUsers: Types.ObjectId[];
 }
 
 export const PartySchema = SchemaFactory.createForClass(Party);

@@ -64,45 +64,87 @@ export class PartyService {
             })
             .exec();
 
-        log(party?.goingUsers)
+        if (!party) throw new NotFoundException('Party not found');
 
 
+        let userStatus: 'none' | 'requested' | 'going' | 'rejected' = 'none';
 
-        if (!party) {
-            throw new NotFoundException(`Party with id ${id} not found`);
+        if (party.goingUsers.some(user => user._id.toString() === currentUserId)) {
+            userStatus = 'going';
+        } else if (party.joinRequests.some(id => id.toString() === currentUserId)) {
+            userStatus = 'requested';
+        } else if (party.rejectedUsers.some(id => id.toString() === currentUserId)) {
+            userStatus = 'rejected';
         }
-
-        const isUserGoing = (party.goingUsers as any[]).some(user =>
-            user._id.toString() === currentUserId,
-        );
 
         return {
             ...party.toObject(),
-            isUserGoing,
+            userStatus,
         };
     }
 
 
-    async markUserAsGoing(partyId: string, userId: string): Promise<Party> {
-        const party = await this.partyModel.findById(partyId);
-        if (!party) {
-            throw new NotFoundException('Party not found');
-        }
+    async requestToJoinParty(partyId: string, userId: string): Promise<Party> {
 
-        const user = await this.userModel.findById(userId);
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
+        const party = await this.partyModel.findById(partyId);
+        if (!party) throw new NotFoundException('Party not found');
 
         const userObjectId = new Types.ObjectId(userId);
 
-        if (!party.goingUsers.includes(userObjectId)) {
-            party.goingUsers.push(userObjectId);
-            await party.save();
+        if (
+            party.goingUsers.includes(userObjectId) ||
+            party.joinRequests.includes(userObjectId) ||
+            party.rejectedUsers.includes(userObjectId)
+        ) {
+            throw new BadRequestException('You have already requested or been processed');
         }
+
+        party.joinRequests.push(userObjectId);
+        await party.save();
 
         return party;
     }
+
+    async acceptUserToParty(partyId: string, userId: string): Promise<Party> {
+        const party = await this.partyModel.findById(partyId);
+        if (!party) throw new NotFoundException('Party not found');
+
+        const userObjectId = new Types.ObjectId(userId);
+
+        party.joinRequests = party.joinRequests.filter(
+            id => id.toString() !== userObjectId.toString()
+        );
+
+        if (!party.goingUsers.includes(userObjectId)) {
+            party.goingUsers.push(userObjectId);
+        }
+
+        await party.save();
+        return party;
+    }
+
+    async rejectUserFromParty(partyId: string, userId: string): Promise<Party> {
+        const party = await this.partyModel.findById(partyId);
+        if (!party) throw new NotFoundException('Party not found');
+
+        const userObjectId = new Types.ObjectId(userId);
+
+        // Remove from requests
+        party.joinRequests = party.joinRequests.filter(
+            id => id.toString() !== userObjectId.toString()
+        );
+
+        // Add to rejected
+        if (!party.rejectedUsers.includes(userObjectId)) {
+            party.rejectedUsers.push(userObjectId);
+        }
+
+        await party.save();
+        return party;
+    }
+
+
+
 
     async removeUserFromParty(partyId: string, userId: string): Promise<Party> {
         const party = await this.partyModel.findById(partyId);
