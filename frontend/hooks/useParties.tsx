@@ -6,9 +6,9 @@ import { usePartyAPI } from '@/api/parties';
 const STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
 
-export const useParties = () => {
+export const useParties = (venueId?: string) => {
     const { user } = useAuth();
-    const { getParties } = usePartyAPI();
+    const { getParties, getPartiesForVenue } = usePartyAPI();
     const [radius, setRadius] = useState(10000);
     const [date, setDate] = useState(new Date('2025-03-25'));
 
@@ -17,6 +17,10 @@ export const useParties = () => {
         if (!user?.currentLocation) {
             throw new Error('User location not found');
         }
+        if (venueId) {
+            return await getPartiesForVenue(venueId);
+        }
+
         return await getParties(user.currentLocation, radius, date);
     };
 
@@ -53,3 +57,5 @@ export const useParty = (partyId: string) => {
         error: isError ? error?.message || 'Failed to fetch party' : null,
     };
 }
+
+

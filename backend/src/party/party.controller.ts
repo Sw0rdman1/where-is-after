@@ -11,9 +11,16 @@ export class PartyController {
   constructor(private readonly partyService: PartyService) { }
 
   @Roles(Role.USER)
-  @Get()
+  @Get('nearby')
   async getNearbyParties(@Query() { longitude, latitude, radius, date }: { longitude: number; latitude: number; radius: number; date?: string }) {
     return this.partyService.findNearbyParties(longitude, latitude, radius, date);
+  }
+
+  @Roles(Role.VENUE)
+  @Get('venue/:id')
+  async getPartiesByVenue(@Param('id') venueId: string, @Req() req) {
+    const userId = (req.user as any).userId;
+    return this.partyService.getPartiesByVenue(venueId, userId);
   }
 
   @Roles(Role.USER)

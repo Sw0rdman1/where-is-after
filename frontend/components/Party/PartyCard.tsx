@@ -7,6 +7,9 @@ import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import Avatar from '../Image/Avatar'
 import { formatDateWithDay, formatTime } from '@/utils/date'
+import { useAuth } from '@/context/AuthProvider'
+import RoleGuard from '../Middleware/RoleGuard'
+import { Role } from '@/models/User'
 
 interface PartyCardProps {
     party: Party
@@ -14,6 +17,7 @@ interface PartyCardProps {
 
 const PartyCard: React.FC<PartyCardProps> = ({ party }) => {
     const { surface, tint, placeholderText } = useColors()
+    const { user } = useAuth()
 
     const handlePress = () => {
         router.push(`/party/${party._id}`)
@@ -41,10 +45,12 @@ const PartyCard: React.FC<PartyCardProps> = ({ party }) => {
                         </Text>
                     </View>
                 </View>
-                <View style={styles.venue}>
-                    <Avatar size={30} source={party.venue.logo} />
-                    <Text style={styles.venueName}>{party.venue.name}</Text>
-                </View>
+                <RoleGuard allowedRoles={[Role.USER]}>
+                    <View style={styles.venue}>
+                        <Avatar size={30} source={party.venue.logo} />
+                        <Text style={styles.venueName}>{party.venue.name}</Text>
+                    </View>
+                </RoleGuard>
             </View>
         </TouchableOpacity>
     )

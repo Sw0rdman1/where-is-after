@@ -8,11 +8,10 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export const usePartyAPI = () => {
     const api = useAxios();
-    const queryClient = useQueryClient();
 
     const getParties = async (location: Region, radius: number, date: Date): Promise<Party[]> => {
         try {
-            const response = await api.get('/parties', {
+            const response = await api.get('/parties/nearby', {
                 params: {
                     longitude: location.longitude,
                     latitude: location.latitude,
@@ -40,9 +39,21 @@ export const usePartyAPI = () => {
         }
     }
 
+    const getPartiesForVenue = async (venueId: string): Promise<Party[]> => {
+        try {
+            const response = await api.get(`/parties/venue/${venueId}`);
+            return response.data.map((party: Party) => getPartyFromResponse(party));
+        } catch (error) {
+            handleApiError(error);
+            return [];
+        }
+    }
+
+
 
     return {
         getParties,
         getParty,
+        getPartiesForVenue
     }
 }

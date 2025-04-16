@@ -1,47 +1,39 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, View } from '@/components/Themed';
+import { FlatList, StyleSheet } from 'react-native'
+import { Text, View } from '@/components/Themed'
+import { useParties } from '@/hooks/useParties';
+import PartyCard from '@/components/Party/PartyCard';
+import Party from '@/models/Party';
 import { useAuth } from '@/context/AuthProvider';
 
-export default function MainScreen() {
-    const { user, logout } = useAuth();
-    const handleLogout = () => {
-        logout();
-    }
+const ListScreen = () => {
+    const { user } = useAuth()
+    const { parties } = useParties(user?.venueOperator);
+
+    const renderItem = ({ item }: { item: Party }) => (
+        <PartyCard party={item} />
+    );
 
     return (
         <View style={styles.container}>
-
-            <TouchableOpacity style={styles.button} onPress={handleLogout}>
-                <Text style={styles.buttonText}>Log out</Text>
-            </TouchableOpacity>
-
+            <FlatList
+                style={{ width: '100%', padding: 10 }}
+                data={parties}
+                renderItem={renderItem}
+                keyExtractor={(item) => item._id.toString()}
+                ListHeaderComponent={() => <View style={{ height: 120 }} />}
+                ListFooterComponent={() => <View style={{ height: 120 }} />}
+            />
         </View>
-    );
+    )
 }
+
+export default ListScreen
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 20,
+        width: '100%',
     },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-    button: {
-        marginTop: 20,
-        padding: 10,
-        backgroundColor: 'red',
-        borderRadius: 5,
-    },
-    buttonText: {
-        color: 'white',
-    },
-});
+})

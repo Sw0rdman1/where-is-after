@@ -48,7 +48,29 @@ export class PartyService {
             })
             .populate('venue')
             .exec();
+    }
 
+    async getPartiesByVenue(venueId: string, userId: string) {
+        validateMongoID(venueId);
+
+        const user = await this.userModel.findById(userId);
+        if (!user) throw new NotFoundException('User not found');
+
+        if (!user.venueOperator || user.venueOperator.toString() !== venueId) {
+            throw new BadRequestException('You are not authorized to view this venue');
+        }
+
+
+        log('User is venue operator:', venueId);
+
+        const parties = await this.partyModel
+            .find({ venue: new mongoose.Types.ObjectId(venueId) })
+            .populate('venue')
+            .exec();
+
+        if (!parties) throw new NotFoundException('No parties found for this venue');
+
+        return parties;
     }
 
     async getPartyById(id: string, currentUserId: string) {
