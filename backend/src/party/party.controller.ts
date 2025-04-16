@@ -30,6 +30,19 @@ export class PartyController {
     return this.partyService.requestToJoinParty(partyId, userId);
   }
 
+  @Roles(Role.USER)
+  @Delete(':id/request')
+  async cancelRequestToJoin(@Param('id') partyId: string, @Req() req) {
+    const userId = (req.user as any).userId;
+    return this.partyService.cancelRequestToJoinParty(partyId, userId);
+  }
+
+  @Roles(Role.ADMIN)
+  @Get(':id/requests')
+  async getJoinRequests(@Param('id') partyId: string) {
+    return this.partyService.getJoinRequests(partyId);
+  }
+
   @Roles(Role.ADMIN)
   @Post(':id/accept/:userId')
   async acceptUser(@Param('id') partyId: string, @Param('userId') userId: string) {
@@ -48,5 +61,6 @@ export class PartyController {
     const userId = (req.user as any).userId;
     return this.partyService.removeUserFromParty(partyId, userId);
   }
+
 }
 

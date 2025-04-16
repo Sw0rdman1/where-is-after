@@ -2,9 +2,8 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text } from '../Themed'
 import { useState } from 'react'
 import { useColors } from '@/hooks/useColors'
-import { usePartyAPI } from '@/api/parties';
 import Party from '@/models/Party';
-import { useAuth } from '@/context/AuthProvider';
+import { usePartyRequestAPI } from '@/api/partyRequest';
 
 interface JoinPartyProps {
     party: Party
@@ -13,7 +12,7 @@ interface JoinPartyProps {
 const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
     const [userStatus, setUserStatus] = useState(party.userStatus)
     const { tint, error, placeholderText } = useColors()
-    const { sendRequestToJoin, leaveParty, cancelRequest } = usePartyAPI()
+    const { sendRequestToJoin, leaveParty, cancelRequest } = usePartyRequestAPI()
 
     const handleButtonClick = async () => {
         switch (userStatus) {
@@ -23,6 +22,7 @@ const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
                 break
             case 'requested':
                 await cancelRequest(party._id)
+                setUserStatus('none')
                 break
             case 'rejected':
                 break
@@ -65,6 +65,21 @@ const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
         }
     }
 
+    const textBottom = () => {
+        switch (userStatus) {
+            case 'going':
+                return "You are all set! See you at the party 🎉"
+            case 'requested':
+                return "Waiting for party host to accept your request"
+            case 'rejected':
+                return "No place left 😢"
+            case 'none':
+                return `There are still some places left. Join now!`
+            default:
+                return "Waiting for party host to accept your request"
+        }
+    }
+
     return (
         <View style={styles.container}>
             <TouchableOpacity
@@ -77,7 +92,7 @@ const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
                 </Text>
             </TouchableOpacity>
             <Text style={[styles.text, { color: placeholderText }]}>
-                Waiting for party host to accept your request
+                {textBottom()}
             </Text>
         </View>
     )

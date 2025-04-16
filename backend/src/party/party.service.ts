@@ -106,6 +106,29 @@ export class PartyService {
         return party;
     }
 
+    async cancelRequestToJoinParty(partyId: string, userId: string): Promise<Party> {
+        const party = await findById(this.partyModel, partyId);
+        const userObjectId = new Types.ObjectId(userId);
+
+        party.joinRequests = party.joinRequests.filter(
+            id => id.toString() !== userObjectId.toString()
+        );
+
+        await party.save();
+        return party;
+    }
+
+    async getJoinRequests(partyId: string): Promise<Party> {
+        const party = await this.partyModel
+            .findById(partyId)
+            .populate('joinRequests', 'displayName profileImage')
+            .exec();
+
+        if (!party) throw new NotFoundException('Party not found');
+
+        return party;
+    }
+
     async acceptUserToParty(partyId: string, userId: string): Promise<Party> {
         const party = await findById(this.partyModel, partyId);
         const userObjectId = new Types.ObjectId(userId);
@@ -128,12 +151,10 @@ export class PartyService {
 
         const userObjectId = new Types.ObjectId(userId);
 
-        // Remove from requests
         party.joinRequests = party.joinRequests.filter(
             id => id.toString() !== userObjectId.toString()
         );
 
-        // Add to rejected
         if (!party.rejectedUsers.includes(userObjectId)) {
             party.rejectedUsers.push(userObjectId);
         }
@@ -141,9 +162,6 @@ export class PartyService {
         await party.save();
         return party;
     }
-
-
-
 
     async removeUserFromParty(partyId: string, userId: string): Promise<Party> {
         const party = await this.partyModel.findById(partyId);
