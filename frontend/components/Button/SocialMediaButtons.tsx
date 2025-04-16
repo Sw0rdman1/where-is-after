@@ -1,8 +1,6 @@
-import React from 'react';
 import { View, Linking, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useColors } from '@/hooks/useColors';
-import ShareButton from './ShareButton';
 import { ScrollView, Text } from '../Themed';
 
 type SocialLinks = {

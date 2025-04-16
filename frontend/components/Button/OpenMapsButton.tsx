@@ -1,7 +1,5 @@
-// components/OpenInMapsButton.tsx
 
-import React from 'react';
-import { Platform, TouchableOpacity, Text, Linking, Alert, ActionSheetIOS, View } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useColors } from '@/hooks/useColors';
 import { handleOpenMaps } from '@/utils/map';
