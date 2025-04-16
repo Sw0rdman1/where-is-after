@@ -146,7 +146,7 @@ export class PartyService {
             .populate({
                 path: 'joinRequests',
                 model: 'User',
-                select: 'displayName profileImage',
+                select: 'displayName profileImage email',
             })
             .exec();
 
