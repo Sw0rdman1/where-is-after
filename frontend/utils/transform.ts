@@ -28,7 +28,7 @@ export const getPartyFromResponse = (response: any): Party => {
         endDate: new Date(response.endDate),
         image: response.image,
         goingUsers: response.goingUsers,
-        isUserGoing: response.isUserGoing,
+        userStatus: response.userStatus,
         venue: {
             _id: response.venue._id,
             name: response.venue.name,

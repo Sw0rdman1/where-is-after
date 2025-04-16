@@ -1,6 +1,8 @@
 import User from "./User";
 import Venue from "./Venue";
 
+type UserStatus = 'none' | 'requested' | 'going' | 'rejected';
+
 interface Party {
     _id: string;
     name: string;
@@ -10,7 +12,7 @@ interface Party {
     endDate: Date;
     venue: Venue;
     goingUsers: Partial<User>[];
-    isUserGoing: boolean;
+    userStatus: UserStatus;
 }
 
 export default Party;

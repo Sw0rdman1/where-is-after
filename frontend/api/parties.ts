@@ -40,9 +40,40 @@ export const usePartyAPI = () => {
         }
     }
 
-    const joinParty = async (partyId: string): Promise<any> => {
+    const sendRequestToJoin = async (partyId: string): Promise<any> => {
         try {
-            const res = await api.post(`/parties/${partyId}/going`)
+            const res = await api.post(`/parties/${partyId}/request`)
+            queryClient.invalidateQueries({ queryKey: ['party', partyId] });
+            return res.data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    }
+
+    const cancelRequest = async (partyId: string): Promise<any> => {
+        try {
+            const res = await api.delete(`/parties/${partyId}/request`)
+            queryClient.invalidateQueries({ queryKey: ['party', partyId] });
+            return res.data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    }
+
+    const acceptRequest = async (partyId: string, userId: string): Promise<any> => {
+        try {
+            const res = await api.post(`/parties/${partyId}/accept/${userId}`)
+            queryClient.invalidateQueries({ queryKey: ['party', partyId] });
+            return res.data;
+        }
+        catch (error) {
+            handleApiError(error);
+        }
+    }
+
+    const rejectRequest = async (partyId: string, userId: string): Promise<any> => {
+        try {
+            const res = await api.post(`/parties/${partyId}/reject/${userId}`)
             queryClient.invalidateQueries({ queryKey: ['party', partyId] });
             return res.data;
         } catch (error) {
@@ -63,7 +94,10 @@ export const usePartyAPI = () => {
     return {
         getParties,
         getParty,
-        joinParty,
+        sendRequestToJoin,
+        cancelRequest,
+        acceptRequest,
+        rejectRequest,
         leaveParty,
     }
 }

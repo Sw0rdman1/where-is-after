@@ -11,46 +11,74 @@ interface JoinPartyProps {
 }
 
 const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
-    const [isUserGoingState, setIsUserGoingState] = useState(party.isUserGoing)
-    const { tint, error } = useColors()
-    const { joinParty, leaveParty } = usePartyAPI()
+    const [userStatus, setUserStatus] = useState(party.userStatus)
+    const { tint, error, placeholderText } = useColors()
+    const { sendRequestToJoin, leaveParty, cancelRequest } = usePartyAPI()
 
     const handleButtonClick = async () => {
-        if (isUserGoingState) {
-            const res = await leaveParty(party._id)
-            if (res) {
-                setIsUserGoingState(false)
-            }
-        } else {
-            const res = await joinParty(party._id)
-            if (res) {
-                setIsUserGoingState(true)
-            }
+        switch (userStatus) {
+            case 'going':
+                await leaveParty(party._id)
+                setUserStatus('none')
+                break
+            case 'requested':
+                await cancelRequest(party._id)
+                break
+            case 'rejected':
+                break
+            case 'none':
+                await sendRequestToJoin(party._id)
+                setUserStatus('requested')
+                break
+            default:
+                break
+        }
+    }
+
+    const buttonColor = () => {
+        switch (userStatus) {
+            case 'going':
+                return error
+            case 'requested':
+                return placeholderText
+            case 'rejected':
+                return error
+            case 'none':
+                return tint
+            default:
+                return tint
+        }
+    }
+
+    const buttonText = () => {
+        switch (userStatus) {
+            case 'going':
+                return "Leave party 😢"
+            case 'requested':
+                return "Request sent"
+            case 'rejected':
+                return "No place left 😢"
+            case 'none':
+                return "Join party 🔥"
+            default:
+                return "Join party 🔥"
         }
     }
 
     return (
         <View style={styles.container}>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={[styles.button, { backgroundColor: isUserGoingState ? error : tint }]}
-                    onPress={handleButtonClick}
-                    activeOpacity={0.7}
-                >
-                    <Text style={styles.buttonText}>
-                        {isUserGoingState ? "Leave party 😢" : "Join party 🔥"}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.textContainer}>
-                {isUserGoingState ?
-                    <Text style={styles.text}>You are all set 🚀 </Text> :
-                    <Text style={styles.text}>
-                        <Text style={{ color: tint }}>{14} </Text>
-                        places left 🎉
-                    </Text>
-                }
-            </View>
+            <TouchableOpacity
+                style={[styles.button, { backgroundColor: buttonColor() }]}
+                onPress={handleButtonClick}
+                activeOpacity={0.7}
+            >
+                <Text style={styles.buttonText}>
+                    {buttonText()}
+                </Text>
+            </TouchableOpacity>
+            <Text style={[styles.text, { color: placeholderText }]}>
+                Waiting for party host to accept your request
+            </Text>
         </View>
     )
 }
@@ -60,29 +88,19 @@ export default JoinParty
 const styles = StyleSheet.create({
     container: {
         paddingBottom: 16,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: 10,
-    },
-    textContainer: {
-        width: 80,
+        flexDirection: "column",
+        gap: 5,
     },
     text: {
         textAlign: "center",
         fontSize: 14,
-        lineHeight: 20,
         fontWeight: "bold",
-    },
-    buttonContainer: {
-        flex: 2,
-        justifyContent: "flex-end",
     },
     button: {
         width: '100%',
         height: 48,
         borderRadius: 15,
-        marginVertical: 10,
+        marginVertical: 5,
         justifyContent: 'center',
     },
     buttonText: {

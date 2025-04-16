@@ -4,9 +4,9 @@ import mongoose, { Model, Types } from 'mongoose';
 import { Party } from './schema/party.schema';
 import { Venue } from 'src/venue/schema/venue.schema';
 import * as moment from "moment";
-import { validateMongoID } from 'src/utils/validation';
 import { User } from 'src/users/schema/user.schema';
 import { log } from 'console';
+import { findById, validateMongoID } from 'src/utils/validation';
 
 @Injectable()
 export class PartyService {
@@ -66,7 +66,6 @@ export class PartyService {
 
         if (!party) throw new NotFoundException('Party not found');
 
-
         let userStatus: 'none' | 'requested' | 'going' | 'rejected' = 'none';
 
         if (party.goingUsers.some(user => user._id.toString() === currentUserId)) {
@@ -76,6 +75,8 @@ export class PartyService {
         } else if (party.rejectedUsers.some(id => id.toString() === currentUserId)) {
             userStatus = 'rejected';
         }
+
+        log('User status:', userStatus);
 
         return {
             ...party.toObject(),
@@ -106,9 +107,7 @@ export class PartyService {
     }
 
     async acceptUserToParty(partyId: string, userId: string): Promise<Party> {
-        const party = await this.partyModel.findById(partyId);
-        if (!party) throw new NotFoundException('Party not found');
-
+        const party = await findById(this.partyModel, partyId);
         const userObjectId = new Types.ObjectId(userId);
 
         party.joinRequests = party.joinRequests.filter(
