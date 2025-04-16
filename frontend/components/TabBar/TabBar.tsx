@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { View } from "../Themed";
-import { Ionicons } from "@expo/vector-icons";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useColors } from "@/hooks/useColors";
 import FontAwesome from '@expo/vector-icons/FontAwesome';

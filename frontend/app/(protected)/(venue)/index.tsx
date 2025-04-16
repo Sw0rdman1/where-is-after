@@ -1,7 +1,6 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useAuth } from '@/context/AuthProvider';
-import { verifyUser } from '@/api/auth';
 
 export default function MainScreen() {
     const { user, logout } = useAuth();
@@ -11,15 +10,7 @@ export default function MainScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>
-                {user?.email}
-            </Text>
-            <Text style={styles.title}>
-                {user?.role}
-            </Text>
-            <Text style={styles.title}>
-                {user?.isVerified ? 'Verified' : 'Not verified'}
-            </Text>
+
             <TouchableOpacity style={styles.button} onPress={handleLogout}>
                 <Text style={styles.buttonText}>Log out</Text>
             </TouchableOpacity>

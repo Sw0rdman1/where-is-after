@@ -87,8 +87,8 @@ function RootLayoutNav() {
     if (isLoading) return;
 
     if (user && user.isVerified) {
-      if (user.role === 'admin') {
-        router.replace(`/(protected)/(admin)`);
+      if (user.role === 'venue') {
+        router.replace(`/(protected)/(venue)`);
       }
       if (user.role === 'user') {
         router.replace(`/(protected)/(user)/(tabs)`);

@@ -7,7 +7,7 @@ export default function AppLayout() {
     <ProtectedRoute>
       <Stack initialRouteName='(user)'>
         <Stack.Screen name="(user)" options={{ headerShown: false }} />
-        <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+        <Stack.Screen name="(venue)" options={{ headerShown: false }} />
       </Stack>
     </ProtectedRoute>
   );

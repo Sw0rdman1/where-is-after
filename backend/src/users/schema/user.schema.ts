@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Role } from './role.enum';
 
 @Schema({ timestamps: true })
@@ -30,6 +30,10 @@ export class User extends Document {
 
     @Prop({ type: Date, nullable: true })
     verificationCodeExpires: Date | null;
+
+    @Prop({ type: Types.ObjectId, ref: 'Venue', required: true })
+    venueOperator: Types.ObjectId;
+
 
 }
 

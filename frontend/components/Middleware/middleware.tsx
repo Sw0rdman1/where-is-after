@@ -23,10 +23,10 @@ export function RoleBasedRedirect({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!isLoading && user) {
-            if (user.role === 'admin' && (segments[1] as string) !== '(admin)') {
-                router.replace('/(protected)/(admin)');
+            if (user.role === 'venue' && (segments[1] as string) !== '(venue)') {
+                router.replace('/(protected)/(venue)');
             } else if (user.role === 'user' && (segments[1] as string) !== '(user)') {
-                router.replace('/(protected)/(user)');
+                router.replace('/(protected)/(user)/(tabs)');
             }
         }
     }, [user, isLoading]);
