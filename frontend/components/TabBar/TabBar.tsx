@@ -17,7 +17,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
     const renderIcon = (routeName: string, isFocused: boolean) => {
         switch (routeName) {
             case "index":
-                return <FontAwesome name="map" size={24} color={isFocused ? tint : text} />;
+                return <FontAwesome name={user?.role === 'user' ? "map" : 'list-alt'} size={24} color={isFocused ? tint : text} />;
             case "list":
                 return <FontAwesome name="list" size={24} color={isFocused ? tint : text} />;
             case "profile":

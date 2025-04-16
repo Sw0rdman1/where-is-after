@@ -16,7 +16,6 @@ export default function AdminLayout() {
                     }}
                 >
                     <Tabs.Screen name="index" />
-                    <Tabs.Screen name="list" />
                     <Tabs.Screen name="profile" />
                 </Tabs>
             </React.Fragment>
