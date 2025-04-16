@@ -3,10 +3,7 @@ import { useAuth } from '@/context/AuthProvider'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
 const ProfileScreen = () => {
-    const { logout, user } = useAuth()
-
-    console.log(user?.venueOperator);
-
+    const { logout } = useAuth()
 
     const handleLogout = async () => {
         await logout()
