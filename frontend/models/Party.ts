@@ -12,7 +12,9 @@ interface Party {
     endDate: Date;
     venue: Venue;
     goingUsers: Partial<User>[];
-    userStatus: UserStatus;
+    rejectedUsers?: Partial<User>[];
+    joinRequests?: Partial<User>[];
+    userStatus?: UserStatus;
 }
 
 export default Party;

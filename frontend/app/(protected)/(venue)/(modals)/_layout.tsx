@@ -6,7 +6,6 @@ export default function ModalLayout() {
         <RoleBasedRedirect>
             <Stack screenOptions={{ headerShown: false, presentation: 'modal' }}>
                 <Stack.Screen name="party/[partyId]" />
-                <Stack.Screen name="venue/[venueId]" />
             </Stack>
         </RoleBasedRedirect >
     )

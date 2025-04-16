@@ -4,6 +4,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/users/decorators/roles.decorator';
 import { Role } from 'src/users/schema/role.enum';
+import { log } from 'console';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('parties')
@@ -44,19 +45,20 @@ export class PartyController {
     return this.partyService.cancelRequestToJoinParty(partyId, userId);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.VENUE)
   @Get(':id/requests')
   async getJoinRequests(@Param('id') partyId: string) {
+    log('partyId', partyId);
     return this.partyService.getJoinRequests(partyId);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.VENUE)
   @Post(':id/accept/:userId')
   async acceptUser(@Param('id') partyId: string, @Param('userId') userId: string) {
     return this.partyService.acceptUserToParty(partyId, userId);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.VENUE)
   @Post(':id/reject/:userId')
   async rejectUser(@Param('id') partyId: string, @Param('userId') userId: string) {
     return this.partyService.rejectUserFromParty(partyId, userId);

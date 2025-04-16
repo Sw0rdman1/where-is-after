@@ -7,6 +7,15 @@ export const usePartyRequestAPI = () => {
     const api = useAxios();
     const queryClient = useQueryClient();
 
+    const getRequestsForParty = async (partyId: string): Promise<any> => {
+        try {
+            const res = await api.get(`/parties/${partyId}/requests`)
+            return res.data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    }
+
     const sendRequestToJoin = async (partyId: string): Promise<any> => {
         try {
             const res = await api.post(`/parties/${partyId}/request`)
@@ -59,6 +68,7 @@ export const usePartyRequestAPI = () => {
     };
 
     return {
+        getRequestsForParty,
         sendRequestToJoin,
         cancelRequest,
         acceptRequest,

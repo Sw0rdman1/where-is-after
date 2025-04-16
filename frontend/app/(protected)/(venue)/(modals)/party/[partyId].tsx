@@ -1,19 +1,12 @@
-import { View, ScrollView } from "@/components/Themed";
+import { View, ScrollView, Text } from "@/components/Themed";
 import { useParty } from "@/hooks/useParties";
-import { Image } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import ModalBackButton from "@/components/Button/ModalBackButton";
-import Title from "@/components/Typography/Title";
-import { PeopleAtending } from "@/components/Party/PeopleAtending";
-import ShareButton from "@/components/Button/ShareButton";
-import PartyInformations from "@/components/Party/PartyInformations";
 import { StatusBar } from "expo-status-bar";
-import Description from "@/components/Typography/Description";
 import LoadingScreen from "@/components/Loading/LoadingScreen";
 import NotFound from "@/components/Error/NotFound";
-import OpenInMaps from "@/components/Party/OpenInMaps";
-import JoinParty from "@/components/Party/JoinParty";
+import User from "@/models/User";
 
 
 export default function PartyScreen() {
@@ -24,21 +17,27 @@ export default function PartyScreen() {
 
     if (!party) return <NotFound />
 
+    const renderItem = ({ item }: { item: User }) => {
+        return (
+            <View style={styles.partyContainer}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{item.displayName}</Text>
+            </View>
+        );
+    }
+
 
     return (
         <View style={styles.container}>
             <StatusBar style="light" />
             <ModalBackButton />
-            <ShareButton message={`Check out this party: ${party.name}`} title={`Share ${party.name}`} />
-            <Image source={{ uri: party.image }} style={styles.partyImage} />
-            <ScrollView style={styles.partyContainer}>
-                <Title text={party.name} />
-                <PartyInformations party={party} />
-                <PeopleAtending people={party.goingUsers} />
-                <Description label="About party" description={party.description} />
-                <OpenInMaps party={party} />
-                <JoinParty party={party} />
-            </ScrollView>
+            <FlatList
+                style={{ width: '100%', padding: 10 }}
+                data={party.joinRequests?.map(request => request as User) || []}
+                renderItem={renderItem}
+                keyExtractor={(item) => (item._id ?? "").toString()}
+                ListHeaderComponent={() => <View style={{ height: 120 }} />}
+                ListFooterComponent={() => <View style={{ height: 120 }} />}
+            />
         </View>
     );
 }

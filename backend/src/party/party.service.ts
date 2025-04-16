@@ -143,8 +143,15 @@ export class PartyService {
     async getJoinRequests(partyId: string): Promise<Party> {
         const party = await this.partyModel
             .findById(partyId)
-            .populate('joinRequests', 'displayName profileImage')
+            .populate({
+                path: 'joinRequests',
+                model: 'User',
+                select: 'displayName profileImage',
+            })
             .exec();
+
+        console.log(party);
+
 
         if (!party) throw new NotFoundException('Party not found');
 

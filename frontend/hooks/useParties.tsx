@@ -2,13 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/context/AuthProvider';
 import { useState } from 'react';
 import { usePartyAPI } from '@/api/parties';
+import { Role } from '@/models/User';
+import { usePartyRequestAPI } from '@/api/partyRequest';
+import Party from '@/models/Party';
 
 const STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
 
 export const useParties = (venueId?: string) => {
     const { user } = useAuth();
-    const { getParties, getPartiesForVenue } = usePartyAPI();
+    const { getParties, getPartiesForVenue, } = usePartyAPI();
     const [radius, setRadius] = useState(10000);
     const [date, setDate] = useState(new Date('2025-03-25'));
 
@@ -40,8 +43,13 @@ export const useParties = (venueId?: string) => {
 
 export const useParty = (partyId: string) => {
     const { getParty } = usePartyAPI();
+    const { getRequestsForParty } = usePartyRequestAPI();
+    const { user } = useAuth();
 
-    const fetchParty = async () => {
+    const fetchParty = async (): Promise<Party | null> => {
+        if (user?.role === Role.VENUE) {
+            return await getRequestsForParty(partyId);
+        }
         return await getParty(partyId);
     };
 

@@ -28,6 +28,8 @@ export const getPartyFromResponse = (response: any): Party => {
         endDate: new Date(response.endDate),
         image: response.image,
         goingUsers: response.goingUsers,
+        rejectedUsers: response.rejectedUsers,
+        joinRequests: response.joinRequests,
         userStatus: response.userStatus,
         venue: {
             _id: response.venue._id,
