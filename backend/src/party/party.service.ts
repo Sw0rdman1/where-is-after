@@ -63,8 +63,6 @@ export class PartyService {
         }
 
 
-        log('User is venue operator:', venueId);
-
         const parties = await this.partyModel
             .find({ venue: new mongoose.Types.ObjectId(venueId) })
             .populate('venue')
@@ -81,11 +79,15 @@ export class PartyService {
         const party = await this.partyModel
             .findById(id)
             .populate('venue')
+            .populate({
+                path: 'goingUsers',
+                model: 'User',
+                select: 'displayName profileImage',
+            })
             .exec();
 
         if (!party) throw new NotFoundException('Party not found');
 
-        // Check if user has an existing request
         const joinRequest = await this.joinRequestModel.findOne({
             user: currentUserId,
             party: id,
@@ -142,7 +144,7 @@ export class PartyService {
 
     async getJoinRequests(partyId: string): Promise<JoinRequest[]> {
         await findById(this.partyModel, partyId);
-        return this.joinRequestModel.find({ party: partyId })
+        return this.joinRequestModel.find({ party: partyId, status: JoinRequestStatus.PENDING })
             .populate('user', 'displayName profileImage email')
             .exec();
     }
@@ -157,7 +159,7 @@ export class PartyService {
         await this.partyModel.findByIdAndUpdate(
             partyId,
             {
-                $addToSet: { goingUsers: userId },
+                $addToSet: { goingUsers: new mongoose.Types.ObjectId(userId) },
             },
             { new: true }
         );

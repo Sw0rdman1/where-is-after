@@ -5,6 +5,7 @@ import { usePartyAPI } from '@/api/parties';
 import { Role } from '@/models/User';
 import { usePartyRequestAPI } from '@/api/partyRequest';
 import Party from '@/models/Party';
+import { JoinRequest } from '@/models/JoinRequest';
 
 const STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
@@ -48,9 +49,6 @@ export const useParty = (partyId: string) => {
     const { user } = useAuth();
 
     const fetchParty = async (): Promise<Party | null> => {
-        if (user?.role === Role.VENUE) {
-            return await getJoinRequestsForParty();
-        }
         return await getParty(partyId);
     };
 
@@ -67,5 +65,28 @@ export const useParty = (partyId: string) => {
         error: isError ? error?.message || 'Failed to fetch party' : null,
     };
 }
+
+export const usePartyRequests = (partyId: string) => {
+    const { getJoinRequestsForParty } = usePartyRequestAPI(partyId);
+    const { user } = useAuth();
+
+    const fetchPartyRequest = async (): Promise<JoinRequest[] | null> => {
+        return await getJoinRequestsForParty();
+    };
+
+    const { data: partyRequests, isLoading, isError, error } = useQuery({
+        queryKey: ['party', partyId, user?._id],
+        queryFn: fetchPartyRequest,
+        enabled: !!user,
+        staleTime: STALE_TIME
+    });
+
+    return {
+        partyRequests,
+        loading: isLoading,
+        error: isError ? error?.message || 'Failed to fetch party' : null,
+    };
+}
+
 
 

@@ -1,5 +1,5 @@
 import { Text } from "@/components/Themed";
-import { useParty } from "@/hooks/useParties";
+import { useParty, usePartyRequests } from "@/hooks/useParties";
 import { useLocalSearchParams } from "expo-router";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -14,17 +14,15 @@ import { usePartyRequestAPI } from "@/api/partyRequest";
 
 export default function PartyScreen() {
     const { partyId } = useLocalSearchParams();
-    const { party, loading } = useParty(partyId as string);
+    const { partyRequests, loading } = usePartyRequests(partyId as string);
     const { surface, background, success, error } = useColors()
-    const { acceptRequest, rejectRequest } = usePartyRequestAPI();
+    const { acceptRequest, rejectRequest } = usePartyRequestAPI(partyId as string);
 
     if (loading) return <LoadingScreen title="Loading party" />;
 
-    if (!party) return <NotFound />
-
     const handleAccept = async (userId: string) => {
         try {
-            await acceptRequest(partyId as string, userId);
+            await acceptRequest(userId);
         } catch (error) {
             console.error("Error accepting request:", error);
         }
@@ -32,7 +30,7 @@ export default function PartyScreen() {
 
     const handleDecline = async (userId: string) => {
         try {
-            await rejectRequest(partyId as string, userId);
+            await rejectRequest(userId);
         } catch (error) {
             console.error("Error rejecting request:", error);
         }
@@ -66,11 +64,10 @@ export default function PartyScreen() {
         <View style={[styles.container, { backgroundColor: background }]}>
             <StatusBar style="light" />
             <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10 }}>
-                {party.name}
             </Text>
             <FlatList
                 style={{ width: '100%', flex: 1, padding: 10 }}
-                data={party.joinRequests?.map(request => request as User) || []}
+                data={partyRequests?.map((request) => request.user) ?? []}
                 renderItem={renderItem}
                 keyExtractor={(item) => (item._id ?? "").toString()}
                 ListHeaderComponent={() => <View style={{ height: 20 }} />}
