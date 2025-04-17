@@ -2,8 +2,9 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text } from '../Themed'
 import { useState } from 'react'
 import { useColors } from '@/hooks/useColors'
-import Party from '@/models/Party';
+import Party, { JoinRequestStatus } from '@/models/Party';
 import { useJoinPartyButton } from '@/hooks/useJoinPartyButton';
+import { usePartyRequestAPI } from '@/api/partyRequest';
 
 interface JoinPartyProps {
     party: Party
@@ -11,9 +12,16 @@ interface JoinPartyProps {
 
 const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
     const [userStatus, setUserStatus] = useState(party.userJoinRequestStatus)
-    const { placeholderText } = useColors()
-
+    const { placeholderText, error } = useColors()
     const { buttonColor, buttonText, textBottom, handleButtonClick } = useJoinPartyButton(userStatus, party._id, setUserStatus)
+    const { cancelJoinRequest } = usePartyRequestAPI(party._id)
+    const leaveButtonDisplayed = [JoinRequestStatus.ACCEPTED, JoinRequestStatus.PENDING].includes(userStatus)
+
+
+    const leaveButtonHandler = async () => {
+        await cancelJoinRequest()
+        setUserStatus(JoinRequestStatus.NONE)
+    }
 
     return (
         <View style={styles.container}>
@@ -26,10 +34,21 @@ const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
                     {buttonText}
                 </Text>
             </TouchableOpacity>
-            <Text style={[styles.text, { color: placeholderText }]}>
-                {textBottom}
-            </Text>
-        </View>
+            <View style={styles.bottomTextContainer}>
+                <Text style={[styles.text, { color: placeholderText }]}>
+                    {textBottom}
+                </Text>
+
+                {leaveButtonDisplayed && (
+                    <TouchableOpacity onPress={leaveButtonHandler}>
+                        <Text style={[styles.text, { color: error }]}>
+                            {userStatus === JoinRequestStatus.ACCEPTED ? "Leave party" : "Cancel request"}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+            </View >
+        </View >
+
     )
 }
 
@@ -52,6 +71,14 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         marginVertical: 5,
         justifyContent: 'center',
+    },
+    bottomTextContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 5,
+        maxWidth: '100%',
+        flexWrap: 'wrap',
     },
     buttonText: {
         textAlign: 'center',

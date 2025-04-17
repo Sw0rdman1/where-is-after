@@ -5,7 +5,6 @@ import { Party } from './schema/party.schema';
 import { Venue } from 'src/venue/schema/venue.schema';
 import * as moment from "moment";
 import { User } from 'src/users/schema/user.schema';
-import { log } from 'console';
 import { findById, validateMongoID } from 'src/utils/validation';
 import { JoinRequest, JoinRequestStatus } from './schema/join.request.schema';
 
@@ -93,7 +92,7 @@ export class PartyService {
             party: id,
         });
 
-        let userStatus: 'none' | JoinRequestStatus = 'none';
+        let userStatus: JoinRequestStatus | 'none' = 'none';
 
         if (joinRequest) {
             userStatus = joinRequest.status;
@@ -131,7 +130,7 @@ export class PartyService {
             await this.partyModel.findByIdAndUpdate(
                 partyId,
                 {
-                    $pull: { goingUsers: userId },
+                    $pull: { goingUsers: new mongoose.Types.ObjectId(userId) },
                 },
                 { new: true }
             );

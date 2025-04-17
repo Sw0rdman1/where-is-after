@@ -10,20 +10,23 @@ export const useJoinPartyButton = (userStatus: JoinRequestStatus, partyId: strin
     const handleButtonClick = useCallback(async () => {
         switch (userStatus) {
             case JoinRequestStatus.ACCEPTED:
-                await leaveParty()
-                setUserStatus(JoinRequestStatus.NONE)
+                // await leaveParty()
+                // setUserStatus(JoinRequestStatus.NONE)
                 break
+
             case JoinRequestStatus.PENDING:
                 await cancelJoinRequest()
                 setUserStatus(JoinRequestStatus.NONE)
                 break
+
             case JoinRequestStatus.REJECTED:
-                // optional: show a toast or feedback
                 break
+
             case JoinRequestStatus.NONE:
                 await sendJoinRequest()
                 setUserStatus(JoinRequestStatus.PENDING)
                 break
+
             default:
                 break
         }
@@ -33,9 +36,9 @@ export const useJoinPartyButton = (userStatus: JoinRequestStatus, partyId: strin
         switch (userStatus) {
             case JoinRequestStatus.ACCEPTED:
                 return {
-                    buttonColor: error,
-                    buttonText: "Leave party 😢",
-                    textBottom: "You are all set! See you at the party 🎉"
+                    buttonColor: tint,
+                    buttonText: "See you at the party! 🎉",
+                    textBottom: "Something changed your plans? ",
                 }
             case JoinRequestStatus.PENDING:
                 return {
