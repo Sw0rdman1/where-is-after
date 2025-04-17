@@ -4,7 +4,12 @@ import { useGlobalContext } from '@/context/GlobalProvider';
 import { useColors } from '@/hooks/useColors';
 import FiltersOptions from './FiltersOptions';
 
-const FilterBottomSheet = () => {
+interface FilterBottomSheetProps {
+    date: Date;
+    setDate: (date: Date) => void;
+}
+
+const FilterBottomSheet: React.FC<FilterBottomSheetProps> = ({ date, setDate }) => {
     const { filterBottomSheetRef } = useGlobalContext();
     const { surface } = useColors();
 
@@ -34,7 +39,7 @@ const FilterBottomSheet = () => {
             handleComponent={renderHandle}
             backgroundStyle={{ backgroundColor: surface }}
         >
-            <FiltersOptions />
+            <FiltersOptions date={date} setDate={setDate} />
         </BottomSheetModal>
     );
 };

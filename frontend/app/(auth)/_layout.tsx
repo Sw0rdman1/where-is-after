@@ -19,7 +19,7 @@ export default function AuthLayout() {
 
     }, [user]);
 
-    if (isLoading) return <LoadingScreen />;
+    if (isLoading) return <LoadingScreen title="Loading" />;
 
     return (
         <ImageBackground

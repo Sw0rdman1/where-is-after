@@ -16,7 +16,6 @@ export const useParties = (venueId?: string) => {
     const [radius, setRadius] = useState(10000);
     const [date, setDate] = useState(new Date('2025-03-25'));
 
-
     const fetchParties = async () => {
         if (!user?.currentLocation) {
             throw new Error('User location not found');
@@ -35,17 +34,23 @@ export const useParties = (venueId?: string) => {
         staleTime: STALE_TIME
     });
 
+    console.log(isLoading);
+
+
     return {
         parties: parties || [],
         loading: isLoading,
         error: isError ? error?.message || 'Failed to fetch parties' : null,
+        date,
+        setDate,
+        radius,
+        setRadius,
     };
 };
 
 
 export const useParty = (partyId: string) => {
     const { getParty } = usePartyAPI();
-    const { getJoinRequestsForParty } = usePartyRequestAPI(partyId);
     const { user } = useAuth();
 
     const fetchParty = async (): Promise<Party | null> => {

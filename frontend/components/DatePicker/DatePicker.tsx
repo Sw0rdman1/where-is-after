@@ -12,7 +12,7 @@ interface DatePickerProps {
 
 const DatePicker: React.FC<DatePickerProps> = ({ isDatePickerVisible, setDatePickerVisibility, date, setDate }) => {
     const [] = useState(false)
-    const [tempSelectedDate, setTempSelectedDate] = useState(new Date())
+    const [tempSelectedDate, setTempSelectedDate] = useState(date)
 
     const hideDatePicker = () => setDatePickerVisibility(false)
 

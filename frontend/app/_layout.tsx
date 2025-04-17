@@ -64,17 +64,18 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <BottomSheetModalProvider>
-        <QueryClientProvider client={queryClient}>
-          <AxiosProvider>
-            <GlobalProvider>
-              <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AxiosProvider>
+          <AuthProvider>
+            <BottomSheetModalProvider>
+              <GlobalProvider>
                 <RootLayoutNav />
-              </AuthProvider>
-            </GlobalProvider>
-          </AxiosProvider >
-        </QueryClientProvider>
-      </BottomSheetModalProvider>
+              </GlobalProvider>
+            </BottomSheetModalProvider>
+
+          </AuthProvider>
+        </AxiosProvider >
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }
@@ -88,7 +89,7 @@ function RootLayoutNav() {
 
     if (user && user.isVerified) {
       if (user.role === 'venue') {
-        router.replace(`/(protected)/(venue)`);
+        router.replace(`/(protected)/(venue)/(tabs)`);
       }
       if (user.role === 'user') {
         router.replace(`/(protected)/(user)/(tabs)`);

@@ -6,10 +6,15 @@ import { Text } from '../Themed'
 import DatePicker from '../DatePicker/DatePicker'
 import { Ionicons } from '@expo/vector-icons'
 import Button from '../Button/Button'
+import { useParties } from '@/hooks/useParties'
 
-const FiltersOptions = () => {
+interface FiltersOptionsProps {
+    date: Date;
+    setDate: (date: Date) => void;
+}
+
+const FiltersOptions: React.FC<FiltersOptionsProps> = ({ date, setDate }) => {
     const { surface, background, tint } = useColors()
-    const [date, setDate] = useState(new Date())
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
 
 

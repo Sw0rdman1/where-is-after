@@ -19,7 +19,6 @@ export default function UserLayout() {
                     <Tabs.Screen name="list" />
                     <Tabs.Screen name="profile" />
                 </Tabs>
-                <FilterBottomSheet />
             </React.Fragment>
         </RoleBasedRedirect>
     )
