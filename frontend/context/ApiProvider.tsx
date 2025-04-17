@@ -21,6 +21,7 @@ interface AxiosAPI {
     get: AxiosInstance["get"];
     post: AxiosInstance["post"];
     put: AxiosInstance["put"];
+    patch: AxiosInstance["patch"];
     delete: AxiosInstance["delete"];
 }
 
@@ -86,6 +87,7 @@ export const AxiosProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             const api: AxiosAPI = {
                 get: instance.get.bind(instance),
                 post: instance.post.bind(instance),
+                patch: instance.patch.bind(instance),
                 put: instance.put.bind(instance),
                 delete: instance.delete.bind(instance),
             };

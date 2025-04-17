@@ -7,7 +7,7 @@ import * as moment from "moment";
 import { User } from 'src/users/schema/user.schema';
 import { log } from 'console';
 import { findById, validateMongoID } from 'src/utils/validation';
-import { JoinRequest } from './schema/join.request.schema';
+import { JoinRequest, JoinRequestStatus } from './schema/join.request.schema';
 
 @Injectable()
 export class PartyService {
@@ -91,7 +91,8 @@ export class PartyService {
             party: id,
         });
 
-        let userStatus: 'none' | 'pending' | 'accepted' | 'rejected' = 'none';
+        let userStatus: 'none' | JoinRequestStatus = 'none';
+
         if (joinRequest) {
             userStatus = joinRequest.status;
         }
@@ -103,7 +104,7 @@ export class PartyService {
     }
 
 
-    async requestToJoinParty(partyId: string, userId: string, peopleCount: number = 1): Promise<JoinRequest> {
+    async requestToJoinParty(partyId: string, userId: string, numberOfPeople: number = 1): Promise<JoinRequest> {
         await findById(this.partyModel, partyId);
 
         const existing = await this.joinRequestModel.findOne({ user: userId, party: partyId });
@@ -114,8 +115,8 @@ export class PartyService {
         const newRequest = new this.joinRequestModel({
             user: userId,
             party: partyId,
-            peopleCount,
-            status: 'requested',
+            numberOfPeople,
+            status: JoinRequestStatus.PENDING,
         });
 
         return await newRequest.save();
@@ -123,6 +124,17 @@ export class PartyService {
 
     async cancelRequestToJoinParty(partyId: string, userId: string): Promise<void> {
         const request = await this.joinRequestModel.findOneAndDelete({ party: partyId, user: userId });
+
+        if (request && request.status === JoinRequestStatus.ACCEPTED) {
+            await this.partyModel.findByIdAndUpdate(
+                partyId,
+                {
+                    $pull: { goingUsers: userId },
+                },
+                { new: true }
+            );
+        }
+
         if (!request) {
             throw new NotFoundException('Request not found');
         }
@@ -139,7 +151,7 @@ export class PartyService {
         const request = await this.joinRequestModel.findOne({ party: partyId, user: userId });
         if (!request) throw new NotFoundException('Join request not found');
 
-        request.status = 'accepted';
+        request.status = JoinRequestStatus.ACCEPTED;
         await request.save();
 
         await this.partyModel.findByIdAndUpdate(
@@ -158,19 +170,8 @@ export class PartyService {
         const request = await this.joinRequestModel.findOne({ party: partyId, user: userId });
         if (!request) throw new NotFoundException('Join request not found');
 
-        request.status = 'rejected';
+        request.status = JoinRequestStatus.REJECTED
         return await request.save();
-    }
-
-    async removeUserFromParty(partyId: string, userId: string): Promise<Party> {
-        const party = await this.partyModel.findById(partyId);
-        if (!party) throw new NotFoundException('Party not found');
-
-        party.goingUsers = party.goingUsers.filter(
-            id => id.toString() !== userId,
-        );
-
-        return await party.save();
     }
 
 }

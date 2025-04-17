@@ -1,7 +1,12 @@
 import User from "./User";
 import Venue from "./Venue";
 
-type UserStatus = 'none' | 'requested' | 'going' | 'rejected';
+export enum JoinRequestStatus {
+    PENDING = 'pending',
+    ACCEPTED = 'accepted',
+    REJECTED = 'rejected',
+    NONE = 'none',
+}
 
 interface Party {
     _id: string;
@@ -12,9 +17,7 @@ interface Party {
     endDate: Date;
     venue: Venue;
     goingUsers: Partial<User>[];
-    rejectedUsers?: Partial<User>[];
-    joinRequests?: Partial<User>[];
-    userStatus?: UserStatus;
+    userJoinRequestStatus: JoinRequestStatus;
 }
 
 export default Party;

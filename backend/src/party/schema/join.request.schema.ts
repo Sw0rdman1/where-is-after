@@ -1,6 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
+export enum JoinRequestStatus {
+    PENDING = 'pending',
+    ACCEPTED = 'accepted',
+    REJECTED = 'rejected',
+}
+
 @Schema({ timestamps: true })
 export class JoinRequest extends Document {
     @Prop({ type: Types.ObjectId, ref: 'User', required: true })
@@ -12,8 +18,8 @@ export class JoinRequest extends Document {
     @Prop({ required: true, min: 1 })
     numberOfPeople: number;
 
-    @Prop({ enum: ['pending', 'accepted', 'rejected'], default: 'pending' })
-    status: 'pending' | 'accepted' | 'rejected';
+    @Prop({ type: String, enum: JoinRequestStatus, required: true, default: JoinRequestStatus.PENDING })
+    status: JoinRequestStatus;
 }
 
 export const JoinRequestSchema = SchemaFactory.createForClass(JoinRequest);

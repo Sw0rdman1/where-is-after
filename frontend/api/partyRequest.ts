@@ -3,22 +3,15 @@ import { useAxios } from "@/context/ApiProvider";
 import { useQueryClient } from '@tanstack/react-query';
 
 
-export const usePartyRequestAPI = () => {
+export const usePartyRequestAPI = (partyId: string) => {
     const api = useAxios();
     const queryClient = useQueryClient();
 
-    const getRequestsForParty = async (partyId: string): Promise<any> => {
-        try {
-            const res = await api.get(`/parties/${partyId}/requests`)
-            return res.data;
-        } catch (error) {
-            handleApiError(error);
-        }
-    }
+    const API_ROUTE = `/parties/${partyId}/join-requests`
 
-    const sendRequestToJoin = async (partyId: string): Promise<any> => {
+    const sendJoinRequest = async (numberOfPeople = 1): Promise<any> => {
         try {
-            const res = await api.post(`/parties/${partyId}/request`)
+            const res = await api.post(API_ROUTE, { numberOfPeople })
             queryClient.invalidateQueries({ queryKey: ['party', partyId] });
             return res.data;
         } catch (error) {
@@ -26,9 +19,9 @@ export const usePartyRequestAPI = () => {
         }
     }
 
-    const cancelRequest = async (partyId: string): Promise<any> => {
+    const cancelJoinRequest = async (): Promise<any> => {
         try {
-            const res = await api.delete(`/parties/${partyId}/request`)
+            const res = await api.delete(API_ROUTE)
             queryClient.invalidateQueries({ queryKey: ['party', partyId] });
             return res.data;
         } catch (error) {
@@ -36,9 +29,18 @@ export const usePartyRequestAPI = () => {
         }
     }
 
-    const acceptRequest = async (partyId: string, userId: string): Promise<any> => {
+    const getJoinRequestsForParty = async (): Promise<any> => {
         try {
-            const res = await api.post(`/parties/${partyId}/accept/${userId}`)
+            const res = await api.get(API_ROUTE)
+            return res.data;
+        } catch (error) {
+            handleApiError(error);
+        }
+    }
+
+    const acceptRequest = async (userId: string): Promise<any> => {
+        try {
+            const res = await api.patch(`${API_ROUTE}/${userId}/accept`)
             queryClient.invalidateQueries({ queryKey: ['party', partyId] });
             return res.data;
         }
@@ -47,9 +49,9 @@ export const usePartyRequestAPI = () => {
         }
     }
 
-    const rejectRequest = async (partyId: string, userId: string): Promise<any> => {
+    const rejectRequest = async (userId: string): Promise<any> => {
         try {
-            const res = await api.post(`/parties/${partyId}/reject/${userId}`)
+            const res = await api.patch(`${API_ROUTE}/${userId}/reject`)
             queryClient.invalidateQueries({ queryKey: ['party', partyId] });
             return res.data;
         } catch (error) {
@@ -57,7 +59,7 @@ export const usePartyRequestAPI = () => {
         }
     }
 
-    const leaveParty = async (partyId: string): Promise<any> => {
+    const leaveParty = async (): Promise<any> => {
         try {
             const res = await api.delete(`/parties/${partyId}/going`)
             queryClient.invalidateQueries({ queryKey: ['party', partyId] });
@@ -68,9 +70,9 @@ export const usePartyRequestAPI = () => {
     };
 
     return {
-        getRequestsForParty,
-        sendRequestToJoin,
-        cancelRequest,
+        getJoinRequestsForParty,
+        sendJoinRequest,
+        cancelJoinRequest,
         acceptRequest,
         rejectRequest,
         leaveParty,

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { PartyService } from './party.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -31,11 +31,15 @@ export class PartyController {
     return this.partyService.getPartyById(id, userId);
   }
 
+
+
+  // JOIN REQUESTS
+
   @Roles(Role.USER)
   @Post(':id/join-requests')
-  async requestToJoin(@Param('id') partyId: string, @Req() req) {
+  async requestToJoin(@Param('id') partyId: string, @Req() req, @Body() body: { numberOfPeople: number }) {
     const userId = (req.user as any).userId;
-    return this.partyService.requestToJoinParty(partyId, userId);
+    return this.partyService.requestToJoinParty(partyId, userId, body.numberOfPeople);
   }
 
   // DELETE /parties/:id/join-requests
@@ -65,13 +69,6 @@ export class PartyController {
   @Patch(':id/join-requests/:userId/reject')
   async rejectUser(@Param('id') partyId: string, @Param('userId') userId: string) {
     return this.partyService.rejectUserFromParty(partyId, userId);
-  }
-
-  @Roles(Role.USER)
-  @Delete(':id/going')
-  async removeFromGoing(@Param('id') partyId: string, @Req() req) {
-    const userId = (req.user as any).userId;
-    return this.partyService.removeUserFromParty(partyId, userId);
   }
 
 }

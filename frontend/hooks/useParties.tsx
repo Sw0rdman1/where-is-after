@@ -44,12 +44,12 @@ export const useParties = (venueId?: string) => {
 
 export const useParty = (partyId: string) => {
     const { getParty } = usePartyAPI();
-    const { getRequestsForParty } = usePartyRequestAPI();
+    const { getJoinRequestsForParty } = usePartyRequestAPI(partyId);
     const { user } = useAuth();
 
     const fetchParty = async (): Promise<Party | null> => {
         if (user?.role === Role.VENUE) {
-            return await getRequestsForParty(partyId);
+            return await getJoinRequestsForParty();
         }
         return await getParty(partyId);
     };
