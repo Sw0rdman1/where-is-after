@@ -3,7 +3,6 @@ import Party from "@/models/Party";
 import { Region } from "react-native-maps";
 import { getPartyFromResponse } from "@/utils/transform";
 import { useAxios } from "@/context/ApiProvider";
-import { useQueryClient } from '@tanstack/react-query';
 
 
 export const usePartyAPI = () => {
