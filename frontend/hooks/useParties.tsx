@@ -28,8 +28,9 @@ export const useParties = (venueId?: string) => {
     };
 
     const { data: parties, isLoading, isError, error } = useQuery({
-        queryKey: ['parties', user?.currentLocation, radius, date],
+        queryKey: ['parties', user?.currentLocation, radius, date, user?._id],
         queryFn: fetchParties,
+        enabled: !!user,
         staleTime: STALE_TIME
     });
 
@@ -54,8 +55,9 @@ export const useParty = (partyId: string) => {
     };
 
     const { data: party, isLoading, isError, error } = useQuery({
-        queryKey: ['party', partyId],
+        queryKey: ['party', partyId, user?._id],
         queryFn: fetchParty,
+        enabled: !!user,
         staleTime: STALE_TIME
     });
 

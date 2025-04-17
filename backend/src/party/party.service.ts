@@ -7,6 +7,7 @@ import * as moment from "moment";
 import { User } from 'src/users/schema/user.schema';
 import { log } from 'console';
 import { findById, validateMongoID } from 'src/utils/validation';
+import { JoinRequest } from './schema/join.request.schema';
 
 @Injectable()
 export class PartyService {
@@ -14,6 +15,7 @@ export class PartyService {
         @InjectModel(Party.name) private readonly partyModel: Model<Party>,
         @InjectModel(Venue.name) private readonly venueModel: Model<Venue>,
         @InjectModel(User.name) private readonly userModel: Model<User>,
+        @InjectModel(JoinRequest.name) private readonly joinRequestModel: Model<JoinRequest>,
     ) { }
 
     async findNearbyParties(longitude: number, latitude: number, radius: number, date: string | undefined) {
@@ -79,26 +81,20 @@ export class PartyService {
         const party = await this.partyModel
             .findById(id)
             .populate('venue')
-            .populate({
-                path: 'goingUsers',
-                model: 'User',
-                select: 'displayName profileImage',
-            })
             .exec();
 
         if (!party) throw new NotFoundException('Party not found');
 
-        let userStatus: 'none' | 'requested' | 'going' | 'rejected' = 'none';
+        // Check if user has an existing request
+        const joinRequest = await this.joinRequestModel.findOne({
+            user: currentUserId,
+            party: id,
+        });
 
-        if (party.goingUsers.some(user => user._id.toString() === currentUserId)) {
-            userStatus = 'going';
-        } else if (party.joinRequests.some(id => id.toString() === currentUserId)) {
-            userStatus = 'requested';
-        } else if (party.rejectedUsers.some(id => id.toString() === currentUserId)) {
-            userStatus = 'rejected';
+        let userStatus: 'none' | 'pending' | 'accepted' | 'rejected' = 'none';
+        if (joinRequest) {
+            userStatus = joinRequest.status;
         }
-
-        log('User status:', userStatus);
 
         return {
             ...party.toObject(),
@@ -107,89 +103,63 @@ export class PartyService {
     }
 
 
-    async requestToJoinParty(partyId: string, userId: string): Promise<Party> {
+    async requestToJoinParty(partyId: string, userId: string, peopleCount: number = 1): Promise<JoinRequest> {
+        await findById(this.partyModel, partyId);
 
-        const party = await this.partyModel.findById(partyId);
-        if (!party) throw new NotFoundException('Party not found');
-
-        const userObjectId = new Types.ObjectId(userId);
-
-        if (
-            party.goingUsers.includes(userObjectId) ||
-            party.joinRequests.includes(userObjectId) ||
-            party.rejectedUsers.includes(userObjectId)
-        ) {
-            throw new BadRequestException('You have already requested or been processed');
+        const existing = await this.joinRequestModel.findOne({ user: userId, party: partyId });
+        if (existing) {
+            throw new BadRequestException('You have already submitted a request');
         }
 
-        party.joinRequests.push(userObjectId);
-        await party.save();
+        const newRequest = new this.joinRequestModel({
+            user: userId,
+            party: partyId,
+            peopleCount,
+            status: 'requested',
+        });
 
-        return party;
+        return await newRequest.save();
     }
 
-    async cancelRequestToJoinParty(partyId: string, userId: string): Promise<Party> {
-        const party = await findById(this.partyModel, partyId);
-        const userObjectId = new Types.ObjectId(userId);
-
-        party.joinRequests = party.joinRequests.filter(
-            id => id.toString() !== userObjectId.toString()
-        );
-
-        await party.save();
-        return party;
+    async cancelRequestToJoinParty(partyId: string, userId: string): Promise<void> {
+        const request = await this.joinRequestModel.findOneAndDelete({ party: partyId, user: userId });
+        if (!request) {
+            throw new NotFoundException('Request not found');
+        }
     }
 
-    async getJoinRequests(partyId: string): Promise<Party> {
-        const party = await this.partyModel
-            .findById(partyId)
-            .populate({
-                path: 'joinRequests',
-                model: 'User',
-                select: 'displayName profileImage email',
-            })
+    async getJoinRequests(partyId: string): Promise<JoinRequest[]> {
+        await findById(this.partyModel, partyId);
+        return this.joinRequestModel.find({ party: partyId })
+            .populate('user', 'displayName profileImage email')
             .exec();
-
-        console.log(party);
-
-
-        if (!party) throw new NotFoundException('Party not found');
-
-        return party;
     }
 
-    async acceptUserToParty(partyId: string, userId: string): Promise<Party> {
-        const party = await findById(this.partyModel, partyId);
-        const userObjectId = new Types.ObjectId(userId);
+    async acceptUserToParty(partyId: string, userId: string): Promise<JoinRequest> {
+        const request = await this.joinRequestModel.findOne({ party: partyId, user: userId });
+        if (!request) throw new NotFoundException('Join request not found');
 
-        party.joinRequests = party.joinRequests.filter(
-            id => id.toString() !== userObjectId.toString()
+        request.status = 'accepted';
+        await request.save();
+
+        await this.partyModel.findByIdAndUpdate(
+            partyId,
+            {
+                $addToSet: { goingUsers: userId },
+            },
+            { new: true }
         );
 
-        if (!party.goingUsers.includes(userObjectId)) {
-            party.goingUsers.push(userObjectId);
-        }
-
-        await party.save();
-        return party;
+        return request;
     }
 
-    async rejectUserFromParty(partyId: string, userId: string): Promise<Party> {
-        const party = await this.partyModel.findById(partyId);
-        if (!party) throw new NotFoundException('Party not found');
 
-        const userObjectId = new Types.ObjectId(userId);
+    async rejectUserFromParty(partyId: string, userId: string): Promise<JoinRequest> {
+        const request = await this.joinRequestModel.findOne({ party: partyId, user: userId });
+        if (!request) throw new NotFoundException('Join request not found');
 
-        party.joinRequests = party.joinRequests.filter(
-            id => id.toString() !== userObjectId.toString()
-        );
-
-        if (!party.rejectedUsers.includes(userObjectId)) {
-            party.rejectedUsers.push(userObjectId);
-        }
-
-        await party.save();
-        return party;
+        request.status = 'rejected';
+        return await request.save();
     }
 
     async removeUserFromParty(partyId: string, userId: string): Promise<Party> {

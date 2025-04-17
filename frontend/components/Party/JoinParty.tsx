@@ -72,7 +72,7 @@ const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
             case 'requested':
                 return "Waiting for party host to accept your request"
             case 'rejected':
-                return "No place left 😢"
+                return "Sorry for the inconvenience!"
             case 'none':
                 return `There are still some places left. Join now!`
             default:
