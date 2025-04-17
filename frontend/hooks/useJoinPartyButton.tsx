@@ -15,8 +15,8 @@ export const useJoinPartyButton = (userStatus: JoinRequestStatus, partyId: strin
                 break
 
             case JoinRequestStatus.PENDING:
-                await cancelJoinRequest()
-                setUserStatus(JoinRequestStatus.NONE)
+                // await cancelJoinRequest()
+                // setUserStatus(JoinRequestStatus.NONE)
                 break
 
             case JoinRequestStatus.REJECTED:
