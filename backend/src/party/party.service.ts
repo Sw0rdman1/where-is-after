@@ -165,15 +165,15 @@ export class PartyService {
 
         // Generate QR Code token that expires at party end
         const tokenPayload = {
-            joinRequestId: (request._id as Types.ObjectId).toString(),
-            userId: userId,
-            partyId: partyId,
+            j: (request._id as Types.ObjectId).toString(), // joinRequestId
+            u: userId,                 // userId
+            p: partyId,                // partyId
         };
 
         const expiresInSeconds = Math.floor((new Date(party.endDate).getTime() - Date.now()) / 1000);
         const qrCodeToken = this.jwtService.sign(tokenPayload, {
             expiresIn: expiresInSeconds,
-            secret: process.env.JWT_ACCESS_SECRET,
+            secret: process.env.QRCODE_TOKEN_SECRET,
         });
 
         request.status = JoinRequestStatus.ACCEPTED;

@@ -37,7 +37,7 @@ export const useJoinPartyButton = (userStatus: JoinRequestStatus, party: Party, 
             case JoinRequestStatus.ACCEPTED:
                 return {
                     buttonColor: tint,
-                    buttonText: "See you at the party! 🎉",
+                    buttonText: "Your Reservation! 🎉",
                     textBottom: "Something changed your plans? ",
                 }
             case JoinRequestStatus.PENDING:
