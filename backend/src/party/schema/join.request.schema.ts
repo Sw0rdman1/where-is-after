@@ -20,6 +20,18 @@ export class JoinRequest extends Document {
 
     @Prop({ type: String, enum: JoinRequestStatus, required: true, default: JoinRequestStatus.PENDING })
     status: JoinRequestStatus;
+
+    // ✅ New: Token to generate and validate the QR code
+    @Prop({ type: String })
+    qrCodeToken?: string;
+
+    // ✅ New: Track if the QR was used for entry
+    @Prop({ type: Boolean, default: false })
+    hasEntered?: boolean;
+
+    // ✅ New: Optional timestamp when the person entered
+    @Prop({ type: Date })
+    enteredAt?: Date;
 }
 
 export const JoinRequestSchema = SchemaFactory.createForClass(JoinRequest);

@@ -7,6 +7,7 @@ import * as moment from "moment";
 import { User } from 'src/users/schema/user.schema';
 import { findById, validateMongoID } from 'src/utils/validation';
 import { JoinRequest, JoinRequestStatus } from './schema/join.request.schema';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class PartyService {
@@ -15,6 +16,7 @@ export class PartyService {
         @InjectModel(Venue.name) private readonly venueModel: Model<Venue>,
         @InjectModel(User.name) private readonly userModel: Model<User>,
         @InjectModel(JoinRequest.name) private readonly joinRequestModel: Model<JoinRequest>,
+        private jwtService: JwtService,
     ) { }
 
     async findNearbyParties(longitude: number, latitude: number, radius: number, date: string | undefined) {
@@ -149,10 +151,25 @@ export class PartyService {
     }
 
     async acceptUserToParty(partyId: string, userId: string): Promise<JoinRequest> {
-        const request = await this.joinRequestModel.findOne({ party: partyId, user: userId });
+        const request = await this.joinRequestModel.findOne({ party: partyId, user: userId }) as JoinRequest;
         if (!request) throw new NotFoundException('Join request not found');
 
+        // Fetch party with endTime
+        const party = await this.partyModel.findById(partyId);
+        if (!party || !party.endDate) throw new BadRequestException('Party or end time not found');
+
+        // Generate QR Code token that expires at party end
+        const tokenPayload = {
+            joinRequestId: (request._id as Types.ObjectId).toString(),
+            userId: userId,
+            partyId: partyId,
+        };
+
+        const expiresInSeconds = Math.floor((new Date(party.endDate).getTime() - Date.now()) / 1000);
+        const qrCodeToken = this.jwtService.sign(tokenPayload, { expiresIn: expiresInSeconds });
+
         request.status = JoinRequestStatus.ACCEPTED;
+        request.qrCodeToken = qrCodeToken;
         await request.save();
 
         await this.partyModel.findByIdAndUpdate(
@@ -165,6 +182,7 @@ export class PartyService {
 
         return request;
     }
+
 
 
     async rejectUserFromParty(partyId: string, userId: string): Promise<JoinRequest> {
