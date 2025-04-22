@@ -29,6 +29,7 @@ export const getPartyFromResponse = (response: any): Party => {
         image: response.image,
         goingUsers: response.goingUsers,
         userJoinRequestStatus: response.userStatus,
+        userQRCode: response.userQRCode,
         venue: {
             _id: response.venue._id,
             name: response.venue.name,

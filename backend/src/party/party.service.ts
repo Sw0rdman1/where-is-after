@@ -95,14 +95,19 @@ export class PartyService {
         });
 
         let userStatus: JoinRequestStatus | 'none' = 'none';
+        let userQRCode: string | undefined = undefined;
 
         if (joinRequest) {
             userStatus = joinRequest.status;
+            if (joinRequest.status === JoinRequestStatus.ACCEPTED) {
+                userQRCode = joinRequest.qrCodeToken;
+            }
         }
 
         return {
             ...party.toObject(),
             userStatus,
+            userQRCode
         };
     }
 
@@ -166,7 +171,10 @@ export class PartyService {
         };
 
         const expiresInSeconds = Math.floor((new Date(party.endDate).getTime() - Date.now()) / 1000);
-        const qrCodeToken = this.jwtService.sign(tokenPayload, { expiresIn: expiresInSeconds });
+        const qrCodeToken = this.jwtService.sign(tokenPayload, {
+            expiresIn: expiresInSeconds,
+            secret: process.env.JWT_ACCESS_SECRET,
+        });
 
         request.status = JoinRequestStatus.ACCEPTED;
         request.qrCodeToken = qrCodeToken;

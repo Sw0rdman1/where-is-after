@@ -13,7 +13,7 @@ interface JoinPartyProps {
 const JoinParty: React.FC<JoinPartyProps> = ({ party }) => {
     const [userStatus, setUserStatus] = useState(party.userJoinRequestStatus)
     const { placeholderText, error } = useColors()
-    const { buttonColor, buttonText, textBottom, handleButtonClick } = useJoinPartyButton(userStatus, party._id, setUserStatus)
+    const { buttonColor, buttonText, textBottom, handleButtonClick } = useJoinPartyButton(userStatus, party, setUserStatus)
     const { cancelJoinRequest } = usePartyRequestAPI(party._id)
     const leaveButtonDisplayed = [JoinRequestStatus.ACCEPTED, JoinRequestStatus.PENDING].includes(userStatus)
 

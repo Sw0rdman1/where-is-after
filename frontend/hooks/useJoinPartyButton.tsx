@@ -1,17 +1,17 @@
-import { JoinRequestStatus } from '@/models/Party'
+import Party, { JoinRequestStatus } from '@/models/Party'
 import { useCallback, useMemo } from 'react'
 import { useColors } from './useColors'
 import { usePartyRequestAPI } from '@/api/partyRequest'
+import { router } from 'expo-router'
 
-export const useJoinPartyButton = (userStatus: JoinRequestStatus, partyId: string, setUserStatus: (status: JoinRequestStatus) => void) => {
+export const useJoinPartyButton = (userStatus: JoinRequestStatus, party: Party, setUserStatus: (status: JoinRequestStatus) => void) => {
     const { tint, error, placeholderText } = useColors()
-    const { sendJoinRequest, leaveParty, cancelJoinRequest } = usePartyRequestAPI(partyId)
+    const { sendJoinRequest, leaveParty, cancelJoinRequest } = usePartyRequestAPI(party._id)
 
     const handleButtonClick = useCallback(async () => {
         switch (userStatus) {
             case JoinRequestStatus.ACCEPTED:
-                // await leaveParty()
-                // setUserStatus(JoinRequestStatus.NONE)
+                router.push(`/qrcode/${party.userQRCode}`)
                 break
 
             case JoinRequestStatus.PENDING:

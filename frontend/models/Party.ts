@@ -18,6 +18,7 @@ interface Party {
     venue: Venue;
     goingUsers: Partial<User>[];
     userJoinRequestStatus: JoinRequestStatus;
+    userQRCode?: string;
 }
 
 export default Party;
