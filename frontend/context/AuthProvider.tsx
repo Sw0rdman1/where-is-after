@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { Region } from 'react-native-maps';
 import { getCurrentLocation } from '@/utils/map';
 import User from '@/models/User';
+import { router, SplashScreen } from 'expo-router';
 
 interface AuthContextType {
     user: User | null;
@@ -23,6 +24,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const { getProfile, login, register, verifyUser } = useAuthAPI();
+
 
     useEffect(() => {
         const loadAuthData = async () => {
@@ -49,6 +51,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loadAuthData();
     }, []);
 
+    useEffect(() => {
+        if (!isLoading) {
+            SplashScreen.hideAsync();
+        }
+    }, [isLoading]);
 
     const loginHandler = async (email: string, password: string) => {
         const data = await login(email, password);
@@ -60,6 +67,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             await AsyncStorage.setItem('user', JSON.stringify(data.user));
             await AsyncStorage.setItem('token', data.accessToken);
             await AsyncStorage.setItem('refreshToken', data.refreshToken);
+            router.replace("/");
         }
     };
 

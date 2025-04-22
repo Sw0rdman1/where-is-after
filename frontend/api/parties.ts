@@ -19,9 +19,6 @@ export const usePartyAPI = () => {
                 },
             });
 
-            console.log(response.data.length);
-
-
             const parties = response.data.map((party: Party) => getPartyFromResponse(party));
 
             return parties;

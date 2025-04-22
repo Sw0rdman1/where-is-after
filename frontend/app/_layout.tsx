@@ -1,25 +1,15 @@
 import AppProvider from '@/components/Provider/AppProvider';
-import { useAuth } from '@/context/AuthProvider';
-import { ToastProvider } from '@/context/ToastProvider';
 import { cacheImages } from '@/utils/cache';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { router, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 
 export { ErrorBoundary } from 'expo-router';
 
-export const unstable_settings = {
-  initialRouteName: '(auth)',
-};
-
 SplashScreen.preventAutoHideAsync();
-
-
 
 export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -51,45 +41,20 @@ export default function RootLayout() {
     loadResourcesAndDataAsync();
   }, []);
 
+  useEffect(() => {
+    if (appIsReady && fontsLoaded) {
+    }
+  }, [appIsReady, fontsLoaded]);
 
-
-  if (!appIsReady || !fontsLoaded) {
-    return null;
-  }
 
   return (
     <AppProvider>
-      <RootLayoutNav />
+      <Stack initialRouteName='(protected)' screenOptions={{ headerShown: false, animation: 'fade', gestureEnabled: false }}>
+        <Stack.Screen name="(protected)" />
+        <Stack.Screen name="auth" />
+        <Stack.Screen name="verify" />
+      </Stack>
     </AppProvider>
   );
 }
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-  const { isLoading, user } = useAuth();
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    if (user && user.isVerified) {
-      router.replace('/(protected)/(tabs)');
-    } else if (user && !user.isVerified) {
-      router.replace('/(auth)/verify');
-    } else {
-      router.replace('/(auth)');
-    }
-
-  }, [isLoading, user]);
-
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ToastProvider>
-        <Stack screenOptions={{ headerShown: false, animation: 'fade', gestureEnabled: false }}>
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(protected)" />
-        </Stack>
-      </ToastProvider>
-    </ThemeProvider>
-  );
-}

@@ -12,11 +12,11 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class PartyService {
     constructor(
+        private jwtService: JwtService,
         @InjectModel(Party.name) private readonly partyModel: Model<Party>,
         @InjectModel(Venue.name) private readonly venueModel: Model<Venue>,
         @InjectModel(User.name) private readonly userModel: Model<User>,
         @InjectModel(JoinRequest.name) private readonly joinRequestModel: Model<JoinRequest>,
-        private jwtService: JwtService,
     ) { }
 
     async findNearbyParties(longitude: number, latitude: number, radius: number, date: string | undefined) {

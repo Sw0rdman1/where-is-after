@@ -1,5 +1,4 @@
 import Header from "@/components/Header/Header";
-import { RoleBasedRedirect } from "@/components/Middleware/middleware";
 import TabBar from "@/components/TabBar/TabBar";
 import { Tabs } from "expo-router";
 
@@ -9,23 +8,21 @@ const COMMON_TABS = [
     { name: "profile", options: { title: "Profile" } },
 ];
 
-export default function UserLayout() {
+export default function TabLayout() {
 
     return (
-        <RoleBasedRedirect>
-            <Tabs
-                tabBar={(props) => <TabBar {...props} />}
-                screenOptions={{ header: (props) => <Header {...props} /> }}
-            >
-                {COMMON_TABS.map((tab) => (
-                    <Tabs.Screen
-                        key={tab.name}
-                        name={tab.name}
-                        options={tab.options}
-                    />
-                ))}
+        <Tabs
+            tabBar={(props) => <TabBar {...props} />}
+            screenOptions={{ header: (props) => <Header {...props} /> }}
+        >
+            {COMMON_TABS.map((tab) => (
+                <Tabs.Screen
+                    key={tab.name}
+                    name={tab.name}
+                    options={tab.options}
+                />
+            ))}
 
-            </Tabs>
-        </RoleBasedRedirect>
+        </Tabs>
     )
 }

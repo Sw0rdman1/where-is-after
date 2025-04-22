@@ -34,9 +34,6 @@ export const useParties = (venueId?: string) => {
         staleTime: STALE_TIME
     });
 
-    console.log(isLoading);
-
-
     return {
         parties: parties || [],
         loading: isLoading,
